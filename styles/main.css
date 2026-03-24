@@ -99,12 +99,42 @@ ul.clean { margin: 0; padding-left: 18px; color: var(--muted); }
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
 }
-.visual-card svg { width: 100%; height: auto; display: block; background: #111823; }
+.visual-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124,199,255,0.22);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.42);
+}
+.visual-card svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #111823;
+  opacity: 0;
+  transform: translateY(10px) scale(0.99);
+  animation: chartEntrance .85s ease forwards;
+  will-change: transform, opacity;
+}
+.visual-card:nth-child(2) svg { animation-delay: .08s; }
+.visual-card:nth-child(3) svg { animation-delay: .16s; }
+.visual-card:hover svg { transform: translateY(0) scale(1.01); }
 .visual-copy { padding: 18px 20px 22px; }
 .visual-copy p { margin: 0; color: var(--muted); }
 .visual-copy h3 { margin-bottom: 10px; }
 .figure-note { margin-top: 14px; color: var(--muted); font-size: 0.95rem; }
+.info-list { display: grid; gap: 14px; }
+.info-item { padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,0.03); }
+.info-item strong { display: block; margin-bottom: 6px; }
+@keyframes chartEntrance {
+  from { opacity: 0; transform: translateY(10px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .visual-card,
+  .visual-card svg { transition: none; animation: none; transform: none; opacity: 1; }
+}
 @media (max-width: 900px) {
   .hero-grid, .grid-2, .grid-3, .stat-row, .visual-grid { grid-template-columns: 1fr; }
   .nav { gap: 14px; align-items: flex-start; flex-direction: column; }
