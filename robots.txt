@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.solarex.no/sitemap.xml
+Sitemap: https://solarex.no/sitemap.xml
