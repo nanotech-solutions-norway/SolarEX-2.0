@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIW v1.0 — Surface Intelligence Workspace</title>
+    <meta
+      name="description"
+      content="SIW v1.0 — Surface Intelligence Workspace. Structured, explainable decision support for technical coatings selection."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="siw-shell">
+      <header class="hero-card">
+        <div>
+          <p class="eyebrow">SIW v1.0 — Surface Intelligence Workspace</p>
+          <h1>Cross-page decision support for technical coatings selection</h1>
+          <p class="lede">
+            Structured, explainable interface for moving buyers from scenario framing to fit, proof, and the correct next action.
+          </p>
+        </div>
+        <div class="journey-strip" aria-label="SIW journey">
+          <span class="journey-pill">Orient</span>
+          <span class="journey-pill">Explain</span>
+          <span class="journey-pill">Fit</span>
+          <span class="journey-pill">Prove</span>
+          <span class="journey-pill">Act</span>
+        </div>
+      </header>
+
+      <section class="grid two-col">
+        <article class="panel-card">
+          <div class="panel-head">
+            <h2>Persistent Workspace</h2>
+            <span class="panel-tag">MVP core</span>
+          </div>
+          <dl class="workspace-grid" id="workspaceSummary"></dl>
+        </article>
+
+        <article class="panel-card">
+          <div class="panel-head">
+            <h2>Explain layer</h2>
+            <span class="panel-tag">Mechanism clarity</span>
+          </div>
+          <p class="note-text" id="explainSummary"></p>
+          <p class="note-text">
+            This module binds mechanism understanding to the active scenario so the recommendation path stays transparent and governed.
+          </p>
+        </article>
+      </section>
+
+      <section class="grid one-col">
+        <article class="panel-card">
+          <div class="panel-head">
+            <h2>Outcome Selector</h2>
+            <span class="panel-tag">Orient</span>
+          </div>
+          <p class="note-text">
+            Capture the buyer scenario early so the interface can carry context, explain fit logic, and route to the correct next action.
+          </p>
+
+          <div class="form-grid">
+            <label>
+              <span>Industry</span>
+              <select id="industrySelect"></select>
+            </label>
+            <label>
+              <span>Asset</span>
+              <select id="assetSelect"></select>
+            </label>
+            <label>
+              <span>Mechanism</span>
+              <select id="mechanismSelect"></select>
+            </label>
+            <label>
+              <span>Substrate</span>
+              <select id="substrateSelect"></select>
+            </label>
+            <label>
+              <span>Environment</span>
+              <select id="environmentSelect"></select>
+            </label>
+          </div>
+
+          <div class="constraint-group">
+            <p class="constraint-title">Operating constraints</p>
+            <div class="checkbox-grid" id="constraintGrid"></div>
+          </div>
+
+          <div class="recommendation-card">
+            <div>
+              <p class="recommendation-label">Derived recommendation path</p>
+              <h3 id="candidatePath"></h3>
+              <p class="note-text" id="proofStatus"></p>
+            </div>
+            <div class="cta-row">
+              <button type="button" id="primaryActionButton"></button>
+              <button type="button" class="button-secondary">Request sample</button>
+            </div>
+          </div>
+
+          <details class="payload-panel">
+            <summary>Scenario payload preview</summary>
+            <pre id="payloadPreview"></pre>
+          </details>
+        </article>
+      </section>
+
+      <section class="grid three-col">
+        <article class="panel-card">
+          <div class="panel-head">
+            <h2>Fit</h2>
+            <span class="panel-tag">Next module</span>
+          </div>
+          <p class="note-text">
+            Expand the rules engine into product-path scoring, exclusions, caution flags, and shortlist comparison.
+          </p>
+        </article>
+        <article class="panel-card">
+          <div class="panel-head">
+            <h2>Prove</h2>
+            <span class="panel-tag">Next module</span>
+          </div>
+          <p class="note-text">
+            Bind standards, case evidence, test summaries, and limitations directly to the active scenario context.
+          </p>
+        </article>
+        <article class="panel-card">
+          <div class="panel-head">
+            <h2>Act</h2>
+            <span class="panel-tag">Next module</span>
+          </div>
+          <p class="note-text">
+            Route users into technical discussion, sample request, documentation pack, or RFQ with prefilled context.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
