@@ -3,70 +3,79 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SIW v1.0 — Surface Intelligence Workspace</title>
+    <title>SIW v1.2 — Master Solution Workspace</title>
     <meta
       name="description"
-      content="SIW v1.0 — Surface Intelligence Workspace. Structured, explainable decision support for technical coatings selection."
+      content="SIW v1.2 — Master Solution Workspace. Persistent decision-support for technical B2B coatings selection across Orient, Explain, Fit, Prove, and Act."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="siw-shell">
-      <header class="hero-card">
-        <div>
-          <p class="eyebrow">SIW v1.0 — Surface Intelligence Workspace</p>
-          <h1>Cross-page decision support for technical coatings selection</h1>
-          <p class="lede">
-            Structured, explainable interface for moving buyers from scenario framing to fit, proof, and the correct next action.
-          </p>
+    <div class="scene"></div>
+    <main class="siw-app">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <div class="brand-mark"></div>
+          <div>
+            <div class="brand-line"><strong>Meyer</strong><span>Nano</span><span>Tech</span><span>Solutions</span><span>Norway</span></div>
+            <div class="subline">Surface Intelligence Workspace <span class="version-badge">v1.2</span></div>
+          </div>
         </div>
-        <div class="journey-strip" aria-label="SIW journey">
-          <span class="journey-pill">Orient</span>
-          <span class="journey-pill">Explain</span>
-          <span class="journey-pill">Fit</span>
-          <span class="journey-pill">Prove</span>
-          <span class="journey-pill">Act</span>
+        <div class="utility-wrap">
+          <label class="search-shell">
+            <input id="globalSearch" type="search" placeholder="Search products, evidence, mechanisms" autocomplete="off" />
+            <div id="searchResults" class="search-results"></div>
+          </label>
         </div>
       </header>
 
-      <section class="grid two-col">
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Persistent Workspace</h2>
-            <span class="panel-tag">MVP core</span>
-          </div>
-          <dl class="workspace-grid" id="workspaceSummary"></dl>
-        </article>
-
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Explain layer</h2>
-            <span class="panel-tag">Mechanism clarity</span>
-          </div>
-          <p class="note-text" id="explainSummary"></p>
-          <div class="explain-grid">
-            <div class="mini-panel">
-              <p class="mini-label">Intervention principle</p>
-              <p class="note-text" id="interventionSummary"></p>
-            </div>
-            <div class="mini-panel">
-              <p class="mini-label">Primary caution</p>
-              <p class="note-text" id="primaryCaution"></p>
-            </div>
-          </div>
-        </article>
+      <section class="workspace-shell glass-panel">
+        <div class="workspace-strip" id="workspaceStrip"></div>
+        <div class="strip-actions">
+          <button id="saveWorkspaceButton" class="ghost-button" type="button">Save Workspace</button>
+          <button id="clearWorkspaceButton" class="ghost-button" type="button">Clear</button>
+        </div>
       </section>
 
-      <section class="grid one-col">
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Outcome Selector</h2>
-            <span class="panel-tag">Orient</span>
+      <section class="hero-panel glass-panel">
+        <div class="hero-copy">
+          <p class="eyebrow">Master Solution</p>
+          <h1 id="heroTitle">Decision support for exposed industrial assets</h1>
+          <p class="hero-subtitle" id="heroSubtitle">Orient the problem, explain the mechanism, test fit, inspect proof, and route to the correct next action.</p>
+          <div class="hero-badges">
+            <span class="hero-tag">Persistent workspace</span>
+            <span class="hero-tag">Explainable fit</span>
+            <span class="hero-tag">Proof-first trust</span>
+            <span class="hero-tag">Precision act</span>
           </div>
-          <p class="note-text">
-            Capture the buyer scenario early so the interface can carry context, explain fit logic, and route to the correct next action.
-          </p>
+        </div>
+        <aside class="support-panel glass-panel-soft">
+          <div class="panel-title-row">
+            <h2>Trust-Safe Support</h2>
+            <span class="status-pill">Human-first</span>
+          </div>
+          <p class="body-copy">AI assistance remains bounded and source-aware. For complex scenarios, the workspace escalates to technical review instead of guessing.</p>
+          <div class="support-grid">
+            <div class="support-card">
+              <p class="mini-label">Assistance</p>
+              <h3>AI Assistance</h3>
+              <p class="micro-copy">Preview only. Uses approved proof categories and workspace context.</p>
+            </div>
+            <div class="support-card">
+              <p class="mini-label">Escalation</p>
+              <h3>Talk to Engineer</h3>
+              <p class="micro-copy">Best for low-confidence, high-risk, or procurement-critical scenarios.</p>
+            </div>
+          </div>
+        </aside>
+      </section>
 
+      <section class="stage-grid">
+        <article class="stage-card glass-panel">
+          <div class="stage-head">
+            <h2>Orient</h2>
+            <p>What are you protecting?</p>
+          </div>
           <div class="form-grid">
             <label>
               <span>Industry</span>
@@ -77,125 +86,159 @@
               <select id="assetSelect"></select>
             </label>
             <label>
-              <span>Mechanism</span>
+              <span>Degradation</span>
               <select id="mechanismSelect"></select>
             </label>
             <label>
               <span>Substrate</span>
               <select id="substrateSelect"></select>
             </label>
-            <label>
-              <span>Environment</span>
-              <select id="environmentSelect"></select>
-            </label>
           </div>
-
-          <div class="constraint-group">
-            <p class="constraint-title">Operating constraints</p>
-            <div class="checkbox-grid" id="constraintGrid"></div>
+          <div class="constraint-zone">
+            <p class="constraint-title">Constraint profile</p>
+            <div id="constraintGrid" class="chip-grid"></div>
           </div>
-
-          <div class="recommendation-card">
-            <div>
-              <p class="recommendation-label">Derived recommendation path</p>
-              <h3 id="candidatePath"></h3>
-              <p class="note-text" id="proofStatus"></p>
-            </div>
-            <div class="cta-row">
-              <a href="#" class="button-link" id="primaryActionLink">Request technical discussion</a>
-              <a href="#" class="button-link button-secondary" id="sampleActionLink">Request sample</a>
-            </div>
-          </div>
-
-          <details class="payload-panel">
-            <summary>Scenario payload preview</summary>
-            <pre id="payloadPreview"></pre>
-          </details>
+          <div class="sentence-builder" id="sentenceBuilder"></div>
         </article>
-      </section>
 
-      <section class="grid two-col">
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Fit</h2>
-            <span class="panel-tag">Scenario shortlist</span>
+        <article class="stage-card glass-panel">
+          <div class="stage-head">
+            <h2>Explain</h2>
+            <p>How does it work?</p>
           </div>
-          <p class="note-text">
-            The shortlist below is driven by mechanism, environment, substrate, and operating constraints. Logic is intentionally transparent rather than black-box.
-          </p>
-          <div class="score-banner">
+          <div class="explain-visual"></div>
+          <div class="explainer-stack">
+            <div class="micro-panel">
+              <p class="mini-label">Mechanism micro-story</p>
+              <p id="explainSummary" class="body-copy"></p>
+            </div>
+            <div class="micro-panel">
+              <p class="mini-label">Intervention principle</p>
+              <p id="interventionSummary" class="body-copy"></p>
+            </div>
+            <div class="micro-panel caution-panel">
+              <p class="mini-label">Boundary conditions</p>
+              <p id="boundarySummary" class="body-copy"></p>
+            </div>
+          </div>
+        </article>
+
+        <article class="stage-card glass-panel">
+          <div class="stage-head">
+            <h2>Fit</h2>
+            <p>How well does it fit?</p>
+          </div>
+          <div class="fit-overview">
             <div>
               <p class="mini-label">Best-fit score</p>
-              <h3 id="bestFitScore">—</h3>
+              <div id="bestFitScore" class="score-display">--</div>
             </div>
             <div>
-              <p class="mini-label">Decision confidence</p>
-              <p class="note-text" id="decisionConfidence"></p>
+              <p class="mini-label">Verdict</p>
+              <div id="fitVerdict" class="verdict-pill">Needs review</div>
             </div>
           </div>
           <div id="fitShortlist" class="stack-list"></div>
-        </article>
-
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Fit rationale</h2>
-            <span class="panel-tag">Why this path</span>
-          </div>
-          <div id="fitRationale" class="stack-list"></div>
-          <div class="section-divider"></div>
-          <div>
-            <p class="constraint-title">Caution flags</p>
-            <div id="cautionFlags" class="tag-list"></div>
+          <div class="compare-actions">
+            <button id="compareToggleButton" class="ghost-button" type="button">Compare shortlisted paths</button>
+            <button id="saveSolutionButton" class="ghost-button" type="button">Save solution</button>
           </div>
         </article>
       </section>
 
-      <section class="grid two-col">
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Prove</h2>
-            <span class="panel-tag">Evidence stack</span>
+      <section class="proof-shell glass-panel">
+        <div class="section-head">
+          <h2>Evidence rail</h2>
+          <div class="section-head-actions">
+            <button id="bookmarkProofButton" class="ghost-button" type="button">Save proof</button>
+            <button id="openEvidenceButton" class="ghost-button" type="button">Open evidence drawer</button>
           </div>
-          <p class="note-text">
-            The proof layer surfaces the most relevant standards, field signals, and implementation boundaries for the active scenario.
-          </p>
-          <div id="evidenceCards" class="stack-list"></div>
+        </div>
+        <div id="proofRail" class="proof-rail"></div>
+      </section>
+
+      <section class="mid-grid">
+        <article class="glass-panel">
+          <div class="section-head">
+            <h2>Guided capability map</h2>
+            <span class="status-pill">Core MVP</span>
+          </div>
+          <div class="capability-map" id="capabilityMap"></div>
         </article>
 
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Evidence summary</h2>
-            <span class="panel-tag">Scope and limits</span>
+        <article class="glass-panel">
+          <div class="section-head">
+            <h2>Credibility summary</h2>
+            <span class="status-pill">Procurement-ready</span>
           </div>
-          <div class="summary-grid">
-            <div class="mini-panel">
-              <p class="mini-label">Recommended proof emphasis</p>
-              <p class="note-text" id="proofEmphasis"></p>
+          <div class="cred-grid">
+            <div class="micro-panel">
+              <p class="mini-label">Standards status</p>
+              <p id="standardsSummary" class="body-copy"></p>
             </div>
-            <div class="mini-panel">
-              <p class="mini-label">Implementation note</p>
-              <p class="note-text" id="implementationNote"></p>
+            <div class="micro-panel">
+              <p class="mini-label">Lab vs field</p>
+              <p id="labFieldSummary" class="body-copy"></p>
+            </div>
+            <div class="micro-panel">
+              <p class="mini-label">Operational implication</p>
+              <p id="operationalImplication" class="body-copy"></p>
+            </div>
+            <div class="micro-panel caution-panel">
+              <p class="mini-label">Not-recommended use cases</p>
+              <div id="cautionFlags" class="tag-list"></div>
             </div>
           </div>
-          <div class="section-divider"></div>
-          <p class="constraint-title">Limitations and scope</p>
-          <div id="limitationList" class="stack-list compact-stack"></div>
         </article>
       </section>
 
-      <section class="grid one-col">
-        <article class="panel-card">
-          <div class="panel-head">
+      <section class="details-grid">
+        <article class="glass-panel">
+          <div class="section-head">
+            <h2>Spec Explorer</h2>
+            <span class="status-pill">Explainable filters</span>
+          </div>
+          <div id="specExplorer" class="spec-table"></div>
+        </article>
+
+        <article class="glass-panel">
+          <div class="section-head">
             <h2>Act</h2>
-            <span class="panel-tag">Precision routing</span>
+            <span class="status-pill">High-precision CTA</span>
           </div>
-          <p class="note-text">
-            Next-step routing is scenario-aware. Each CTA passes the active workspace context forward so the commercial or technical follow-up starts with the correct briefing.
-          </p>
-          <div class="action-grid" id="actionGrid"></div>
+          <div class="action-trio" id="actionGrid"></div>
+          <div class="response-panel">
+            <div class="micro-panel">
+              <p class="mini-label">Expected next step</p>
+              <p id="responseSummary" class="body-copy"></p>
+            </div>
+            <div class="micro-panel">
+              <p class="mini-label">Decision confidence checklist</p>
+              <div id="decisionChecklist" class="checklist"></div>
+            </div>
+          </div>
         </article>
+      </section>
+
+      <section class="payload-shell glass-panel">
+        <div class="section-head">
+          <h2>Workspace payload</h2>
+          <span class="status-pill">State preview</span>
+        </div>
+        <pre id="payloadPreview" class="payload-box"></pre>
       </section>
     </main>
+
+    <aside id="evidenceDrawer" class="evidence-drawer" aria-hidden="true">
+      <div class="drawer-header">
+        <div>
+          <p class="eyebrow">Evidence drawer</p>
+          <h2 id="drawerTitle">Proof and documentation</h2>
+        </div>
+        <button id="closeDrawerButton" class="ghost-button" type="button">Close</button>
+      </div>
+      <div id="drawerContent" class="drawer-content"></div>
+    </aside>
 
     <script src="./app.js"></script>
   </body>
