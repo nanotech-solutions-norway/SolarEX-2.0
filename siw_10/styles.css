@@ -30,6 +30,10 @@ button {
   cursor: pointer;
 }
 
+a {
+  text-decoration: none;
+}
+
 .siw-shell {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,7 +43,11 @@ button {
 .hero-card,
 .panel-card,
 .recommendation-card,
-.payload-panel {
+.payload-panel,
+.score-banner,
+.mini-panel,
+.stack-card,
+.action-card {
   border: 1px solid rgba(148, 163, 184, 0.2);
   background: rgba(15, 23, 42, 0.82);
   backdrop-filter: blur(12px);
@@ -87,7 +95,9 @@ h1 {
 }
 
 .journey-pill,
-.panel-tag {
+.panel-tag,
+.score-chip,
+.info-tag {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
@@ -96,6 +106,16 @@ h1 {
   background: rgba(59, 130, 246, 0.16);
   color: #d9e8ff;
   border: 1px solid rgba(96, 165, 250, 0.24);
+}
+
+.score-chip {
+  font-weight: 700;
+}
+
+.caution-tag {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.28);
+  color: #fde6b0;
 }
 
 .grid {
@@ -112,15 +132,12 @@ h1 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.three-col {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
 .panel-card {
   padding: 22px;
 }
 
-.panel-head {
+.panel-head,
+.stack-head {
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -138,7 +155,8 @@ h1 {
 .workspace-grid dt,
 .constraint-title,
 .recommendation-label,
-.form-grid label span {
+.form-grid label span,
+.mini-label {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -155,7 +173,9 @@ h1 {
   color: #bfd0e8;
 }
 
-.form-grid {
+.form-grid,
+.summary-grid,
+.explain-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
@@ -180,7 +200,8 @@ h1 {
   margin-top: 22px;
 }
 
-.checkbox-grid {
+.checkbox-grid,
+.action-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
@@ -197,7 +218,8 @@ h1 {
   color: #dce8fb;
 }
 
-.recommendation-card {
+.recommendation-card,
+.score-banner {
   margin-top: 22px;
   padding: 18px;
   display: flex;
@@ -206,13 +228,17 @@ h1 {
   align-items: flex-start;
 }
 
-.cta-row {
+.cta-row,
+.tag-list {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.cta-row button {
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   border-radius: 12px;
   padding: 12px 16px;
@@ -220,10 +246,15 @@ h1 {
   color: white;
 }
 
-.cta-row .button-secondary {
+.button-secondary {
   background: rgba(59, 130, 246, 0.16);
   border: 1px solid rgba(96, 165, 250, 0.28);
   color: #d9e8ff;
+}
+
+.button-disabled {
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .payload-panel {
@@ -243,16 +274,45 @@ h1 {
   color: #bfd0e8;
 }
 
+.stack-list {
+  display: grid;
+  gap: 14px;
+}
+
+.compact-stack .stack-card,
+.compact-card {
+  padding: 14px 16px;
+}
+
+.stack-card,
+.action-card,
+.mini-panel {
+  padding: 16px 18px;
+}
+
+.action-card-muted {
+  opacity: 0.78;
+}
+
+.section-divider {
+  height: 1px;
+  margin: 18px 0;
+  background: rgba(148, 163, 184, 0.18);
+}
+
 @media (max-width: 900px) {
   .two-col,
-  .three-col,
   .workspace-grid,
   .form-grid,
-  .checkbox-grid {
+  .checkbox-grid,
+  .summary-grid,
+  .explain-grid,
+  .action-grid {
     grid-template-columns: 1fr;
   }
 
-  .recommendation-card {
+  .recommendation-card,
+  .score-banner {
     flex-direction: column;
   }
 }

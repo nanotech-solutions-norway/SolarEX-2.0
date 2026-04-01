@@ -44,9 +44,16 @@
             <span class="panel-tag">Mechanism clarity</span>
           </div>
           <p class="note-text" id="explainSummary"></p>
-          <p class="note-text">
-            This module binds mechanism understanding to the active scenario so the recommendation path stays transparent and governed.
-          </p>
+          <div class="explain-grid">
+            <div class="mini-panel">
+              <p class="mini-label">Intervention principle</p>
+              <p class="note-text" id="interventionSummary"></p>
+            </div>
+            <div class="mini-panel">
+              <p class="mini-label">Primary caution</p>
+              <p class="note-text" id="primaryCaution"></p>
+            </div>
+          </div>
         </article>
       </section>
 
@@ -95,8 +102,8 @@
               <p class="note-text" id="proofStatus"></p>
             </div>
             <div class="cta-row">
-              <button type="button" id="primaryActionButton"></button>
-              <button type="button" class="button-secondary">Request sample</button>
+              <a href="#" class="button-link" id="primaryActionLink">Request technical discussion</a>
+              <a href="#" class="button-link button-secondary" id="sampleActionLink">Request sample</a>
             </div>
           </div>
 
@@ -107,33 +114,85 @@
         </article>
       </section>
 
-      <section class="grid three-col">
+      <section class="grid two-col">
         <article class="panel-card">
           <div class="panel-head">
             <h2>Fit</h2>
-            <span class="panel-tag">Next module</span>
+            <span class="panel-tag">Scenario shortlist</span>
           </div>
           <p class="note-text">
-            Expand the rules engine into product-path scoring, exclusions, caution flags, and shortlist comparison.
+            The shortlist below is driven by mechanism, environment, substrate, and operating constraints. Logic is intentionally transparent rather than black-box.
           </p>
+          <div class="score-banner">
+            <div>
+              <p class="mini-label">Best-fit score</p>
+              <h3 id="bestFitScore">—</h3>
+            </div>
+            <div>
+              <p class="mini-label">Decision confidence</p>
+              <p class="note-text" id="decisionConfidence"></p>
+            </div>
+          </div>
+          <div id="fitShortlist" class="stack-list"></div>
         </article>
+
+        <article class="panel-card">
+          <div class="panel-head">
+            <h2>Fit rationale</h2>
+            <span class="panel-tag">Why this path</span>
+          </div>
+          <div id="fitRationale" class="stack-list"></div>
+          <div class="section-divider"></div>
+          <div>
+            <p class="constraint-title">Caution flags</p>
+            <div id="cautionFlags" class="tag-list"></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid two-col">
         <article class="panel-card">
           <div class="panel-head">
             <h2>Prove</h2>
-            <span class="panel-tag">Next module</span>
+            <span class="panel-tag">Evidence stack</span>
           </div>
           <p class="note-text">
-            Bind standards, case evidence, test summaries, and limitations directly to the active scenario context.
+            The proof layer surfaces the most relevant standards, field signals, and implementation boundaries for the active scenario.
           </p>
+          <div id="evidenceCards" class="stack-list"></div>
         </article>
+
+        <article class="panel-card">
+          <div class="panel-head">
+            <h2>Evidence summary</h2>
+            <span class="panel-tag">Scope and limits</span>
+          </div>
+          <div class="summary-grid">
+            <div class="mini-panel">
+              <p class="mini-label">Recommended proof emphasis</p>
+              <p class="note-text" id="proofEmphasis"></p>
+            </div>
+            <div class="mini-panel">
+              <p class="mini-label">Implementation note</p>
+              <p class="note-text" id="implementationNote"></p>
+            </div>
+          </div>
+          <div class="section-divider"></div>
+          <p class="constraint-title">Limitations and scope</p>
+          <div id="limitationList" class="stack-list compact-stack"></div>
+        </article>
+      </section>
+
+      <section class="grid one-col">
         <article class="panel-card">
           <div class="panel-head">
             <h2>Act</h2>
-            <span class="panel-tag">Next module</span>
+            <span class="panel-tag">Precision routing</span>
           </div>
           <p class="note-text">
-            Route users into technical discussion, sample request, documentation pack, or RFQ with prefilled context.
+            Next-step routing is scenario-aware. Each CTA passes the active workspace context forward so the commercial or technical follow-up starts with the correct briefing.
           </p>
+          <div class="action-grid" id="actionGrid"></div>
         </article>
       </section>
     </main>

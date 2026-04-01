@@ -57,6 +57,94 @@ const constraintOptions = [
   { value: 'field-application', label: 'Field application required' },
 ]
 
+const solutionCatalog = [
+  {
+    id: 'hydrophobic-rf',
+    label: 'Hydrophobic transparency-preserving coating path',
+    industries: ['telecom'],
+    mechanisms: ['water-icing', 'contamination'],
+    environments: ['cold-wet', 'general-outdoor'],
+    substrates: ['polymer-composite', 'glass'],
+    constraints: ['rf-transparency', 'low-downtime'],
+    scoreBase: 72,
+    rationale: [
+      'Supports rapid shedding of water films that degrade exposed telecom assets.',
+      'Maintains preference for transparency-critical surfaces where signal integrity matters.',
+      'Best suited when uptime and weather resilience matter more than aggressive photocatalytic action.',
+    ],
+    cautions: ['Validate RF transparency on the final substrate and geometry.', 'Surface preparation and adhesion validation remain mandatory.'],
+    evidence: [
+      { type: 'Field', title: 'Weather exposure performance', text: 'Prioritize field evidence showing faster water release and lower persistent wetting on exposed assets.' },
+      { type: 'Implementation', title: 'Transparency validation', text: 'Confirm transparency-critical behavior at the final operating frequency and radome configuration.' },
+      { type: 'Scope', title: 'Harsh climate relevance', text: 'Use cold-wet and icing-relevant evidence first when prioritizing telecom availability.' },
+    ],
+    actions: ['technical-discussion', 'documentation-pack', 'sample-request'],
+  },
+  {
+    id: 'easy-clean',
+    label: 'Low-adhesion easy-clean contamination-control path',
+    industries: ['industrial', 'marine', 'telecom'],
+    mechanisms: ['contamination', 'uv-weathering'],
+    environments: ['general-outdoor', 'marine-salt', 'desert-dust'],
+    substrates: ['metal', 'glass', 'painted-surface', 'polymer-composite'],
+    constraints: ['easy-cleaning', 'low-downtime'],
+    scoreBase: 66,
+    rationale: [
+      'Optimized for reducing cleaning burden and contaminant retention.',
+      'Useful where operational teams need faster maintenance cycles and clearer surface behavior.',
+      'Well suited for general outdoor and industrial contamination scenarios.',
+    ],
+    cautions: ['Do not treat easy-clean performance as a substitute for substrate compatibility testing.'],
+    evidence: [
+      { type: 'Lab', title: 'Contamination-release tests', text: 'Show soiling reduction, wash-down behavior, and cleaning effort reduction.' },
+      { type: 'Field', title: 'Maintenance interval evidence', text: 'Use operational evidence that links lower fouling to lower maintenance burden.' },
+    ],
+    actions: ['documentation-pack', 'sample-request', 'implementation-discussion'],
+  },
+  {
+    id: 'abrasion-resistant',
+    label: 'Abrasion-resistant protection path',
+    industries: ['wind', 'industrial'],
+    mechanisms: ['abrasion', 'uv-weathering'],
+    environments: ['desert-dust', 'general-outdoor'],
+    substrates: ['polymer-composite', 'metal', 'painted-surface'],
+    constraints: ['harsh-weather', 'low-downtime'],
+    scoreBase: 69,
+    rationale: [
+      'Prioritizes durability where particle impact and repeated exposure are primary failure drivers.',
+      'Fits leading-edge and exposed surface scenarios where mechanical wear dominates.',
+      'Supports longer maintenance intervals when the substrate and application route are validated.',
+    ],
+    cautions: ['Abrasion resistance claims should be read together with application method and repairability.'],
+    evidence: [
+      { type: 'Durability', title: 'Abrasion and exposure evidence', text: 'Prioritize controlled durability tests and field-aging signals relevant to abrasive environments.' },
+      { type: 'Implementation', title: 'Application-route dependency', text: 'Performance is highly dependent on substrate preparation and application control.' },
+    ],
+    actions: ['technical-discussion', 'implementation-discussion', 'documentation-pack'],
+  },
+  {
+    id: 'marine-durability',
+    label: 'Marine durability and contamination-control path',
+    industries: ['marine', 'industrial'],
+    mechanisms: ['contamination', 'uv-weathering'],
+    environments: ['marine-salt'],
+    substrates: ['metal', 'glass', 'painted-surface'],
+    constraints: ['harsh-weather', 'easy-cleaning'],
+    scoreBase: 68,
+    rationale: [
+      'Designed for high-exposure salt and contamination environments.',
+      'Useful when maintenance burden and persistent contamination both influence asset performance.',
+      'Pairs contamination control with exposure-awareness rather than a single performance claim.',
+    ],
+    cautions: ['Corrosion and system-stack requirements must be reviewed separately from top-surface behavior.'],
+    evidence: [
+      { type: 'Field', title: 'Salt exposure relevance', text: 'Evidence should reflect marine contamination, weathering, and maintenance realities.' },
+      { type: 'Scope', title: 'System boundary', text: 'Use top-coat evidence only within its actual protective scope and avoid over-claiming corrosion performance.' },
+    ],
+    actions: ['implementation-discussion', 'documentation-pack', 'sample-request'],
+  },
+]
+
 const state = {
   industry: 'telecom',
   asset: 'radome',
@@ -67,6 +155,9 @@ const state = {
   candidatePath: '',
   proofStatus: '',
   nextAction: '',
+  bestFitScore: 0,
+  shortlistedSolutions: [],
+  cautionFlags: [],
 }
 
 const industrySelect = document.getElementById('industrySelect')
@@ -77,29 +168,27 @@ const environmentSelect = document.getElementById('environmentSelect')
 const constraintGrid = document.getElementById('constraintGrid')
 const workspaceSummary = document.getElementById('workspaceSummary')
 const explainSummary = document.getElementById('explainSummary')
+const interventionSummary = document.getElementById('interventionSummary')
+const primaryCaution = document.getElementById('primaryCaution')
 const candidatePath = document.getElementById('candidatePath')
 const proofStatus = document.getElementById('proofStatus')
-const primaryActionButton = document.getElementById('primaryActionButton')
+const primaryActionLink = document.getElementById('primaryActionLink')
+const sampleActionLink = document.getElementById('sampleActionLink')
 const payloadPreview = document.getElementById('payloadPreview')
+const bestFitScore = document.getElementById('bestFitScore')
+const decisionConfidence = document.getElementById('decisionConfidence')
+const fitShortlist = document.getElementById('fitShortlist')
+const fitRationale = document.getElementById('fitRationale')
+const cautionFlags = document.getElementById('cautionFlags')
+const evidenceCards = document.getElementById('evidenceCards')
+const proofEmphasis = document.getElementById('proofEmphasis')
+const implementationNote = document.getElementById('implementationNote')
+const limitationList = document.getElementById('limitationList')
+const actionGrid = document.getElementById('actionGrid')
 
 function deriveCandidatePath(currentState) {
-  if (currentState.industry === 'telecom' && currentState.mechanism === 'water-icing') {
-    return 'Hydrophobic transparency-preserving protective coating path'
-  }
-
-  if (currentState.industry === 'wind' && currentState.mechanism === 'abrasion') {
-    return 'Abrasion-resistant leading-edge protection path'
-  }
-
-  if (currentState.environment === 'marine-salt') {
-    return 'Marine durability and contamination-control coating path'
-  }
-
-  if (currentState.mechanism === 'contamination') {
-    return 'Low-adhesion, easy-clean contamination-control coating path'
-  }
-
-  return 'General outdoor protective coating evaluation path'
+  const top = currentState.shortlistedSolutions[0]
+  return top ? top.label : 'General outdoor protective coating evaluation path'
 }
 
 function deriveProofStatus(currentState) {
@@ -115,14 +204,12 @@ function deriveProofStatus(currentState) {
 }
 
 function deriveNextAction(currentState) {
-  if (currentState.constraints.includes('field-application')) {
-    return 'Request implementation discussion'
-  }
+  const top = currentState.shortlistedSolutions[0]
+  if (!top) return 'Request documentation pack'
 
-  if (currentState.constraints.includes('rf-transparency')) {
-    return 'Request technical discussion'
-  }
-
+  if (top.actions.includes('technical-discussion')) return 'Request technical discussion'
+  if (top.actions.includes('implementation-discussion')) return 'Request implementation discussion'
+  if (top.actions.includes('sample-request')) return 'Request sample'
   return 'Request documentation pack'
 }
 
@@ -142,6 +229,73 @@ function deriveExplainSummary(currentState) {
   return 'Long-term outdoor exposure can degrade surface function, appearance, and protection unless the intervention path is matched correctly.'
 }
 
+function deriveInterventionSummary(currentState) {
+  if (currentState.mechanism === 'water-icing') {
+    return 'Favour low-retention surface behavior that reduces persistent wetting and encourages faster shedding.'
+  }
+
+  if (currentState.mechanism === 'abrasion') {
+    return 'Favour durability-led surface protection with exposure-aware application and maintenance planning.'
+  }
+
+  if (currentState.mechanism === 'contamination') {
+    return 'Favour low-adhesion and easy-clean behavior supported by contamination-release evidence.'
+  }
+
+  return 'Favour the coating path whose mechanism, substrate fit, and exposure profile align with the actual asset condition.'
+}
+
+function scoreSolution(solution, currentState) {
+  let score = solution.scoreBase
+  if (solution.industries.includes(currentState.industry)) score += 10
+  if (solution.mechanisms.includes(currentState.mechanism)) score += 10
+  if (solution.environments.includes(currentState.environment)) score += 8
+  if (solution.substrates.includes(currentState.substrate)) score += 6
+
+  currentState.constraints.forEach((constraint) => {
+    if (solution.constraints.includes(constraint)) score += 4
+  })
+
+  if (currentState.constraints.includes('rf-transparency') && !solution.constraints.includes('rf-transparency')) {
+    score -= 12
+  }
+
+  if (currentState.environment === 'marine-salt' && solution.id === 'hydrophobic-rf') {
+    score -= 6
+  }
+
+  return Math.max(score, 0)
+}
+
+function computeShortlist(currentState) {
+  return solutionCatalog
+    .map((solution) => ({ ...solution, score: scoreSolution(solution, currentState) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+}
+
+function deriveCautionFlags(currentState) {
+  const flags = []
+
+  if (currentState.constraints.includes('rf-transparency')) {
+    flags.push('Validate transparency-critical performance on final geometry.')
+  }
+
+  if (currentState.constraints.includes('field-application')) {
+    flags.push('Field application increases dependency on preparation and process control.')
+  }
+
+  if (currentState.environment === 'marine-salt') {
+    flags.push('Keep corrosion/system-stack scope separate from surface-behavior claims.')
+  }
+
+  if (currentState.mechanism === 'abrasion') {
+    flags.push('Use abrasion evidence and repairability guidance together.')
+  }
+
+  return flags
+}
+
 function getPayload(currentState) {
   return {
     industry: currentState.industry,
@@ -152,7 +306,29 @@ function getPayload(currentState) {
     constraints: currentState.constraints,
     candidatePath: currentState.candidatePath,
     nextAction: currentState.nextAction,
+    bestFitScore: currentState.bestFitScore,
   }
+}
+
+function buildActionUrl(actionType, currentState) {
+  const payload = new URLSearchParams({
+    intent: actionType,
+    industry: currentState.industry,
+    asset: currentState.asset,
+    mechanism: currentState.mechanism,
+    substrate: currentState.substrate,
+    environment: currentState.environment,
+    candidatePath: currentState.candidatePath,
+    score: String(currentState.bestFitScore),
+  })
+
+  currentState.constraints.forEach((constraint) => payload.append('constraint', constraint))
+
+  if (actionType === 'documentation-pack') {
+    return `../proof.html?${payload.toString()}`
+  }
+
+  return `../contact.html?${payload.toString()}`
 }
 
 function renderSelect(selectElement, options, selectedValue) {
@@ -196,14 +372,115 @@ function renderWorkspace() {
     ['Substrate', state.substrate],
     ['Environment', state.environment],
     ['Candidate path', state.candidatePath],
-    ['Proof state', state.proofStatus],
+    ['Best-fit score', `${state.bestFitScore}/100`],
     ['Next action', state.nextAction],
   ]
     .map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`)
     .join('')
 }
 
+function renderFitShortlist() {
+  fitShortlist.innerHTML = state.shortlistedSolutions
+    .map((solution, index) => `
+      <article class="stack-card">
+        <div class="stack-head">
+          <div>
+            <p class="mini-label">Option ${index + 1}</p>
+            <h3>${solution.label}</h3>
+          </div>
+          <span class="score-chip">${solution.score}/100</span>
+        </div>
+        <p class="note-text">${solution.rationale[0]}</p>
+      </article>
+    `)
+    .join('')
+
+  const top = state.shortlistedSolutions[0]
+  fitRationale.innerHTML = top
+    ? top.rationale.map((item) => `<div class="stack-card compact-card"><p class="note-text">${item}</p></div>`).join('')
+    : '<div class="stack-card compact-card"><p class="note-text">No shortlist available.</p></div>'
+
+  cautionFlags.innerHTML = state.cautionFlags.map((flag) => `<span class="info-tag caution-tag">${flag}</span>`).join('')
+}
+
+function renderProof() {
+  const top = state.shortlistedSolutions[0]
+  if (!top) {
+    evidenceCards.innerHTML = '<div class="stack-card compact-card"><p class="note-text">No evidence stack available.</p></div>'
+    limitationList.innerHTML = ''
+    return
+  }
+
+  evidenceCards.innerHTML = top.evidence
+    .map((item) => `
+      <article class="stack-card">
+        <div class="stack-head">
+          <p class="mini-label">${item.type}</p>
+        </div>
+        <h3>${item.title}</h3>
+        <p class="note-text">${item.text}</p>
+      </article>
+    `)
+    .join('')
+
+  proofEmphasis.textContent = state.proofStatus
+  implementationNote.textContent = top.cautions[0] || 'Validate substrate compatibility and implementation route before commitment.'
+  limitationList.innerHTML = top.cautions
+    .map((item) => `<div class="stack-card compact-card"><p class="note-text">${item}</p></div>`)
+    .join('')
+}
+
+function renderActions() {
+  const top = state.shortlistedSolutions[0]
+  const actions = [
+    {
+      type: 'technical-discussion',
+      title: 'Technical discussion',
+      body: 'Use this path when validation, constraints, or performance assumptions need technical review.',
+    },
+    {
+      type: 'sample-request',
+      title: 'Sample request',
+      body: 'Use this path when the next step is surface-level evaluation or controlled pilot sampling.',
+    },
+    {
+      type: 'documentation-pack',
+      title: 'Documentation pack',
+      body: 'Use this path when stakeholders need proof, standards, and decision-support material.',
+    },
+    {
+      type: 'implementation-discussion',
+      title: 'Implementation discussion',
+      body: 'Use this path when application method, rollout model, or field process needs planning.',
+    },
+  ]
+
+  actionGrid.innerHTML = actions
+    .map((action) => {
+      const enabled = top && top.actions.includes(action.type)
+      const href = enabled ? buildActionUrl(action.type, state) : '#'
+      return `
+        <article class="action-card ${enabled ? '' : 'action-card-muted'}">
+          <div class="panel-head">
+            <h3>${action.title}</h3>
+            <span class="panel-tag">${enabled ? 'Recommended' : 'Secondary'}</span>
+          </div>
+          <p class="note-text">${action.body}</p>
+          <a class="button-link ${enabled ? '' : 'button-disabled'}" ${enabled ? `href="${href}"` : 'href="#" aria-disabled="true"'}>${enabled ? 'Open route' : 'Not primary'}</a>
+        </article>
+      `
+    })
+    .join('')
+
+  primaryActionLink.textContent = state.nextAction
+  primaryActionLink.href = buildActionUrl((top && top.actions[0]) || 'documentation-pack', state)
+  sampleActionLink.href = buildActionUrl('sample-request', state)
+}
+
 function syncDerivedFields() {
+  state.shortlistedSolutions = computeShortlist(state)
+  state.bestFitScore = state.shortlistedSolutions[0] ? state.shortlistedSolutions[0].score : 0
+  state.cautionFlags = deriveCautionFlags(state)
   state.candidatePath = deriveCandidatePath(state)
   state.proofStatus = deriveProofStatus(state)
   state.nextAction = deriveNextAction(state)
@@ -217,12 +494,18 @@ function render() {
   renderSelect(environmentSelect, environmentOptions, state.environment)
   renderConstraints()
   renderWorkspace()
+  renderFitShortlist()
+  renderProof()
+  renderActions()
 
   explainSummary.textContent = deriveExplainSummary(state)
+  interventionSummary.textContent = deriveInterventionSummary(state)
+  primaryCaution.textContent = state.cautionFlags[0] || 'No elevated caution flags for the current scenario.'
   candidatePath.textContent = state.candidatePath
   proofStatus.textContent = state.proofStatus
-  primaryActionButton.textContent = state.nextAction
   payloadPreview.textContent = JSON.stringify(getPayload(state), null, 2)
+  bestFitScore.textContent = `${state.bestFitScore}/100`
+  decisionConfidence.textContent = state.bestFitScore >= 85 ? 'High' : state.bestFitScore >= 72 ? 'Moderate' : 'Needs review'
 }
 
 industrySelect.addEventListener('change', (event) => {
