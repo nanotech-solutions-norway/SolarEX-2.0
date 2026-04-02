@@ -402,7 +402,7 @@ function detailPayload(key, primary, secondary, metrics) {
   if (key === 'chart') {
     return {
       title: 'Coating comparison chart',
-      summary: `The comparison chart visualizes how ${primary.label} and ${secondary.label} perform against four decision criteria: water shedding, contamination control, proof strength, and durability framing. In mobile view this chart is intentionally tappable so users can inspect the analysis without trying to read the small plot inline.`,
+      summary: `The comparison chart visualizes how ${primary.label} and ${secondary.label} perform against four decision criteria: water shedding, contamination control, proof strength, and durability framing. Across desktop, tablet, and mobile, this chart is intentionally clickable or tappable so users can inspect the analysis without relying on compressed inline reading.`,
       metrics: [`${primary.label}: ${metrics.composite}/100 composite fit`, `${secondary.label}: ${rankProduct(secondary) - 100}/comparison rank proxy`, `Mechanism focus: ${label(data.mechanisms, state.mechanism)}`],
       sections: [
         ['Why the primary path leads', `${primary.label} is currently prioritized because its mechanism match and asset fit align more closely with the selected scenario. The chart is not a guarantee model; it is a structured decision view that separates performance logic from proof depth.`],
@@ -414,7 +414,7 @@ function detailPayload(key, primary, secondary, metrics) {
   if (key === 'environment') {
     return {
       title: 'Environmental testing profile',
-      summary: `The environment panel frames the scenario conditions used to interpret fit and proof. It turns the dashboard from a generic recommendation layer into a contextual review surface. On mobile this panel opens a detailed view because the exposure assumptions materially affect interpretation.`,
+      summary: `The environment panel frames the scenario conditions used to interpret fit and proof. It turns the dashboard from a generic recommendation layer into a contextual review surface. Across desktop, tablet, and mobile, this panel opens into the same detailed analysis layer so exposure assumptions remain readable and reviewable.`,
       metrics: [`Temperature: ${env.temperature}`, `Wind speed: ${env.wind}`, `Exposure: ${env.exposure}`],
       sections: [
         ['Interpretation', `The current mechanism selection (${label(data.mechanisms, state.mechanism)}) maps to an exposure profile intended to frame the recommendation. This is a scenario scaffold, not a site-certified weather history.`],
@@ -453,7 +453,7 @@ function detailPayload(key, primary, secondary, metrics) {
     const mech = key.split(':')[1];
     return {
       title: 'Mechanism analysis tile',
-      summary: `This mechanism card represents a simplified visual cue for ${mech.replace('-', ' ')}. In mobile view each tile opens into a larger explanatory layer so the user can read the detailed meaning instead of relying on small inline cards.`,
+      summary: `This mechanism card represents a simplified visual cue for ${mech.replace('-', ' ')}. Across desktop, tablet, and mobile, each tile opens into the same larger explanatory layer so the user can review the detailed meaning without depending on small inline cards.`,
       metrics: [`Primary path: ${primary.label}`, `Mechanism: ${label(data.mechanisms, state.mechanism)}`],
       sections: [
         ['Interpretation', `${primary.label} is being explained through a bounded micro-story: mechanism first, evidence second, route decision third. This preserves transparency and keeps the recommendation trust-safe.`],
@@ -475,7 +475,7 @@ function detailPayload(key, primary, secondary, metrics) {
       summary: map[insightKey] || 'Insight detail is not available.',
       metrics: [`Scenario path: ${primary.label}`],
       sections: [
-        ['Why this module exists', `The right rail condenses the main guidance into clickable operational notes. It is intentionally compact on desktop and intentionally expandable on mobile.`],
+        ['Why this module exists', `The right rail condenses the main guidance into clickable operational notes. It is intentionally compact in the dashboard and intentionally expandable through the same popup pattern on desktop, tablet, and mobile.`],
       ],
       actions: [{ label: 'Return to workspace', href: '#top' }],
     };
@@ -516,7 +516,7 @@ function detailPayload(key, primary, secondary, metrics) {
   if (key === 'metric-exposure') {
     return {
       title: 'Exposure window metric',
-      summary: `The exposure window card gives the user a fast reminder of how long the current proof framing or field window extends. On mobile it opens into a larger description because short labels hide too much nuance.`,
+      summary: `The exposure window card gives the user a fast reminder of how long the current proof framing or field window extends. Across desktop, tablet, and mobile it opens into the same larger description because short inline labels can hide too much nuance.`,
       metrics: [`Exposure: ${primary.exposureWindow}`, `Environment: ${environmentProfile().index}`],
       sections: [
         ['Interpretation', `Exposure window framing helps users distinguish between short validation cycles and longer field-backed narratives. It should always be read alongside the current caution notes.`],

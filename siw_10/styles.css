@@ -146,6 +146,11 @@ body::before {
 .status-cluster { align-items: center; flex-wrap: wrap; }
 .status-chip { color: var(--muted); }
 .status-chip.status-ok { color: #dfffe6; }
+.status-chip.status-accent {
+  color: #cae8ff;
+  border-color: rgba(60, 160, 255, 0.34);
+  background: rgba(13, 34, 63, 0.82);
+}
 .ghost-button {
   cursor: pointer;
   background: rgba(10, 22, 39, 0.82);
@@ -339,6 +344,12 @@ select {
   height: 10px;
   border-radius: 999px;
   display: inline-block;
+}
+.interaction-note {
+  margin: 10px 0 0;
+  color: #9fb4d6;
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 .mechanism-gallery {
@@ -553,8 +564,68 @@ select {
   color: var(--text);
 }
 
+button.interactive-surface,
+button.mechanism-card,
+button.validation-row,
+button.proof-row,
+button.metric-card,
+button.side-action,
+button.panel-icon {
+  cursor: zoom-in;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+button.interactive-surface:focus-visible,
+button.mechanism-card:focus-visible,
+button.validation-row:focus-visible,
+button.proof-row:focus-visible,
+button.metric-card:focus-visible,
+button.side-action:focus-visible,
+button.panel-icon:focus-visible,
+.ghost-button:focus-visible,
+.nav-chip:focus-visible,
+.document-link:focus-visible,
+.route-link:focus-visible {
+  outline: 2px solid rgba(130, 198, 255, 0.92);
+  outline-offset: 2px;
+}
+@media (hover: hover) {
+  button.interactive-surface:hover,
+  button.mechanism-card:hover,
+  button.validation-row:hover,
+  button.proof-row:hover,
+  button.metric-card:hover,
+  button.side-action:hover,
+  button.panel-icon:hover,
+  .document-link:hover,
+  .route-link:hover,
+  .ghost-button:hover {
+    border-color: rgba(112, 170, 255, 0.46);
+    box-shadow: 0 10px 24px rgba(7, 18, 34, 0.34), 0 0 18px rgba(60, 160, 255, 0.14);
+    transform: translateY(-1px);
+    background: rgba(12, 24, 42, 0.9);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  button.interactive-surface,
+  button.mechanism-card,
+  button.validation-row,
+  button.proof-row,
+  button.metric-card,
+  button.side-action,
+  button.panel-icon,
+  .document-link,
+  .route-link,
+  .ghost-button {
+    transition: none;
+  }
+}
+
+@media (min-width: 981px) {
+  .detail-dialog {
+    width: min(980px, calc(100vw - 48px));
+  }
 }
 
 @media (max-width: 1280px) {
@@ -569,6 +640,13 @@ select {
   }
   .top-nav { justify-content: flex-start; }
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 980px) and (min-width: 761px) {
+  .detail-dialog {
+    width: min(860px, calc(100vw - 28px));
+  }
+  .chart-surface-inner { min-height: 240px; }
 }
 
 @media (max-width: 760px) {
