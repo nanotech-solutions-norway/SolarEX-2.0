@@ -3,168 +3,223 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SIW v1.3 — SolarEX Decision Workspace</title>
-    <meta name="description" content="SIW v1.3 — SolarEX Decision Workspace. SolarEX-native decision support for Quartz and Titan across Orient, Explain, Fit, Prove, Compare, and Act." />
+    <title>SIW v1.4 — Surface Intelligence Workspace</title>
+    <meta
+      name="description"
+      content="SIW v1.4 — Surface Intelligence Workspace. Control-room dashboard for coating comparison, validation evidence, performance testing, and guided next-step routing."
+    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="scene"></div>
-    <main class="siw-app">
-      <header class="topbar">
-        <div class="brand-wrap">
-          <div class="brand-mark"></div>
-          <div>
-            <div class="brand-line"><strong>SolarEX</strong><span>Decision</span><span>Workspace</span></div>
-            <div class="subline">Surface Intelligence Workspace <span class="version-badge">v1.3</span></div>
+
+    <main class="workspace-app">
+      <header class="command-bar shell-panel">
+        <div class="brand-cluster">
+          <div class="brand-glyph"></div>
+          <div class="brand-copy">
+            <div class="brand-title"><strong>Surface Intelligence</strong> Workspace</div>
+            <div class="brand-subtitle">SIW v1.4 • Control-room redesign</div>
           </div>
         </div>
-        <label class="search-shell">
-          <input id="globalSearch" type="search" placeholder="Search products, evidence, mechanisms" autocomplete="off" />
-          <div id="searchResults" class="search-results"></div>
-        </label>
+
+        <nav class="top-nav" aria-label="Workspace navigation">
+          <button class="nav-chip is-active" type="button">Materials Analysis</button>
+          <button class="nav-chip" type="button">Performance Testing</button>
+          <button class="nav-chip" type="button">Validation Reports</button>
+        </nav>
+
+        <div class="status-cluster">
+          <span class="status-chip status-ok">System Status: Online</span>
+          <span class="status-chip">Alerts</span>
+          <span class="status-chip">Admin</span>
+        </div>
       </header>
 
-      <section class="workspace-shell glass-panel">
-        <div class="workspace-strip" id="workspaceStrip"></div>
-        <div class="strip-actions">
-          <button id="saveWorkspaceButton" class="ghost-button" type="button">Save Workspace</button>
-          <button id="clearWorkspaceButton" class="ghost-button" type="button">Clear</button>
+      <section class="workspace-stage shell-panel">
+        <div class="workspace-backdrop" aria-hidden="true">
+          <div class="tower tower-left"></div>
+          <div class="tower tower-center"></div>
+          <div class="windmill"></div>
+          <div class="radome"></div>
         </div>
-      </section>
 
-      <section class="hero-panel glass-panel">
-        <div class="hero-copy">
-          <p class="eyebrow">SolarEX master solution</p>
-          <h1 id="heroTitle">Decision support for solar contamination control</h1>
-          <p class="hero-subtitle" id="heroSubtitle">Orient the scenario, explain the mechanism, test fit, inspect proof, compare Quartz vs Titan, and route to the correct next action.</p>
-          <div class="hero-badges">
-            <span class="hero-tag">Persistent workspace</span>
-            <span class="hero-tag">Evidence-bound fit</span>
-            <span class="hero-tag">Compare-ready</span>
-            <span class="hero-tag">Trust-safe routing</span>
+        <div class="workspace-grid">
+          <div class="column column-left">
+            <section class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Comparison</p>
+                  <h2>Coating Comparisons</h2>
+                </div>
+                <button id="openChartDetail" class="panel-icon" type="button" aria-label="Open chart detail">•••</button>
+              </div>
+
+              <div class="panel-controls">
+                <label class="field-shell field-shell-wide">
+                  <span>Primary coating path</span>
+                  <select id="productFocusSelect"></select>
+                </label>
+              </div>
+
+              <div class="panel-controls panel-controls-tight">
+                <label class="field-shell">
+                  <span>Industry</span>
+                  <select id="industrySelect"></select>
+                </label>
+                <label class="field-shell">
+                  <span>Asset</span>
+                  <select id="assetSelect"></select>
+                </label>
+                <label class="field-shell">
+                  <span>Mechanism</span>
+                  <select id="mechanismSelect"></select>
+                </label>
+              </div>
+
+              <button id="chartTrigger" class="chart-surface interactive-surface" type="button">
+                <div id="chartSurface" class="chart-surface-inner"></div>
+                <div class="chart-legend" id="chartLegend"></div>
+              </button>
+            </section>
+
+            <section class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Mechanism</p>
+                  <h2>Mechanism Analysis</h2>
+                </div>
+                <button class="panel-icon" type="button" aria-label="Mechanism detail">•••</button>
+              </div>
+
+              <div id="mechanismGallery" class="mechanism-gallery"></div>
+            </section>
+          </div>
+
+          <div class="column column-center">
+            <section class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Exposure profile</p>
+                  <h2>Environmental Testing</h2>
+                </div>
+                <button id="environmentTrigger" class="panel-icon" type="button" aria-label="Environment detail">•••</button>
+              </div>
+              <button id="environmentSurface" class="interactive-surface environment-strip" type="button"></button>
+            </section>
+
+            <section class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Verification</p>
+                  <h2>Validation Results</h2>
+                </div>
+                <button id="validationTrigger" class="panel-icon" type="button" aria-label="Validation detail">•••</button>
+              </div>
+              <div id="validationList" class="validation-list"></div>
+            </section>
+
+            <section class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Evidence</p>
+                  <h2>Proof of Performance</h2>
+                </div>
+                <button id="proofTrigger" class="panel-icon" type="button" aria-label="Proof detail">•••</button>
+              </div>
+              <div id="proofList" class="proof-list"></div>
+            </section>
+          </div>
+
+          <div class="column column-right">
+            <section class="dashboard-panel side-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Decision support</p>
+                  <h2>Insights &amp; Notes</h2>
+                </div>
+                <button class="panel-icon" type="button" aria-label="Insights detail">•••</button>
+              </div>
+              <div id="insightList" class="stacked-action-list"></div>
+            </section>
+
+            <section class="dashboard-panel side-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Documents</p>
+                  <h2>Attached Documents</h2>
+                </div>
+                <button class="panel-icon" type="button" aria-label="Documents detail">•••</button>
+              </div>
+              <div id="documentList" class="stacked-action-list"></div>
+            </section>
+
+            <section class="dashboard-panel side-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Next action</p>
+                  <h2>Response Routing</h2>
+                </div>
+                <button class="panel-icon" type="button" aria-label="Routing detail">•••</button>
+              </div>
+              <div id="routeList" class="stacked-action-list"></div>
+            </section>
           </div>
         </div>
-        <aside class="support-panel glass-panel-soft">
-          <div class="panel-title-row">
-            <h2>Trust-Safe Support</h2>
-            <span class="status-pill">Human-first</span>
-          </div>
-          <p class="body-copy">Recommendations are transparent. Technical fit, proof strength, and route readiness are separated so the output remains reviewable rather than black-box.</p>
-          <div class="support-grid">
-            <div class="support-card">
-              <p class="mini-label">Assistance</p>
-              <h3>Bounded AI layer</h3>
-              <p class="micro-copy">Narratives and fit logic use governed SolarEX records rather than open-ended text generation.</p>
+
+        <section class="workspace-ribbon">
+          <div class="ribbon-header">
+            <p class="panel-kicker">Data overview</p>
+            <div class="ribbon-actions">
+              <button id="saveWorkspaceButton" class="ghost-button" type="button">Save Workspace</button>
+              <button id="clearWorkspaceButton" class="ghost-button" type="button">Clear</button>
             </div>
-            <div class="support-card">
-              <p class="mini-label">Escalation</p>
-              <h3>Technical review</h3>
-              <p class="micro-copy">Mixed or proof-heavy cases should escalate before commercial commitment.</p>
-            </div>
           </div>
-        </aside>
-      </section>
 
-      <section class="stage-grid">
-        <article class="stage-card glass-panel">
-          <div class="stage-head"><h2>Orient</h2><p>What are you protecting?</p></div>
-          <div class="form-grid">
-            <label><span>Industry</span><select id="industrySelect"></select></label>
-            <label><span>Asset</span><select id="assetSelect"></select></label>
-            <label><span>Degradation</span><select id="mechanismSelect"></select></label>
-            <label><span>Substrate</span><select id="substrateSelect"></select></label>
+          <div class="metric-grid">
+            <button id="metricFit" class="metric-card interactive-surface" type="button">
+              <span class="metric-label">Composite Fit</span>
+              <strong id="metricFitValue" class="metric-value">--</strong>
+              <span id="metricFitNote" class="metric-note">Scenario fit index</span>
+            </button>
+            <button id="metricProof" class="metric-card interactive-surface" type="button">
+              <span class="metric-label">Proof Strength</span>
+              <strong id="metricProofValue" class="metric-value">--</strong>
+              <span id="metricProofNote" class="metric-note">Evidence quality index</span>
+            </button>
+            <button id="metricAngle" class="metric-card interactive-surface" type="button">
+              <span class="metric-label">Contact Angle</span>
+              <strong id="metricAngleValue" class="metric-value">--</strong>
+              <span id="metricAngleNote" class="metric-note">Surface wetting proxy</span>
+            </button>
+            <button id="metricExposure" class="metric-card interactive-surface" type="button">
+              <span class="metric-label">Exposure Window</span>
+              <strong id="metricExposureValue" class="metric-value">--</strong>
+              <span id="metricExposureNote" class="metric-note">Field duration framing</span>
+            </button>
           </div>
-          <div class="constraint-zone">
-            <p class="constraint-title">Constraint profile</p>
-            <div id="constraintGrid" class="chip-grid"></div>
-          </div>
-          <div class="sentence-builder" id="sentenceBuilder"></div>
-        </article>
-
-        <article class="stage-card glass-panel">
-          <div class="stage-head"><h2>Explain</h2><p>How does it work?</p></div>
-          <div class="explain-visual"></div>
-          <div class="explainer-stack">
-            <div class="micro-panel"><p class="mini-label">Mechanism micro-story</p><p id="explainSummary" class="body-copy"></p></div>
-            <div class="micro-panel"><p class="mini-label">Intervention principle</p><p id="interventionSummary" class="body-copy"></p></div>
-            <div class="micro-panel caution-panel"><p class="mini-label">Boundary conditions</p><p id="boundarySummary" class="body-copy"></p></div>
-          </div>
-        </article>
-
-        <article class="stage-card glass-panel">
-          <div class="stage-head"><h2>Fit</h2><p>How well does it fit?</p></div>
-          <div class="fit-overview">
-            <div><p class="mini-label">Composite fit</p><div id="bestFitScore" class="score-display">--</div></div>
-            <div><p class="mini-label">Verdict</p><div id="fitVerdict" class="verdict-pill">Needs review</div></div>
-          </div>
-          <div id="fitShortlist" class="stack-list"></div>
-          <div class="compare-actions">
-            <button id="compareToggleButton" class="ghost-button" type="button">Open compare tray</button>
-            <button id="saveSolutionButton" class="ghost-button" type="button">Save solution</button>
-          </div>
-        </article>
-      </section>
-
-      <section class="proof-shell glass-panel">
-        <div class="section-head">
-          <h2>Evidence rail</h2>
-          <div class="section-head-actions">
-            <button id="bookmarkProofButton" class="ghost-button" type="button">Save proof</button>
-            <button id="openEvidenceButton" class="ghost-button" type="button">Open evidence drawer</button>
-          </div>
-        </div>
-        <div id="proofRail" class="proof-rail"></div>
-      </section>
-
-      <section class="mid-grid">
-        <article class="glass-panel">
-          <div class="section-head"><h2>Guided capability map</h2><span class="status-pill">Governed MVP</span></div>
-          <div class="capability-map" id="capabilityMap"></div>
-        </article>
-        <article class="glass-panel">
-          <div class="section-head"><h2>Credibility summary</h2><span class="status-pill">Evidence-bound</span></div>
-          <div class="cred-grid">
-            <div class="micro-panel"><p class="mini-label">Standards status</p><p id="standardsSummary" class="body-copy"></p></div>
-            <div class="micro-panel"><p class="mini-label">Lab vs field</p><p id="labFieldSummary" class="body-copy"></p></div>
-            <div class="micro-panel"><p class="mini-label">Operational implication</p><p id="operationalImplication" class="body-copy"></p></div>
-            <div class="micro-panel caution-panel"><p class="mini-label">Limitations</p><div id="cautionFlags" class="tag-list"></div></div>
-          </div>
-        </article>
-      </section>
-
-      <section class="compare-shell glass-panel" id="compareShell" hidden>
-        <div class="section-head"><h2>Compare tray</h2><span class="status-pill">Quartz vs Titan</span></div>
-        <div id="compareGrid" class="compare-grid"></div>
-      </section>
-
-      <section class="details-grid">
-        <article class="glass-panel">
-          <div class="section-head"><h2>Spec Explorer</h2><span class="status-pill">Explainable filters</span></div>
-          <div id="specExplorer" class="spec-table"></div>
-        </article>
-        <article class="glass-panel">
-          <div class="section-head"><h2>Act</h2><span class="status-pill">High-precision CTA</span></div>
-          <div class="action-trio" id="actionGrid"></div>
-          <div class="response-panel">
-            <div class="micro-panel"><p class="mini-label">Expected next step</p><p id="responseSummary" class="body-copy"></p></div>
-            <div class="micro-panel"><p class="mini-label">Decision confidence checklist</p><div id="decisionChecklist" class="checklist"></div></div>
-          </div>
-        </article>
-      </section>
-
-      <section class="payload-shell glass-panel">
-        <div class="section-head"><h2>Workspace payload</h2><span class="status-pill">State preview</span></div>
-        <pre id="payloadPreview" class="payload-box"></pre>
+        </section>
       </section>
     </main>
 
-    <aside id="evidenceDrawer" class="evidence-drawer" aria-hidden="true">
-      <div class="drawer-header">
-        <div><p class="eyebrow">Evidence drawer</p><h2 id="drawerTitle">Proof and documentation</h2></div>
-        <button id="closeDrawerButton" class="ghost-button" type="button">Close</button>
-      </div>
-      <div id="drawerContent" class="drawer-content"></div>
-    </aside>
+    <div id="detailModal" class="detail-modal" aria-hidden="true">
+      <div class="detail-backdrop" data-close-modal="true"></div>
+      <section class="detail-dialog shell-panel" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+        <div class="detail-header">
+          <div>
+            <p class="panel-kicker">Detailed description and analysis</p>
+            <h2 id="detailTitle">Analysis detail</h2>
+          </div>
+          <button id="closeDetailModal" class="ghost-button" type="button">Close</button>
+        </div>
+        <div class="detail-body">
+          <p id="detailSummary" class="detail-summary"></p>
+          <div id="detailMetrics" class="detail-metrics"></div>
+          <div id="detailAnalysis" class="detail-analysis"></div>
+          <div id="detailActions" class="detail-actions"></div>
+        </div>
+      </section>
+    </div>
 
     <script src="./app.js"></script>
   </body>

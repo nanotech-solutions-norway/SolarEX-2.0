@@ -1,36 +1,22 @@
-const versionLabel = 'SIW v1.3';
-const STORAGE_KEY = 'siw13_workspace_v13';
-const ANALYTICS_KEY = 'siw13_analytics_v13';
+const versionLabel = 'SIW v1.4';
+const STORAGE_KEY = 'siw10_workspace_v14';
 
 const data = {
   industries: [
     { id: 'solar', label: 'Solar' },
     { id: 'commercial-rooftop', label: 'Commercial Rooftop' },
-    { id: 'utility-scale', label: 'Utility-scale PV' }
+    { id: 'utility-scale', label: 'Utility-scale PV' },
   ],
   assets: [
     { id: 'panel-glass', label: 'Panel glass', industryIds: ['solar', 'commercial-rooftop', 'utility-scale'] },
     { id: 'framed-module', label: 'Framed module surface', industryIds: ['solar', 'commercial-rooftop', 'utility-scale'] },
-    { id: 'rooftop-array', label: 'Rooftop array', industryIds: ['solar', 'commercial-rooftop'] }
+    { id: 'rooftop-array', label: 'Rooftop array', industryIds: ['solar', 'commercial-rooftop'] },
   ],
   mechanisms: [
     { id: 'dust', label: 'Dust / sand soiling' },
     { id: 'organic', label: 'Organic fouling / biofilm' },
     { id: 'mixed', label: 'Mixed contamination' },
-    { id: 'uv', label: 'UV / weathering' }
-  ],
-  substrates: [
-    { id: 'glass', label: 'Glass' },
-    { id: 'coated', label: 'Painted / coated surface' },
-    { id: 'metal', label: 'Metal frame / housing' }
-  ],
-  constraints: [
-    { id: 'easy-cleaning', label: 'Low cleaning burden' },
-    { id: 'low-downtime', label: 'Downtime must stay low' },
-    { id: 'proof-heavy', label: 'Proof-heavy review' },
-    { id: 'organic-load', label: 'High organic loading' },
-    { id: 'arid-site', label: 'High dust / arid site' },
-    { id: 'roi-sensitive', label: 'ROI-sensitive evaluation' }
+    { id: 'uv', label: 'UV / weathering' },
   ],
   products: [
     {
@@ -42,21 +28,23 @@ const data = {
       assetIds: ['panel-glass', 'framed-module', 'rooftop-array'],
       mechanismIds: ['dust', 'mixed', 'uv'],
       substrateIds: ['glass', 'coated'],
-      constraintIds: ['easy-cleaning', 'low-downtime', 'arid-site', 'roi-sensitive'],
       scores: { technical: 62, proof: 56, route: 52 },
-      useCaseFit: 'Best for dust-led, hydrophobic easy-clean, and passive low-adhesion evaluation paths.',
+      chart: { shedding: 82, contamination: 71, proof: 56, durability: 74 },
+      contactAngle: '112°',
+      exposureWindow: '180 days',
       standards: 'Field normalisation basis plus application and cure framing.',
-      labField: 'Positioned with monitored rooftop evidence from the InterCos PV plant in Hochdorf.',
-      operational: 'Use where reduced contaminant adhesion and easier wash-down are the main commercial levers.',
+      labField: 'Monitored rooftop evidence from the InterCos PV plant in Hochdorf.',
+      operational: 'Best where reduced contaminant adhesion and easier wash-down are the primary commercial levers.',
       proof: [
-        { id: 'quartz-field', category: 'validated field', title: 'InterCos PV Plant Hochdorf', text: 'Monitored treated-versus-untreated rooftop evidence for Quartz, including reported uplift against untreated control arrays.', file: '../evidence/quartz-hochdorf.html' },
-        { id: 'quartz-tech', category: 'technical framing', title: 'Application and cure window', text: 'Quartz is positioned with coating thickness, coverage, cure, and pH-stability framing on the live product page.', file: '../products/quartz.html' }
+        { id: 'quartz-field', title: 'InterCos PV Plant Hochdorf', text: 'Monitored treated-versus-untreated rooftop evidence for Quartz, including reported uplift against untreated control arrays.', file: '../evidence/quartz-hochdorf.html', status: 'Field proven' },
+        { id: 'quartz-tech', title: 'Application and cure window', text: 'Quartz is positioned with coating thickness, coverage, cure, and pH-stability framing on the live product page.', file: '../products/quartz.html', status: 'Technical framing' },
       ],
+      validations: ['Surface wetting review', 'Dust-release screening', 'Outdoor exposure framing'],
       cautions: [
         'Field case is site-specific and should not be generalized without qualification.',
-        'Quartz is a passive easy-clean path, not a photocatalytic path.'
+        'Quartz is a passive easy-clean path, not a photocatalytic path.',
       ],
-      preferredRoute: 'sample-request'
+      preferredRoute: 'sample-request',
     },
     {
       id: 'solarex-titan',
@@ -67,319 +55,591 @@ const data = {
       assetIds: ['panel-glass', 'framed-module', 'rooftop-array'],
       mechanismIds: ['organic', 'mixed', 'uv'],
       substrateIds: ['glass'],
-      constraintIds: ['proof-heavy', 'organic-load', 'roi-sensitive', 'low-downtime'],
       scores: { technical: 60, proof: 64, route: 56 },
-      useCaseFit: 'Best for organic fouling, pollen, algae, biofilm, bird fouling, and active-cleaning evaluation paths.',
+      chart: { shedding: 71, contamination: 88, proof: 64, durability: 79 },
+      contactAngle: '9°',
+      exposureWindow: '360 days',
       standards: 'Study-window framing plus application and cure framing.',
       labField: 'Positioned with a 360-day expert-accompanied rooftop study and string-level uplift data.',
-      operational: 'Use where active cleaning chemistry and uniform rinsing are more relevant than passive anti-stick alone.',
+      operational: 'Best where active cleaning chemistry and uniform rinsing matter more than passive anti-stick alone.',
       proof: [
-        { id: 'titan-study', category: 'validated study', title: 'PV³ Expert-Accompanying Study', text: '360-day rooftop study for Titan comparing coated and uncoated strings within the same monitored installation.', file: '../evidence/titan-pv3-study.html' },
-        { id: 'titan-tech', category: 'technical framing', title: 'Photocatalytic pathway', text: 'Titan is positioned around TiO₂-based photocatalysis, superhydrophilic rinsing, and active self-cleaning logic.', file: '../products/titan.html' }
+        { id: 'titan-study', title: 'PV³ Expert-Accompanying Study', text: '360-day rooftop study for Titan comparing coated and uncoated strings within the same monitored installation.', file: '../evidence/titan-pv3-study.html', status: 'Lab and field' },
+        { id: 'titan-tech', title: 'Photocatalytic pathway', text: 'Titan is positioned around TiO₂-based photocatalysis, superhydrophilic rinsing, and active self-cleaning logic.', file: '../products/titan.html', status: 'Technical framing' },
       ],
+      validations: ['Photocatalytic review', 'Organic-load study', 'Outdoor exposure framing'],
       cautions: [
         'Study-backed revenue implications should not be presented as an unconditional guarantee.',
-        'Organic-load fit should still be validated against the actual site environment and wash regime.'
+        'Organic-load fit should still be validated against the actual site environment and wash regime.',
       ],
-      preferredRoute: 'technical-consult'
-    }
+      preferredRoute: 'technical-consult',
+    },
   ],
-  narratives: {
-    dust: {
-      explain: 'Dust-led losses rise when persistent soiling increases adhesion and reduces the ease with which rain or washing removes accumulated contamination.',
-      intervention: 'Prioritise passive low-adhesion and easy-clean surface behaviour when the main objective is to reduce persistent dust burden and cleaning intensity.',
-      boundary: 'Do not treat dust-control evidence as a universal performance guarantee outside the actual site conditions and wash regime.'
-    },
-    organic: {
-      explain: 'Organic fouling behaves differently from simple mineral dust because residue can cling, smear, or biologically persist unless the surface actively supports breakdown and rinsing.',
-      intervention: 'Prioritise active-cleaning chemistry and superhydrophilic rinsing logic when pollen, algae, biofilm, or bird fouling are the dominant contaminants.',
-      boundary: 'Organic-load scenarios still need site validation; active-cleaning positioning should not be overstated beyond the actual study-backed scope.'
-    },
-    mixed: {
-      explain: 'Mixed contamination requires separating what is mineral, what is organic, and what portion of the value case comes from easier cleaning versus more active surface chemistry.',
-      intervention: 'Use side-by-side comparison and proof review before selecting the path because both Quartz and Titan can appear plausible in mixed environments.',
-      boundary: 'When contamination is genuinely mixed, technical review should dominate over brochure-level product separation.'
-    },
-    uv: {
-      explain: 'UV and weathering matter because long-duration outdoor exposure changes surface behaviour over time and influences how the contamination-control story should be qualified.',
-      intervention: 'Use the product whose operating narrative, study basis, and application window best match the outdoor durability expectations of the site.',
-      boundary: 'UV framing should remain tied to the actual proof basis and not be expanded into unsupported lifetime claims.'
-    },
-    default: {
-      explain: 'The selected degradation mode should be translated into operationally meaningful criteria before product comparison starts.',
-      intervention: 'Use plain-language explanation first, then connect the mechanism to fit, proof, compare, and next-step routing.',
-      boundary: 'Keep limitations near the proof so the buyer does not need to infer scope from raw study or case titles alone.'
-    }
-  },
   routes: [
-    { id: 'sample-request', title: 'Request sample', body: 'Best for controlled evaluation, pilot sampling, and early-stage surface validation.', workflow: 'evaluation-route' },
-    { id: 'technical-consult', title: 'Book technical consult', body: 'Best for mixed, proof-heavy, or boundary-condition-sensitive scenarios.', workflow: 'engineering-review' },
-    { id: 'rfq-request', title: 'Request RFQ', body: 'Best when the use case is mature enough for commercial qualification.', workflow: 'commercial-qualification' }
-  ]
+    { id: 'sample-request', title: 'Request sample', description: 'Best for controlled evaluation, pilot sampling, and early-stage surface validation.' },
+    { id: 'technical-consult', title: 'Book technical consult', description: 'Best for mixed, proof-heavy, or boundary-condition-sensitive scenarios.' },
+    { id: 'rfq-request', title: 'Request RFQ', description: 'Best when the use case is mature enough for commercial qualification.' },
+  ],
+  documents: [
+    { title: 'Quartz field evidence', subtitle: 'Field case overview', href: '../evidence/quartz-hochdorf.html' },
+    { title: 'Titan study summary', subtitle: 'PV³ evidence package', href: '../evidence/titan-pv3-study.html' },
+    { title: 'Product specification pages', subtitle: 'Quartz and Titan detail', href: '../proof.html' },
+  ],
+};
+
+const environmentProfiles = {
+  dust: { temperature: '42°C', wind: '16 m/s', exposure: '180 days', index: 'Dust load: High' },
+  organic: { temperature: '29°C', wind: '8 m/s', exposure: '360 days', index: 'Humidity: 84%' },
+  mixed: { temperature: '34°C', wind: '12 m/s', exposure: '240 days', index: 'Mixed load: Elevated' },
+  uv: { temperature: '51°C', wind: '6 m/s', exposure: '365 days', index: 'UV index: Severe' },
+};
+
+const mechanismCards = {
+  dust: [
+    { id: 'hydrophobic', title: 'Hydrophobic Action', subtitle: 'Passive low-adhesion shedding' },
+    { id: 'surface-energy', title: 'Surface Energy Profile', subtitle: 'Reduced dust anchoring' },
+    { id: 'durability', title: 'Microscopic Surface', subtitle: 'Retention vs wash-down balance' },
+  ],
+  organic: [
+    { id: 'photocatalytic', title: 'Active Cleaning', subtitle: 'Photocatalytic breakdown pathway' },
+    { id: 'rinsing', title: 'Hydrophilic Rinsing', subtitle: 'Water-sheeting cleanup effect' },
+    { id: 'durability', title: 'Microscopic Surface', subtitle: 'Organic residue release logic' },
+  ],
+  mixed: [
+    { id: 'hybrid', title: 'Hybrid Contamination', subtitle: 'Passive and active trade-off' },
+    { id: 'selection', title: 'Route Selection', subtitle: 'Why proof depth matters' },
+    { id: 'durability', title: 'Microscopic Surface', subtitle: 'Durability under mixed load' },
+  ],
+  uv: [
+    { id: 'weathering', title: 'Weathering Profile', subtitle: 'Outdoor ageing emphasis' },
+    { id: 'durability', title: 'Surface Stability', subtitle: 'Exposure window framing' },
+    { id: 'selection', title: 'Mechanism Review', subtitle: 'Scope and evidence control' },
+  ],
 };
 
 const state = {
   industry: 'solar',
   asset: 'panel-glass',
   mechanism: 'dust',
-  substrate: 'glass',
-  constraints: ['easy-cleaning', 'low-downtime'],
-  savedSolutions: [],
-  savedProof: [],
-  compareIds: []
+  productFocus: 'solarex-quartz',
 };
 
 const els = {
   industrySelect: document.getElementById('industrySelect'),
   assetSelect: document.getElementById('assetSelect'),
   mechanismSelect: document.getElementById('mechanismSelect'),
-  substrateSelect: document.getElementById('substrateSelect'),
-  constraintGrid: document.getElementById('constraintGrid'),
-  workspaceStrip: document.getElementById('workspaceStrip'),
+  productFocusSelect: document.getElementById('productFocusSelect'),
+  chartSurface: document.getElementById('chartSurface'),
+  chartLegend: document.getElementById('chartLegend'),
+  environmentSurface: document.getElementById('environmentSurface'),
+  validationList: document.getElementById('validationList'),
+  proofList: document.getElementById('proofList'),
+  mechanismGallery: document.getElementById('mechanismGallery'),
+  insightList: document.getElementById('insightList'),
+  documentList: document.getElementById('documentList'),
+  routeList: document.getElementById('routeList'),
+  metricFitValue: document.getElementById('metricFitValue'),
+  metricFitNote: document.getElementById('metricFitNote'),
+  metricProofValue: document.getElementById('metricProofValue'),
+  metricProofNote: document.getElementById('metricProofNote'),
+  metricAngleValue: document.getElementById('metricAngleValue'),
+  metricAngleNote: document.getElementById('metricAngleNote'),
+  metricExposureValue: document.getElementById('metricExposureValue'),
+  metricExposureNote: document.getElementById('metricExposureNote'),
   saveWorkspaceButton: document.getElementById('saveWorkspaceButton'),
   clearWorkspaceButton: document.getElementById('clearWorkspaceButton'),
-  heroTitle: document.getElementById('heroTitle'),
-  heroSubtitle: document.getElementById('heroSubtitle'),
-  sentenceBuilder: document.getElementById('sentenceBuilder'),
-  explainSummary: document.getElementById('explainSummary'),
-  interventionSummary: document.getElementById('interventionSummary'),
-  boundarySummary: document.getElementById('boundarySummary'),
-  bestFitScore: document.getElementById('bestFitScore'),
-  fitVerdict: document.getElementById('fitVerdict'),
-  fitShortlist: document.getElementById('fitShortlist'),
-  proofRail: document.getElementById('proofRail'),
-  standardsSummary: document.getElementById('standardsSummary'),
-  labFieldSummary: document.getElementById('labFieldSummary'),
-  operationalImplication: document.getElementById('operationalImplication'),
-  cautionFlags: document.getElementById('cautionFlags'),
-  specExplorer: document.getElementById('specExplorer'),
-  actionGrid: document.getElementById('actionGrid'),
-  responseSummary: document.getElementById('responseSummary'),
-  decisionChecklist: document.getElementById('decisionChecklist'),
-  payloadPreview: document.getElementById('payloadPreview'),
-  capabilityMap: document.getElementById('capabilityMap'),
-  evidenceDrawer: document.getElementById('evidenceDrawer'),
-  drawerTitle: document.getElementById('drawerTitle'),
-  drawerContent: document.getElementById('drawerContent'),
-  closeDrawerButton: document.getElementById('closeDrawerButton'),
-  globalSearch: document.getElementById('globalSearch'),
-  searchResults: document.getElementById('searchResults'),
-  saveSolutionButton: document.getElementById('saveSolutionButton'),
-  bookmarkProofButton: document.getElementById('bookmarkProofButton'),
-  openEvidenceButton: document.getElementById('openEvidenceButton'),
-  compareToggleButton: document.getElementById('compareToggleButton'),
-  compareShell: document.getElementById('compareShell'),
-  compareGrid: document.getElementById('compareGrid')
+  detailModal: document.getElementById('detailModal'),
+  detailTitle: document.getElementById('detailTitle'),
+  detailSummary: document.getElementById('detailSummary'),
+  detailMetrics: document.getElementById('detailMetrics'),
+  detailAnalysis: document.getElementById('detailAnalysis'),
+  detailActions: document.getElementById('detailActions'),
+  closeDetailModal: document.getElementById('closeDetailModal'),
+  chartTrigger: document.getElementById('chartTrigger'),
+  openChartDetail: document.getElementById('openChartDetail'),
+  environmentTrigger: document.getElementById('environmentTrigger'),
+  validationTrigger: document.getElementById('validationTrigger'),
+  proofTrigger: document.getElementById('proofTrigger'),
+  metricFit: document.getElementById('metricFit'),
+  metricProof: document.getElementById('metricProof'),
+  metricAngle: document.getElementById('metricAngle'),
+  metricExposure: document.getElementById('metricExposure'),
 };
 
 function persist() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
+
 function restore() {
   try {
-    Object.assign(state, JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'));
-  } catch (e) {}
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    Object.assign(state, JSON.parse(raw));
+  } catch (error) {}
 }
-function track(name, detail = {}) {
-  try {
-    const items = JSON.parse(localStorage.getItem(ANALYTICS_KEY) || '[]');
-    items.push({ ts: new Date().toISOString(), name, detail });
-    localStorage.setItem(ANALYTICS_KEY, JSON.stringify(items.slice(-100)));
-  } catch (e) {}
-}
+
 function label(list, id) {
   const hit = list.find((item) => item.id === id);
   return hit ? hit.label : id;
 }
+
 function assetOptions() {
   return data.assets.filter((asset) => asset.industryIds.includes(state.industry));
 }
-function narrative() {
-  return data.narratives[state.mechanism] || data.narratives.default;
+
+function activeProducts() {
+  return data.products
+    .filter((product) => product.industryIds.includes(state.industry))
+    .sort((a, b) => rankProduct(b) - rankProduct(a));
 }
-function score(product) {
-  let technical = product.scores.technical;
-  if (product.industryIds.includes(state.industry)) technical += 10;
-  if (product.assetIds.includes(state.asset)) technical += 14;
-  if (product.mechanismIds.includes(state.mechanism)) technical += 16;
-  if (product.substrateIds.includes(state.substrate)) technical += 8;
-  state.constraints.forEach((item) => { if (product.constraintIds.includes(item)) technical += 4; });
-  let proof = product.scores.proof;
-  if (state.mechanism === 'mixed') proof += 6;
-  if (state.constraints.includes('proof-heavy')) proof += product.id === 'solarex-titan' ? 8 : 2;
-  let route = product.scores.route;
-  if (state.constraints.includes('low-downtime')) route += 4;
-  if (state.constraints.includes('roi-sensitive')) route += 4;
-  technical = Math.min(96, Math.max(34, technical));
-  proof = Math.min(96, Math.max(32, proof));
-  route = Math.min(96, Math.max(32, route));
-  const composite = Math.round((technical * 0.5) + (proof * 0.3) + (route * 0.2));
-  return { ...product, metrics: { technical, proof, route, composite } };
+
+function currentPrimary() {
+  return data.products.find((product) => product.id === state.productFocus) || activeProducts()[0] || data.products[0];
 }
-function ranked() {
-  return data.products.map(score).sort((a, b) => b.metrics.composite - a.metrics.composite);
+
+function currentSecondary(primary) {
+  return activeProducts().find((product) => product.id !== primary.id) || primary;
 }
-function verdict(item) {
-  if (item.metrics.composite >= 82 && item.metrics.proof >= 70) return { label: 'Recommended', cls: 'verdict-good' };
-  if (item.metrics.composite >= 68) return { label: 'Needs engineering review', cls: 'verdict-mid' };
-  return { label: 'Not recommended', cls: 'verdict-low' };
+
+function rankProduct(product) {
+  let score = product.scores.technical + product.scores.proof + product.scores.route;
+  if (product.mechanismIds.includes(state.mechanism)) score += 20;
+  if (product.assetIds.includes(state.asset)) score += 14;
+  if (product.id === state.productFocus) score += 4;
+  return score;
 }
-function renderSelect(el, list, value) {
-  el.innerHTML = list.map((item) => `<option value="${item.id}" ${item.id === value ? 'selected' : ''}>${item.label}</option>`).join('');
+
+function environmentProfile() {
+  return environmentProfiles[state.mechanism] || environmentProfiles.dust;
 }
-function renderConstraints() {
-  els.constraintGrid.innerHTML = data.constraints.map((item) => `<button type="button" class="chip ${state.constraints.includes(item.id) ? 'chip-active' : ''}" data-constraint="${item.id}">${item.label}</button>`).join('');
-  els.constraintGrid.querySelectorAll('[data-constraint]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const id = button.dataset.constraint;
-      state.constraints = state.constraints.includes(id) ? state.constraints.filter((x) => x !== id) : [...state.constraints, id];
-      track('constraint_change', { id });
-      update();
-    });
-  });
+
+function fitMetrics(primary) {
+  let technical = primary.scores.technical;
+  let proof = primary.scores.proof;
+  let route = primary.scores.route;
+
+  if (primary.mechanismIds.includes(state.mechanism)) technical += 16;
+  if (primary.assetIds.includes(state.asset)) technical += 12;
+  if (state.mechanism === 'mixed') proof += 8;
+  if (state.mechanism === 'organic' && primary.id === 'solarex-titan') proof += 6;
+  if (state.mechanism === 'dust' && primary.id === 'solarex-quartz') technical += 6;
+
+  technical = Math.min(96, technical);
+  proof = Math.min(94, proof);
+  route = Math.min(90, route + (primary.preferredRoute === 'technical-consult' ? 4 : 2));
+  const composite = Math.round((technical * 0.48) + (proof * 0.32) + (route * 0.20));
+
+  return { technical, proof, route, composite };
 }
-function currentTop() { return ranked()[0]; }
-function renderWorkspace(top) {
-  const savedCount = state.savedSolutions.length + state.savedProof.length;
-  els.workspaceStrip.innerHTML = [
-    ['Asset', label(assetOptions(), state.asset)],
-    ['Mechanism', label(data.mechanisms, state.mechanism)],
-    ['Fit', `${top.metrics.composite}/100`],
-    ['Proof', `${top.metrics.proof}/100`],
-    ['Saved', `${savedCount} bookmarked`]
-  ].map(([a,b]) => `<div class="workspace-chip"><span>${a}:</span><strong>${b}</strong></div>`).join('');
+
+function renderSelect(select, items, value) {
+  select.innerHTML = items.map((item) => `<option value="${item.id}" ${item.id === value ? 'selected' : ''}>${item.label}</option>`).join('');
 }
-function renderHero(top) {
-  els.heroTitle.textContent = `Decision support for ${label(data.industries, state.industry).toLowerCase()} assets`;
-  els.heroSubtitle.textContent = `Current focus: ${label(data.mechanisms, state.mechanism).toLowerCase()} on ${label(assetOptions(), state.asset).toLowerCase()}. Best-fit mapped path: ${top.label}.`;
-  els.sentenceBuilder.innerHTML = `<strong>Protecting</strong> ${label(assetOptions(), state.asset)} <strong>from</strong> ${label(data.mechanisms, state.mechanism).toLowerCase()} <strong>under</strong> ${state.constraints.map((id) => label(data.constraints, id)).join(', ') || 'standard operating conditions'}.`;
+
+function renderProductFocus(primary, secondary) {
+  const products = [primary, secondary].filter((item, index, arr) => arr.findIndex((entry) => entry.id === item.id) === index);
+  els.productFocusSelect.innerHTML = products.map((item) => `<option value="${item.id}" ${item.id === state.productFocus ? 'selected' : ''}>${item.label}</option>`).join('');
 }
-function renderExplain() {
-  const n = narrative();
-  els.explainSummary.textContent = n.explain;
-  els.interventionSummary.textContent = n.intervention;
-  els.boundarySummary.textContent = n.boundary;
-}
-function renderFit(list, top) {
-  const v = verdict(top);
-  els.bestFitScore.textContent = `${top.metrics.composite}/100`;
-  els.fitVerdict.textContent = v.label;
-  els.fitVerdict.className = `verdict-pill ${v.cls}`;
-  els.fitShortlist.innerHTML = list.slice(0, 2).map((item, index) => `
-    <article class="short-card ${index === 0 ? 'short-card-top' : ''}">
-      <div class="short-head">
-        <div>
-          <p class="mini-label">Option ${index + 1}</p>
-          <h3>${item.label}</h3>
-          <p class="micro-copy">${item.positioning}</p>
-        </div>
-        <span class="score-pill">${item.metrics.composite}/100</span>
-      </div>
-      <p class="body-copy">${item.summary}</p>
-      <div class="metric-row"><span class="metric-pill">Technical ${item.metrics.technical}</span><span class="metric-pill">Proof ${item.metrics.proof}</span><span class="metric-pill">Route ${item.metrics.route}</span></div>
-    </article>`).join('');
-}
-function renderProof(top) {
-  els.proofRail.innerHTML = top.proof.map((item) => `<button type="button" class="proof-card" data-proof="${item.id}"><p class="mini-label">${item.category}</p><h3>${item.title}</h3><p class="micro-copy">${item.text}</p></button>`).join('');
-  els.proofRail.querySelectorAll('[data-proof]').forEach((button) => button.addEventListener('click', () => openProof(top, button.dataset.proof)));
-}
-function renderCredibility(top) {
-  els.standardsSummary.textContent = top.standards;
-  els.labFieldSummary.textContent = top.labField;
-  els.operationalImplication.textContent = top.operational;
-  els.cautionFlags.innerHTML = top.cautions.map((item) => `<span class="flag-pill">${item}</span>`).join('');
-}
-function renderSpec(top) {
-  const rows = [
-    ['Use case fit', top.useCaseFit],
-    ['Primary mechanism', label(data.mechanisms, top.mechanismIds[0])],
-    ['Preferred route', data.routes.find((item) => item.id === top.preferredRoute).title],
-    ['Technical fit', `${top.metrics.technical}/100`],
-    ['Proof strength', `${top.metrics.proof}/100`],
-    ['Route readiness', `${top.metrics.route}/100`]
+
+function buildChartSvg(primary, secondary) {
+  const width = 520;
+  const height = 220;
+  const padding = 32;
+  const categories = [
+    { key: 'shedding', label: 'Water Shedding' },
+    { key: 'contamination', label: state.mechanism === 'organic' ? 'Organic Release' : 'Contamination Control' },
+    { key: 'proof', label: 'Proof Strength' },
+    { key: 'durability', label: 'Durability' },
   ];
-  els.specExplorer.innerHTML = `<div class="spec-head-row"><span>Criterion</span><span>Current best-fit path</span></div>${rows.map(([a,b]) => `<div class="spec-row"><span>${a}</span><strong>${b}</strong></div>`).join('')}`;
+  const xStep = (width - padding * 2) / (categories.length - 1);
+  const yFor = (value) => height - padding - ((value / 100) * (height - padding * 2));
+  const polyline = (product) => categories.map((cat, index) => `${padding + index * xStep},${yFor(product.chart[cat.key])}`).join(' ');
+
+  return `
+    <svg viewBox="0 0 ${width} ${height}" width="100%" height="220" aria-hidden="true">
+      <defs>
+        <linearGradient id="lineA" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#6ac7ff" />
+          <stop offset="100%" stop-color="#9de8ff" />
+        </linearGradient>
+        <linearGradient id="lineB" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#5d8cff" />
+          <stop offset="100%" stop-color="#79a6ff" />
+        </linearGradient>
+      </defs>
+      ${[20, 40, 60, 80].map((tick) => `<line x1="${padding}" y1="${yFor(tick)}" x2="${width - padding}" y2="${yFor(tick)}" stroke="rgba(255,255,255,0.09)" />`).join('')}
+      ${categories.map((cat, index) => `<line x1="${padding + index * xStep}" y1="${padding - 4}" x2="${padding + index * xStep}" y2="${height - padding}" stroke="rgba(255,255,255,0.08)" />`).join('')}
+      <polyline fill="none" stroke="url(#lineA)" stroke-width="4" points="${polyline(primary)}" />
+      <polyline fill="none" stroke="url(#lineB)" stroke-width="3" stroke-dasharray="6 4" points="${polyline(secondary)}" />
+      ${categories.map((cat, index) => `
+        <g>
+          <circle cx="${padding + index * xStep}" cy="${yFor(primary.chart[cat.key])}" r="5.2" fill="#a9f0ff" />
+          <circle cx="${padding + index * xStep}" cy="${yFor(secondary.chart[cat.key])}" r="4.6" fill="#8fb7ff" />
+          <text x="${padding + index * xStep}" y="${height - 8}" text-anchor="middle" fill="rgba(232,242,255,0.72)" font-size="11">${cat.label}</text>
+        </g>`).join('')}
+    </svg>
+  `;
 }
-function routeUrl(intent, top) {
-  const params = new URLSearchParams({ intent, version: versionLabel, industry: state.industry, asset: state.asset, mechanism: state.mechanism, substrate: state.substrate, solution: top.label, fitScore: String(top.metrics.composite) });
-  state.constraints.forEach((item) => params.append('constraint', item));
+
+function renderChart(primary, secondary) {
+  els.chartSurface.innerHTML = buildChartSvg(primary, secondary);
+  const legend = [
+    { label: primary.label, color: '#9de8ff' },
+    { label: secondary.label, color: '#79a6ff' },
+  ];
+  els.chartLegend.innerHTML = legend.map((item) => `<span class="chart-legend-item"><span class="chart-dot" style="background:${item.color}"></span>${item.label}</span>`).join('');
+}
+
+function renderMechanisms() {
+  const cards = mechanismCards[state.mechanism] || mechanismCards.dust;
+  els.mechanismGallery.innerHTML = cards.map((card) => `
+    <button class="mechanism-card" type="button" data-detail-key="mechanism:${card.id}">
+      <div class="mechanism-thumb"></div>
+      <div class="mechanism-caption">
+        <strong>${card.title}</strong>
+        <span>${card.subtitle}</span>
+      </div>
+    </button>
+  `).join('');
+}
+
+function renderEnvironment() {
+  const env = environmentProfile();
+  els.environmentSurface.innerHTML = [
+    ['Temp', env.temperature],
+    ['Wind Speed', env.wind],
+    ['Exposure Time', env.exposure],
+    ['Profile', env.index],
+  ].map(([labelText, value]) => `<span class="environment-metric"><span>${labelText}</span><strong>${value}</strong></span>`).join('');
+}
+
+function renderValidation(primary) {
+  const rows = [
+    { title: primary.validations[0], note: 'Verified' },
+    { title: primary.validations[1], note: 'Verified' },
+    { title: primary.validations[2], note: 'Verified' },
+  ];
+  els.validationList.innerHTML = rows.map((row, index) => `
+    <button class="validation-row" type="button" data-detail-key="validation:${index}">
+      <span class="validation-badge">✓</span>
+      <span class="row-copy"><strong>${row.title}</strong><span>Scenario-specific validation checkpoint</span></span>
+      <span class="row-meta">${row.note}</span>
+    </button>
+  `).join('');
+}
+
+function renderProof(primary) {
+  els.proofList.innerHTML = primary.proof.map((item, index) => `
+    <button class="proof-row" type="button" data-detail-key="proof:${index}">
+      <span class="proof-badge">✓</span>
+      <span class="row-copy"><strong>${item.title}</strong><span>${item.text}</span></span>
+      <span class="row-meta">${item.status}</span>
+    </button>
+  `).join('');
+}
+
+function renderInsights(primary, metrics) {
+  const entries = [
+    { key: 'observations', title: 'Test Observations', subtitle: `${primary.label} currently leads the scenario on composite fit.` },
+    { key: 'reports', title: 'Technical Reports', subtitle: `Proof strength is ${metrics.proof}/100 for the active path.` },
+    { key: 'risk', title: 'Risk Factors', subtitle: primary.cautions[0] },
+    { key: 'steps', title: 'Next Steps', subtitle: `Primary routing: ${data.routes.find((route) => route.id === primary.preferredRoute).title}.` },
+  ];
+  els.insightList.innerHTML = entries.map((item) => `
+    <button class="side-action" type="button" data-detail-key="insight:${item.key}">
+      <span class="side-icon">•</span>
+      <span class="row-copy"><strong>${item.title}</strong><span>${item.subtitle}</span></span>
+      <span class="row-meta">›</span>
+    </button>
+  `).join('');
+}
+
+function renderDocuments() {
+  els.documentList.innerHTML = data.documents.map((doc) => `
+    <a class="document-link" href="${doc.href}">
+      <span class="document-icon">▣</span>
+      <span class="row-copy"><strong>${doc.title}</strong><span>${doc.subtitle}</span></span>
+      <span class="row-meta">›</span>
+    </a>
+  `).join('');
+}
+
+function handoffUrl(intent, primary, metrics) {
+  const params = new URLSearchParams({
+    intent,
+    version: versionLabel,
+    industry: state.industry,
+    asset: state.asset,
+    mechanism: state.mechanism,
+    solution: primary.label,
+    fitScore: String(metrics.composite),
+  });
   return `./handoff.html?${params.toString()}`;
 }
-function renderActions(top) {
-  els.actionGrid.innerHTML = data.routes.map((route) => `<a class="action-card" data-intent="${route.id}" href="${routeUrl(route.id, top)}"><p class="mini-label">${route.workflow}</p><h3>${route.title}</h3><p class="body-copy">${route.body}</p></a>`).join('');
-  els.responseSummary.textContent = `Expected response: ${data.routes.find((item) => item.id === top.preferredRoute).title} is currently the primary routed next step.`;
-  els.decisionChecklist.innerHTML = [
-    `Selected path: ${top.label}`,
-    `Current verdict: ${verdict(top).label}`,
-    `Technical / proof / route: ${top.metrics.technical} / ${top.metrics.proof} / ${top.metrics.route}`,
-    `Saved solution count: ${state.savedSolutions.length}`,
-    `Saved proof count: ${state.savedProof.length}`
-  ].map((item) => `<div class="check-item">${item}</div>`).join('');
-  els.actionGrid.querySelectorAll('[data-intent]').forEach((link) => link.addEventListener('click', () => track('cta_click', { intent: link.dataset.intent, solution: top.id })));
+
+function renderRoutes(primary, metrics) {
+  els.routeList.innerHTML = data.routes.map((route) => `
+    <a class="route-link" href="${handoffUrl(route.id, primary, metrics)}">
+      <span class="route-icon">→</span>
+      <span class="row-copy"><strong>${route.title}</strong><span>${route.description}</span></span>
+      <span class="row-meta">›</span>
+    </a>
+  `).join('');
 }
-function renderPayload(list) {
-  els.payloadPreview.textContent = JSON.stringify({ version: versionLabel, industry: state.industry, asset: state.asset, mechanism: state.mechanism, substrate: state.substrate, constraints: state.constraints, shortlist: list.slice(0,2).map((item) => ({ label: item.label, technical: item.metrics.technical, proof: item.metrics.proof, route: item.metrics.route, composite: item.metrics.composite })), savedSolutions: state.savedSolutions, savedProof: state.savedProof }, null, 2);
+
+function renderMetrics(primary, secondary, metrics) {
+  els.metricFitValue.textContent = `${metrics.composite}/100`;
+  els.metricFitNote.textContent = `${primary.label} vs ${secondary.label}`;
+  els.metricProofValue.textContent = `${metrics.proof}/100`;
+  els.metricProofNote.textContent = primary.proof[0].title;
+  els.metricAngleValue.textContent = primary.contactAngle;
+  els.metricAngleNote.textContent = primary.positioning;
+  els.metricExposureValue.textContent = primary.exposureWindow;
+  els.metricExposureNote.textContent = environmentProfile().index;
 }
-function renderMap(top) {
-  const nodes = [ ['Orient', label(data.industries, state.industry)], ['Explain', label(data.mechanisms, state.mechanism)], ['Fit', top.label], ['Prove', top.proof[0].title], ['Act', data.routes.find((item) => item.id === top.preferredRoute).title] ];
-  els.capabilityMap.innerHTML = nodes.map(([a,b]) => `<div class="map-node"><p class="mini-label">${a}</p><strong>${b}</strong></div>`).join('<div class="map-link"></div>');
+
+function detailPayload(key, primary, secondary, metrics) {
+  const env = environmentProfile();
+  if (key === 'chart') {
+    return {
+      title: 'Coating comparison chart',
+      summary: `The comparison chart visualizes how ${primary.label} and ${secondary.label} perform against four decision criteria: water shedding, contamination control, proof strength, and durability framing. In mobile view this chart is intentionally tappable so users can inspect the analysis without trying to read the small plot inline.`,
+      metrics: [`${primary.label}: ${metrics.composite}/100 composite fit`, `${secondary.label}: ${rankProduct(secondary) - 100}/comparison rank proxy`, `Mechanism focus: ${label(data.mechanisms, state.mechanism)}`],
+      sections: [
+        ['Why the primary path leads', `${primary.label} is currently prioritized because its mechanism match and asset fit align more closely with the selected scenario. The chart is not a guarantee model; it is a structured decision view that separates performance logic from proof depth.`],
+        ['How to interpret the lines', `Solid line = selected primary path. Dashed line = comparison path. Higher relative position indicates stronger scenario alignment in that category, not an absolute universal rating.`],
+      ],
+      actions: [{ label: 'Open proof center', href: '../proof.html' }],
+    };
+  }
+  if (key === 'environment') {
+    return {
+      title: 'Environmental testing profile',
+      summary: `The environment panel frames the scenario conditions used to interpret fit and proof. It turns the dashboard from a generic recommendation layer into a contextual review surface. On mobile this panel opens a detailed view because the exposure assumptions materially affect interpretation.`,
+      metrics: [`Temperature: ${env.temperature}`, `Wind speed: ${env.wind}`, `Exposure: ${env.exposure}`],
+      sections: [
+        ['Interpretation', `The current mechanism selection (${label(data.mechanisms, state.mechanism)}) maps to an exposure profile intended to frame the recommendation. This is a scenario scaffold, not a site-certified weather history.`],
+        ['Operational implication', `Use this exposure profile to decide whether the current path should move directly to sample request, technical consult, or a broader proof review before commercial discussion.`],
+      ],
+      actions: [{ label: 'Book technical consult', href: handoffUrl('technical-consult', primary, metrics) }],
+    };
+  }
+  if (key.startsWith('validation:')) {
+    const index = Number(key.split(':')[1]) || 0;
+    return {
+      title: 'Validation checkpoint',
+      summary: `${primary.validations[index]} is one of the scenario checkpoints surfaced in the control-room view. The purpose is to show users where the current path has direct support and where interpretation still needs human review.`,
+      metrics: [`Primary path: ${primary.label}`, `Proof strength: ${metrics.proof}/100`],
+      sections: [
+        ['Checkpoint meaning', `This validation entry is presented as a structured confirmation surface rather than raw test nomenclature. It helps technical buyers understand what was checked and why it matters operationally.`],
+        ['Boundary condition', primary.cautions[0]],
+      ],
+      actions: [{ label: 'Review related proof', href: primary.proof[0].file }],
+    };
+  }
+  if (key.startsWith('proof:')) {
+    const item = primary.proof[Number(key.split(':')[1]) || 0];
+    return {
+      title: item.title,
+      summary: item.text,
+      metrics: [`Status: ${item.status}`, `Path: ${primary.label}`],
+      sections: [
+        ['Why it matters', `This proof item is elevated in the dashboard because it materially influences trust in the selected path. It should be read together with the current mechanism and exposure profile.`],
+        ['Caution', primary.cautions.join(' ')],
+      ],
+      actions: [{ label: 'Open evidence asset', href: item.file }],
+    };
+  }
+  if (key.startsWith('mechanism:')) {
+    const mech = key.split(':')[1];
+    return {
+      title: 'Mechanism analysis tile',
+      summary: `This mechanism card represents a simplified visual cue for ${mech.replace('-', ' ')}. In mobile view each tile opens into a larger explanatory layer so the user can read the detailed meaning instead of relying on small inline cards.`,
+      metrics: [`Primary path: ${primary.label}`, `Mechanism: ${label(data.mechanisms, state.mechanism)}`],
+      sections: [
+        ['Interpretation', `${primary.label} is being explained through a bounded micro-story: mechanism first, evidence second, route decision third. This preserves transparency and keeps the recommendation trust-safe.`],
+        ['Decision value', `Mechanism tiles are not decorative. They explain why the surface strategy is passive, active, hybrid, or durability-led under the current scenario.`],
+      ],
+      actions: [{ label: 'Open product detail', href: primary.id === 'solarex-quartz' ? '../products/quartz.html' : '../products/titan.html' }],
+    };
+  }
+  if (key.startsWith('insight:')) {
+    const insightKey = key.split(':')[1];
+    const map = {
+      observations: 'Test observations summarize what the current dashboard state is indicating at a decision level.',
+      reports: 'Technical reports aggregate evidence and explanation into a committee-friendly view.',
+      risk: primary.cautions.join(' '),
+      steps: `Current preferred route is ${data.routes.find((route) => route.id === primary.preferredRoute).title}.`,
+    };
+    return {
+      title: 'Insight detail',
+      summary: map[insightKey] || 'Insight detail is not available.',
+      metrics: [`Scenario path: ${primary.label}`],
+      sections: [
+        ['Why this module exists', `The right rail condenses the main guidance into clickable operational notes. It is intentionally compact on desktop and intentionally expandable on mobile.`],
+      ],
+      actions: [{ label: 'Return to workspace', href: '#top' }],
+    };
+  }
+  if (key === 'metric-fit') {
+    return {
+      title: 'Composite fit metric',
+      summary: `Composite fit combines technical fit, proof strength, and route readiness into a single dashboard score for fast triage. It is designed for navigation, not for black-box authority.`,
+      metrics: [`Composite fit: ${metrics.composite}/100`, `Technical: ${metrics.technical}/100`, `Route: ${metrics.route}/100`],
+      sections: [
+        ['Interpretation', `Use the composite fit score to decide whether the current path is mature enough for sampling or whether the case should escalate to technical review.`],
+      ],
+      actions: [{ label: 'Open routing options', href: handoffUrl(primary.preferredRoute, primary, metrics) }],
+    };
+  }
+  if (key === 'metric-proof') {
+    return {
+      title: 'Proof strength metric',
+      summary: `Proof strength indicates how much evidence depth is currently surfaced for the chosen path. It is distinct from technical fit so the user can see whether a strong scenario match also has strong proof support.`,
+      metrics: [`Proof strength: ${metrics.proof}/100`, `Lead evidence: ${primary.proof[0].title}`],
+      sections: [
+        ['Interpretation', `High proof strength means the current dashboard can support a more confident buyer conversation. Lower proof strength means the path may still be valid, but the explanation and disclosure burden is higher.`],
+      ],
+      actions: [{ label: 'Review proof asset', href: primary.proof[0].file }],
+    };
+  }
+  if (key === 'metric-angle') {
+    return {
+      title: 'Contact angle proxy',
+      summary: `The contact angle metric is used here as a visual shorthand for surface wetting behavior. It is not displayed as a stand-alone certification claim; it is a dashboard proxy to help the user understand surface behaviour differences between passive and active-cleaning paths.`,
+      metrics: [`Displayed value: ${primary.contactAngle}`, `Path: ${primary.positioning}`],
+      sections: [
+        ['Interpretation', `Higher values generally frame more water repellency, while lower values can align with water-sheeting and active rinsing logic. The number must be interpreted in context, not in isolation.`],
+      ],
+      actions: [{ label: 'Open technical product page', href: primary.id === 'solarex-quartz' ? '../products/quartz.html' : '../products/titan.html' }],
+    };
+  }
+  if (key === 'metric-exposure') {
+    return {
+      title: 'Exposure window metric',
+      summary: `The exposure window card gives the user a fast reminder of how long the current proof framing or field window extends. On mobile it opens into a larger description because short labels hide too much nuance.`,
+      metrics: [`Exposure: ${primary.exposureWindow}`, `Environment: ${environmentProfile().index}`],
+      sections: [
+        ['Interpretation', `Exposure window framing helps users distinguish between short validation cycles and longer field-backed narratives. It should always be read alongside the current caution notes.`],
+      ],
+      actions: [{ label: 'Open proof overview', href: '../proof.html' }],
+    };
+  }
+  return {
+    title: 'Workspace detail',
+    summary: 'Detailed analysis is not available for this item yet.',
+    metrics: [],
+    sections: [],
+    actions: [],
+  };
 }
-function renderCompare(list) {
-  els.compareShell.hidden = false;
-  els.compareGrid.innerHTML = list.slice(0,2).map((item) => `<article class="compare-card"><p class="mini-label">${item.positioning}</p><h3>${item.label}</h3><div class="metric-row"><span class="metric-pill">Composite ${item.metrics.composite}</span><span class="metric-pill">Technical ${item.metrics.technical}</span><span class="metric-pill">Proof ${item.metrics.proof}</span></div><div class="compare-block"><strong>Best use</strong><p class="body-copy">${item.useCaseFit}</p></div><div class="compare-block"><strong>Key proof</strong><p class="body-copy">${item.proof[0].title}</p></div><div class="compare-block"><strong>Primary caution</strong><p class="body-copy">${item.cautions[0]}</p></div><div class="compare-block"><strong>Preferred route</strong><p class="body-copy">${data.routes.find((r) => r.id === item.preferredRoute).title}</p></div></article>`).join('');
+
+function openModal(payload) {
+  els.detailTitle.textContent = payload.title;
+  els.detailSummary.textContent = payload.summary;
+  els.detailMetrics.innerHTML = (payload.metrics || []).map((item) => `<span class="detail-pill">${item}</span>`).join('');
+  els.detailAnalysis.innerHTML = (payload.sections || []).map(([title, body]) => `
+    <section class="detail-analysis-block">
+      <h3>${title}</h3>
+      <p>${body}</p>
+    </section>
+  `).join('');
+  els.detailActions.innerHTML = (payload.actions || []).map((action) => {
+    if (action.href) return `<a href="${action.href}">${action.label}</a>`;
+    return `<button type="button">${action.label}</button>`;
+  }).join('');
+  els.detailModal.classList.add('is-open');
+  els.detailModal.setAttribute('aria-hidden', 'false');
 }
-function openProof(top, proofId) {
-  const proof = top.proof.find((item) => item.id === proofId) || top.proof[0];
-  els.drawerTitle.textContent = proof.title;
-  els.drawerContent.innerHTML = `<div class="drawer-card"><p class="mini-label">Classification</p><p class="body-copy">${proof.category}</p></div><div class="drawer-card"><p class="mini-label">Why this matters</p><p class="body-copy">${proof.text}</p></div><div class="drawer-card"><p class="mini-label">Open evidence asset</p><p class="body-copy"><a href="${proof.file}">${proof.file}</a></p></div><div class="drawer-card"><p class="mini-label">Representative cautions</p><p class="body-copy">${top.cautions.join(' ')}</p></div>`;
-  els.evidenceDrawer.classList.add('drawer-open');
-  els.evidenceDrawer.setAttribute('aria-hidden', 'false');
-  if (!state.savedProof.includes(proof.id)) state.savedProof = state.savedProof;
-  track('proof_open', { proofId });
+
+function closeModal() {
+  els.detailModal.classList.remove('is-open');
+  els.detailModal.setAttribute('aria-hidden', 'true');
 }
-function closeDrawer() {
-  els.evidenceDrawer.classList.remove('drawer-open');
-  els.evidenceDrawer.setAttribute('aria-hidden', 'true');
-}
-function handleSearch() {
-  const value = els.globalSearch.value.trim().toLowerCase();
-  if (!value) { els.searchResults.innerHTML = ''; return; }
-  const hits = [];
-  data.products.forEach((item) => { if (`${item.label} ${item.positioning} ${item.summary}`.toLowerCase().includes(value)) hits.push({ label: item.label, section: 'fit' }); });
-  data.products.forEach((item) => item.proof.forEach((proof) => { if (`${proof.title} ${proof.text}`.toLowerCase().includes(value)) hits.push({ label: proof.title, section: 'prove' }); }));
-  data.routes.forEach((item) => { if (`${item.title} ${item.body}`.toLowerCase().includes(value)) hits.push({ label: item.title, section: 'act' }); });
-  els.searchResults.innerHTML = hits.slice(0,5).map((item) => `<button type="button" class="search-hit" data-section="${item.section}">${item.label}</button>`).join('');
-  els.searchResults.querySelectorAll('[data-section]').forEach((button) => button.addEventListener('click', () => {
-    const section = button.dataset.section;
-    if (section === 'fit') document.querySelector('.stage-grid').scrollIntoView({ behavior: 'smooth' });
-    if (section === 'prove') document.querySelector('.proof-shell').scrollIntoView({ behavior: 'smooth' });
-    if (section === 'act') document.querySelector('.details-grid').scrollIntoView({ behavior: 'smooth' });
-    els.searchResults.innerHTML = '';
-    els.globalSearch.value = button.textContent;
-  }));
-}
-function update() {
+
+function updateView() {
   renderSelect(els.industrySelect, data.industries, state.industry);
   renderSelect(els.assetSelect, assetOptions(), state.asset);
   renderSelect(els.mechanismSelect, data.mechanisms, state.mechanism);
-  renderSelect(els.substrateSelect, data.substrates, state.substrate);
-  renderConstraints();
-  const list = ranked();
-  const top = list[0];
-  renderWorkspace(top); renderHero(top); renderExplain(); renderFit(list, top); renderProof(top); renderCredibility(top); renderSpec(top); renderActions(top); renderPayload(list); renderMap(top); renderCompare(list); persist();
+
+  const primary = currentPrimary();
+  const secondary = currentSecondary(primary);
+  renderProductFocus(primary, secondary);
+
+  const metrics = fitMetrics(primary);
+  renderChart(primary, secondary);
+  renderMechanisms();
+  renderEnvironment();
+  renderValidation(primary);
+  renderProof(primary);
+  renderInsights(primary, metrics);
+  renderDocuments();
+  renderRoutes(primary, metrics);
+  renderMetrics(primary, secondary, metrics);
+  persist();
 }
-function bind() {
-  els.industrySelect.addEventListener('change', (e) => { state.industry = e.target.value; state.asset = assetOptions()[0].id; track('selector_change', { field: 'industry', value: state.industry }); update(); });
-  els.assetSelect.addEventListener('change', (e) => { state.asset = e.target.value; track('selector_change', { field: 'asset', value: state.asset }); update(); });
-  els.mechanismSelect.addEventListener('change', (e) => { state.mechanism = e.target.value; track('selector_change', { field: 'mechanism', value: state.mechanism }); update(); });
-  els.substrateSelect.addEventListener('change', (e) => { state.substrate = e.target.value; track('selector_change', { field: 'substrate', value: state.substrate }); update(); });
-  els.saveWorkspaceButton.addEventListener('click', () => { persist(); track('workspace_saved'); });
-  els.clearWorkspaceButton.addEventListener('click', () => { state.industry = 'solar'; state.asset = 'panel-glass'; state.mechanism = 'dust'; state.substrate = 'glass'; state.constraints = ['easy-cleaning', 'low-downtime']; state.savedSolutions = []; state.savedProof = []; track('workspace_cleared'); update(); });
-  els.saveSolutionButton.addEventListener('click', () => { const top = currentTop(); if (!state.savedSolutions.includes(top.id)) state.savedSolutions.push(top.id); track('solution_saved', { solution: top.id }); update(); });
-  els.bookmarkProofButton.addEventListener('click', () => { const top = currentTop(); const proofId = top.proof[0].id; if (!state.savedProof.includes(proofId)) state.savedProof.push(proofId); track('proof_saved', { proofId }); update(); });
-  els.openEvidenceButton.addEventListener('click', () => openProof(currentTop(), currentTop().proof[0].id));
-  els.compareToggleButton.addEventListener('click', () => { document.querySelector('.compare-shell').scrollIntoView({ behavior: 'smooth' }); track('compare_open'); });
-  els.closeDrawerButton.addEventListener('click', closeDrawer);
-  els.globalSearch.addEventListener('input', handleSearch);
+
+function bindEvents() {
+  els.industrySelect.addEventListener('change', (event) => {
+    state.industry = event.target.value;
+    state.asset = assetOptions()[0]?.id || state.asset;
+    updateView();
+  });
+  els.assetSelect.addEventListener('change', (event) => {
+    state.asset = event.target.value;
+    updateView();
+  });
+  els.mechanismSelect.addEventListener('change', (event) => {
+    state.mechanism = event.target.value;
+    updateView();
+  });
+  els.productFocusSelect.addEventListener('change', (event) => {
+    state.productFocus = event.target.value;
+    updateView();
+  });
+
+  const openDetail = (key) => {
+    const primary = currentPrimary();
+    const secondary = currentSecondary(primary);
+    const metrics = fitMetrics(primary);
+    openModal(detailPayload(key, primary, secondary, metrics));
+  };
+
+  els.chartTrigger.addEventListener('click', () => openDetail('chart'));
+  els.openChartDetail.addEventListener('click', () => openDetail('chart'));
+  els.environmentTrigger.addEventListener('click', () => openDetail('environment'));
+  els.environmentSurface.addEventListener('click', () => openDetail('environment'));
+  els.validationTrigger.addEventListener('click', () => openDetail('validation:0'));
+  els.proofTrigger.addEventListener('click', () => openDetail('proof:0'));
+  els.metricFit.addEventListener('click', () => openDetail('metric-fit'));
+  els.metricProof.addEventListener('click', () => openDetail('metric-proof'));
+  els.metricAngle.addEventListener('click', () => openDetail('metric-angle'));
+  els.metricExposure.addEventListener('click', () => openDetail('metric-exposure'));
+
+  document.addEventListener('click', (event) => {
+    const trigger = event.target.closest('[data-detail-key]');
+    if (trigger) {
+      openDetail(trigger.dataset.detailKey);
+    }
+    if (event.target.matches('[data-close-modal="true"]')) {
+      closeModal();
+    }
+  });
+
+  els.closeDetailModal.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeModal();
+  });
+
+  els.saveWorkspaceButton.addEventListener('click', persist);
+  els.clearWorkspaceButton.addEventListener('click', () => {
+    state.industry = 'solar';
+    state.asset = 'panel-glass';
+    state.mechanism = 'dust';
+    state.productFocus = 'solarex-quartz';
+    updateView();
+  });
 }
-restore(); bind(); update();
+
+restore();
+bindEvents();
+updateView();
