@@ -3,11 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SIW v1.2 — Master Solution Workspace</title>
-    <meta
-      name="description"
-      content="SIW v1.2 — Master Solution Workspace. Persistent decision-support for technical B2B coatings selection across Orient, Explain, Fit, Prove, and Act."
-    />
+    <title>SIW v1.3 — SolarEX Decision Workspace</title>
+    <meta name="description" content="SIW v1.3 — SolarEX Decision Workspace. SolarEX-native decision support for Quartz and Titan across Orient, Explain, Fit, Prove, Compare, and Act." />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -17,16 +14,14 @@
         <div class="brand-wrap">
           <div class="brand-mark"></div>
           <div>
-            <div class="brand-line"><strong>Meyer</strong><span>Nano</span><span>Tech</span><span>Solutions</span><span>Norway</span></div>
-            <div class="subline">Surface Intelligence Workspace <span class="version-badge">v1.2</span></div>
+            <div class="brand-line"><strong>SolarEX</strong><span>Decision</span><span>Workspace</span></div>
+            <div class="subline">Surface Intelligence Workspace <span class="version-badge">v1.3</span></div>
           </div>
         </div>
-        <div class="utility-wrap">
-          <label class="search-shell">
-            <input id="globalSearch" type="search" placeholder="Search products, evidence, mechanisms" autocomplete="off" />
-            <div id="searchResults" class="search-results"></div>
-          </label>
-        </div>
+        <label class="search-shell">
+          <input id="globalSearch" type="search" placeholder="Search products, evidence, mechanisms" autocomplete="off" />
+          <div id="searchResults" class="search-results"></div>
+        </label>
       </header>
 
       <section class="workspace-shell glass-panel">
@@ -39,14 +34,14 @@
 
       <section class="hero-panel glass-panel">
         <div class="hero-copy">
-          <p class="eyebrow">Master Solution</p>
-          <h1 id="heroTitle">Decision support for exposed industrial assets</h1>
-          <p class="hero-subtitle" id="heroSubtitle">Orient the problem, explain the mechanism, test fit, inspect proof, and route to the correct next action.</p>
+          <p class="eyebrow">SolarEX master solution</p>
+          <h1 id="heroTitle">Decision support for solar contamination control</h1>
+          <p class="hero-subtitle" id="heroSubtitle">Orient the scenario, explain the mechanism, test fit, inspect proof, compare Quartz vs Titan, and route to the correct next action.</p>
           <div class="hero-badges">
             <span class="hero-tag">Persistent workspace</span>
-            <span class="hero-tag">Explainable fit</span>
-            <span class="hero-tag">Proof-first trust</span>
-            <span class="hero-tag">Precision act</span>
+            <span class="hero-tag">Evidence-bound fit</span>
+            <span class="hero-tag">Compare-ready</span>
+            <span class="hero-tag">Trust-safe routing</span>
           </div>
         </div>
         <aside class="support-panel glass-panel-soft">
@@ -54,17 +49,17 @@
             <h2>Trust-Safe Support</h2>
             <span class="status-pill">Human-first</span>
           </div>
-          <p class="body-copy">AI assistance remains bounded and source-aware. For complex scenarios, the workspace escalates to technical review instead of guessing.</p>
+          <p class="body-copy">Recommendations are transparent. Technical fit, proof strength, and route readiness are separated so the output remains reviewable rather than black-box.</p>
           <div class="support-grid">
             <div class="support-card">
               <p class="mini-label">Assistance</p>
-              <h3>AI Assistance</h3>
-              <p class="micro-copy">Preview only. Uses approved proof categories and workspace context.</p>
+              <h3>Bounded AI layer</h3>
+              <p class="micro-copy">Narratives and fit logic use governed SolarEX records rather than open-ended text generation.</p>
             </div>
             <div class="support-card">
               <p class="mini-label">Escalation</p>
-              <h3>Talk to Engineer</h3>
-              <p class="micro-copy">Best for low-confidence, high-risk, or procurement-critical scenarios.</p>
+              <h3>Technical review</h3>
+              <p class="micro-copy">Mixed or proof-heavy cases should escalate before commercial commitment.</p>
             </div>
           </div>
         </aside>
@@ -72,27 +67,12 @@
 
       <section class="stage-grid">
         <article class="stage-card glass-panel">
-          <div class="stage-head">
-            <h2>Orient</h2>
-            <p>What are you protecting?</p>
-          </div>
+          <div class="stage-head"><h2>Orient</h2><p>What are you protecting?</p></div>
           <div class="form-grid">
-            <label>
-              <span>Industry</span>
-              <select id="industrySelect"></select>
-            </label>
-            <label>
-              <span>Asset</span>
-              <select id="assetSelect"></select>
-            </label>
-            <label>
-              <span>Degradation</span>
-              <select id="mechanismSelect"></select>
-            </label>
-            <label>
-              <span>Substrate</span>
-              <select id="substrateSelect"></select>
-            </label>
+            <label><span>Industry</span><select id="industrySelect"></select></label>
+            <label><span>Asset</span><select id="assetSelect"></select></label>
+            <label><span>Degradation</span><select id="mechanismSelect"></select></label>
+            <label><span>Substrate</span><select id="substrateSelect"></select></label>
           </div>
           <div class="constraint-zone">
             <p class="constraint-title">Constraint profile</p>
@@ -102,45 +82,24 @@
         </article>
 
         <article class="stage-card glass-panel">
-          <div class="stage-head">
-            <h2>Explain</h2>
-            <p>How does it work?</p>
-          </div>
+          <div class="stage-head"><h2>Explain</h2><p>How does it work?</p></div>
           <div class="explain-visual"></div>
           <div class="explainer-stack">
-            <div class="micro-panel">
-              <p class="mini-label">Mechanism micro-story</p>
-              <p id="explainSummary" class="body-copy"></p>
-            </div>
-            <div class="micro-panel">
-              <p class="mini-label">Intervention principle</p>
-              <p id="interventionSummary" class="body-copy"></p>
-            </div>
-            <div class="micro-panel caution-panel">
-              <p class="mini-label">Boundary conditions</p>
-              <p id="boundarySummary" class="body-copy"></p>
-            </div>
+            <div class="micro-panel"><p class="mini-label">Mechanism micro-story</p><p id="explainSummary" class="body-copy"></p></div>
+            <div class="micro-panel"><p class="mini-label">Intervention principle</p><p id="interventionSummary" class="body-copy"></p></div>
+            <div class="micro-panel caution-panel"><p class="mini-label">Boundary conditions</p><p id="boundarySummary" class="body-copy"></p></div>
           </div>
         </article>
 
         <article class="stage-card glass-panel">
-          <div class="stage-head">
-            <h2>Fit</h2>
-            <p>How well does it fit?</p>
-          </div>
+          <div class="stage-head"><h2>Fit</h2><p>How well does it fit?</p></div>
           <div class="fit-overview">
-            <div>
-              <p class="mini-label">Best-fit score</p>
-              <div id="bestFitScore" class="score-display">--</div>
-            </div>
-            <div>
-              <p class="mini-label">Verdict</p>
-              <div id="fitVerdict" class="verdict-pill">Needs review</div>
-            </div>
+            <div><p class="mini-label">Composite fit</p><div id="bestFitScore" class="score-display">--</div></div>
+            <div><p class="mini-label">Verdict</p><div id="fitVerdict" class="verdict-pill">Needs review</div></div>
           </div>
           <div id="fitShortlist" class="stack-list"></div>
           <div class="compare-actions">
-            <button id="compareToggleButton" class="ghost-button" type="button">Compare shortlisted paths</button>
+            <button id="compareToggleButton" class="ghost-button" type="button">Open compare tray</button>
             <button id="saveSolutionButton" class="ghost-button" type="button">Save solution</button>
           </div>
         </article>
@@ -159,82 +118,49 @@
 
       <section class="mid-grid">
         <article class="glass-panel">
-          <div class="section-head">
-            <h2>Guided capability map</h2>
-            <span class="status-pill">Core MVP</span>
-          </div>
+          <div class="section-head"><h2>Guided capability map</h2><span class="status-pill">Governed MVP</span></div>
           <div class="capability-map" id="capabilityMap"></div>
         </article>
-
         <article class="glass-panel">
-          <div class="section-head">
-            <h2>Credibility summary</h2>
-            <span class="status-pill">Procurement-ready</span>
-          </div>
+          <div class="section-head"><h2>Credibility summary</h2><span class="status-pill">Evidence-bound</span></div>
           <div class="cred-grid">
-            <div class="micro-panel">
-              <p class="mini-label">Standards status</p>
-              <p id="standardsSummary" class="body-copy"></p>
-            </div>
-            <div class="micro-panel">
-              <p class="mini-label">Lab vs field</p>
-              <p id="labFieldSummary" class="body-copy"></p>
-            </div>
-            <div class="micro-panel">
-              <p class="mini-label">Operational implication</p>
-              <p id="operationalImplication" class="body-copy"></p>
-            </div>
-            <div class="micro-panel caution-panel">
-              <p class="mini-label">Not-recommended use cases</p>
-              <div id="cautionFlags" class="tag-list"></div>
-            </div>
+            <div class="micro-panel"><p class="mini-label">Standards status</p><p id="standardsSummary" class="body-copy"></p></div>
+            <div class="micro-panel"><p class="mini-label">Lab vs field</p><p id="labFieldSummary" class="body-copy"></p></div>
+            <div class="micro-panel"><p class="mini-label">Operational implication</p><p id="operationalImplication" class="body-copy"></p></div>
+            <div class="micro-panel caution-panel"><p class="mini-label">Limitations</p><div id="cautionFlags" class="tag-list"></div></div>
           </div>
         </article>
       </section>
 
+      <section class="compare-shell glass-panel" id="compareShell" hidden>
+        <div class="section-head"><h2>Compare tray</h2><span class="status-pill">Quartz vs Titan</span></div>
+        <div id="compareGrid" class="compare-grid"></div>
+      </section>
+
       <section class="details-grid">
         <article class="glass-panel">
-          <div class="section-head">
-            <h2>Spec Explorer</h2>
-            <span class="status-pill">Explainable filters</span>
-          </div>
+          <div class="section-head"><h2>Spec Explorer</h2><span class="status-pill">Explainable filters</span></div>
           <div id="specExplorer" class="spec-table"></div>
         </article>
-
         <article class="glass-panel">
-          <div class="section-head">
-            <h2>Act</h2>
-            <span class="status-pill">High-precision CTA</span>
-          </div>
+          <div class="section-head"><h2>Act</h2><span class="status-pill">High-precision CTA</span></div>
           <div class="action-trio" id="actionGrid"></div>
           <div class="response-panel">
-            <div class="micro-panel">
-              <p class="mini-label">Expected next step</p>
-              <p id="responseSummary" class="body-copy"></p>
-            </div>
-            <div class="micro-panel">
-              <p class="mini-label">Decision confidence checklist</p>
-              <div id="decisionChecklist" class="checklist"></div>
-            </div>
+            <div class="micro-panel"><p class="mini-label">Expected next step</p><p id="responseSummary" class="body-copy"></p></div>
+            <div class="micro-panel"><p class="mini-label">Decision confidence checklist</p><div id="decisionChecklist" class="checklist"></div></div>
           </div>
         </article>
       </section>
 
       <section class="payload-shell glass-panel">
-        <div class="section-head">
-          <h2>Workspace payload</h2>
-          <span class="status-pill">State preview</span>
-        </div>
+        <div class="section-head"><h2>Workspace payload</h2><span class="status-pill">State preview</span></div>
         <pre id="payloadPreview" class="payload-box"></pre>
       </section>
     </main>
 
     <aside id="evidenceDrawer" class="evidence-drawer" aria-hidden="true">
       <div class="drawer-header">
-        <div>
-          <p class="eyebrow">Evidence drawer</p>
-          <h2 id="drawerTitle">Proof and documentation</h2>
-        </div>
+        <div><p class="eyebrow">Evidence drawer</p><h2 id="drawerTitle">Proof and documentation</h2></div>
         <button id="closeDrawerButton" class="ghost-button" type="button">Close</button>
       </div>
       <div id="drawerContent" class="drawer-content"></div>

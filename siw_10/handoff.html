@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIW v1.3 — Next-step Handoff</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="siw-app">
+      <section class="glass-panel" style="padding:24px;max-width:980px;margin:24px auto;">
+        <p class="eyebrow">SIW handoff</p>
+        <h1 id="handoffTitle">Preparing next-step route</h1>
+        <p id="handoffSummary" class="body-copy"></p>
+        <div id="handoffPayload" class="sentence-builder" style="margin:16px 0"></div>
+        <div class="action-trio">
+          <a id="contactLink" class="action-card" href="../contact.html"><p class="mini-label">Primary</p><h3>Continue to contact</h3><p class="body-copy">Route the scenario into the main SolarEX contact surface.</p></a>
+          <a id="proofLink" class="action-card" href="../proof.html"><p class="mini-label">Evidence</p><h3>Review evidence center</h3><p class="body-copy">Open the main proof surface before submitting the enquiry.</p></a>
+          <a class="action-card" href="./index.html"><p class="mini-label">Workspace</p><h3>Return to SIW</h3><p class="body-copy">Go back and refine fit, compare, or proof selection.</p></a>
+        </div>
+      </section>
+    </main>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const intent = params.get('intent') || 'technical-consult';
+      const solution = params.get('solution') || 'Unspecified path';
+      const mechanism = params.get('mechanism') || 'unspecified mechanism';
+      const asset = params.get('asset') || 'unspecified asset';
+      const fitScore = params.get('fitScore') || '--';
+      document.getElementById('handoffTitle').textContent = `Next-step route: ${intent}`;
+      document.getElementById('handoffSummary').textContent = `The SIW workspace has prepared a routed handoff for ${solution}. You can continue into the main SolarEX contact page with the current scenario context preserved in the query string.`;
+      document.getElementById('handoffPayload').textContent = `Solution: ${solution} • Asset: ${asset} • Mechanism: ${mechanism} • Composite fit: ${fitScore}`;
+      document.getElementById('contactLink').href = `../contact.html?${params.toString()}`;
+      document.getElementById('proofLink').href = `../proof.html?${params.toString()}`;
+    </script>
+  </body>
+</html>
