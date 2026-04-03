@@ -3,140 +3,320 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SIW v1.0 — Surface Intelligence Workspace</title>
+    <title>SIW v2.0 — Surface Intelligence Workspace</title>
     <meta
       name="description"
-      content="SIW v1.0 — Surface Intelligence Workspace. Structured, explainable decision support for technical coatings selection."
+      content="SIW v2.0 — Surface Intelligence Workspace. Persistent, explainable decision support for technical coatings selection."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="siw-shell">
-      <header class="hero-card">
-        <div>
-          <p class="eyebrow">SIW v1.0 — Surface Intelligence Workspace</p>
-          <h1>Cross-page decision support for technical coatings selection</h1>
-          <p class="lede">
-            Structured, explainable interface for moving buyers from scenario framing to fit, proof, and the correct next action.
-          </p>
+    <div class="scene" aria-hidden="true"></div>
+
+    <main class="workspace-app">
+      <header class="command-bar shell-panel">
+        <div class="brand-cluster">
+          <div class="brand-glyph" aria-hidden="true"></div>
+          <div class="brand-copy">
+            <strong class="brand-title">SIW <span>v2.0</span></strong>
+            <span class="brand-subtitle">Surface Intelligence Workspace</span>
+          </div>
         </div>
-        <div class="journey-strip" aria-label="SIW journey">
-          <span class="journey-pill">Orient</span>
-          <span class="journey-pill">Explain</span>
-          <span class="journey-pill">Fit</span>
-          <span class="journey-pill">Prove</span>
-          <span class="journey-pill">Act</span>
+
+        <nav class="top-nav" aria-label="Primary">
+          <a class="nav-chip is-active" href="#orient">Orient</a>
+          <a class="nav-chip" href="#explain">Explain</a>
+          <a class="nav-chip" href="#fit">Fit</a>
+          <a class="nav-chip" href="#prove">Prove</a>
+          <a class="nav-chip" href="#act">Act</a>
+        </nav>
+
+        <div class="status-cluster">
+          <span class="status-chip status-ok">Persistent workspace</span>
+          <span class="status-chip status-accent">Explainable fit</span>
+          <span class="status-chip">Evidence-linked</span>
         </div>
       </header>
 
-      <section class="grid two-col">
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Persistent Workspace</h2>
-            <span class="panel-tag">MVP core</span>
-          </div>
-          <dl class="workspace-grid" id="workspaceSummary"></dl>
-        </article>
+      <section class="workspace-stage shell-panel">
+        <div class="workspace-backdrop" aria-hidden="true"></div>
 
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Explain layer</h2>
-            <span class="panel-tag">Mechanism clarity</span>
-          </div>
-          <p class="note-text" id="explainSummary"></p>
-          <p class="note-text">
-            This module binds mechanism understanding to the active scenario so the recommendation path stays transparent and governed.
-          </p>
-        </article>
-      </section>
-
-      <section class="grid one-col">
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Outcome Selector</h2>
-            <span class="panel-tag">Orient</span>
-          </div>
-          <p class="note-text">
-            Capture the buyer scenario early so the interface can carry context, explain fit logic, and route to the correct next action.
-          </p>
-
-          <div class="form-grid">
-            <label>
-              <span>Industry</span>
-              <select id="industrySelect"></select>
-            </label>
-            <label>
-              <span>Asset</span>
-              <select id="assetSelect"></select>
-            </label>
-            <label>
-              <span>Mechanism</span>
-              <select id="mechanismSelect"></select>
-            </label>
-            <label>
-              <span>Substrate</span>
-              <select id="substrateSelect"></select>
-            </label>
-            <label>
-              <span>Environment</span>
-              <select id="environmentSelect"></select>
-            </label>
-          </div>
-
-          <div class="constraint-group">
-            <p class="constraint-title">Operating constraints</p>
-            <div class="checkbox-grid" id="constraintGrid"></div>
-          </div>
-
-          <div class="recommendation-card">
+        <div class="hero-panel dashboard-panel">
+          <div class="panel-header">
             <div>
-              <p class="recommendation-label">Derived recommendation path</p>
-              <h3 id="candidatePath"></h3>
-              <p class="note-text" id="proofStatus"></p>
+              <p class="panel-kicker">SIW v2.0</p>
+              <h1 class="hero-title">Persistent decision support for technical surface selection</h1>
+              <p class="hero-copy">
+                SIW now follows a stronger MIW-style workspace model: outcome-led orientation, context-aware explanation,
+                explainable fit logic, proof-in-context, and action routing without losing state.
+              </p>
             </div>
-            <div class="cta-row">
-              <button type="button" id="primaryActionButton"></button>
-              <button type="button" class="button-secondary">Request sample</button>
+
+            <div class="hero-search">
+              <label class="search-shell" for="globalSearchInput">
+                <span class="search-label">Global search</span>
+                <input
+                  id="globalSearchInput"
+                  type="search"
+                  autocomplete="off"
+                  placeholder="Search industries, applications, products, or evidence"
+                />
+              </label>
+              <div id="searchSuggestions" class="search-suggestions" role="listbox" aria-label="Search suggestions"></div>
             </div>
           </div>
 
-          <details class="payload-panel">
-            <summary>Scenario payload preview</summary>
-            <pre id="payloadPreview"></pre>
-          </details>
-        </article>
-      </section>
+          <div id="breadcrumbTrail" class="breadcrumb-trail" aria-label="Workspace context"></div>
+          <div id="stepper" class="journey-stepper" aria-label="Workspace stages"></div>
+        </div>
 
-      <section class="grid three-col">
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Fit</h2>
-            <span class="panel-tag">Next module</span>
+        <div class="workspace-grid">
+          <div class="column main-column">
+            <section id="orient" class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Orient</p>
+                  <h2>Outcome selector and capability map</h2>
+                </div>
+                <div class="panel-header-actions">
+                  <button id="saveWorkspaceButton" class="ghost-button" type="button">Save workspace</button>
+                  <button id="clearWorkspaceButton" class="ghost-button" type="button">Reset</button>
+                </div>
+              </div>
+
+              <p class="section-copy">
+                Start with the business problem and operating surface. The selector captures the minimum context SIW needs
+                to keep the rest of the workspace coherent and explainable.
+              </p>
+
+              <div id="capabilityMap" class="capability-map" aria-label="Capability map"></div>
+
+              <div class="scenario-form">
+                <label class="field-shell">
+                  <span>Industry</span>
+                  <select id="industrySelect"></select>
+                </label>
+
+                <label class="field-shell">
+                  <span>Application</span>
+                  <select id="applicationSelect"></select>
+                </label>
+
+                <label class="field-shell">
+                  <span>Asset</span>
+                  <select id="assetSelect"></select>
+                </label>
+
+                <label class="field-shell">
+                  <span>Substrate</span>
+                  <select id="substrateSelect"></select>
+                </label>
+
+                <label class="field-shell field-shell-wide">
+                  <span>Primary challenge</span>
+                  <select id="challengeSelect"></select>
+                </label>
+              </div>
+
+              <div class="chip-zone">
+                <p class="small-label">Operating conditions</p>
+                <div id="conditionChips" class="chip-grid"></div>
+              </div>
+
+              <div id="scenarioStatement" class="statement-box statement-empty">
+                Select industry, application, asset, substrate, and challenge to generate the workspace state.
+              </div>
+            </section>
+
+            <section id="explain" class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Explain</p>
+                  <h2>Context-aware explanation layer</h2>
+                </div>
+                <button id="openTopEvidenceButton" class="panel-icon" type="button">Open evidence</button>
+              </div>
+
+              <div class="explain-grid">
+                <article class="explain-card">
+                  <h3>What is happening</h3>
+                  <p id="explainWhat" class="card-copy"></p>
+                </article>
+                <article class="explain-card">
+                  <h3>Why it matters</h3>
+                  <p id="explainWhy" class="card-copy"></p>
+                </article>
+                <article class="explain-card">
+                  <h3>Recommended because</h3>
+                  <p id="explainBecause" class="card-copy"></p>
+                </article>
+              </div>
+
+              <div>
+                <p class="small-label">Proof stack</p>
+                <div id="proofStrip" class="proof-strip"></div>
+              </div>
+            </section>
+
+            <section id="fit" class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Fit</p>
+                  <h2>Explainable best-fit routes</h2>
+                </div>
+              </div>
+
+              <p class="section-copy">
+                Recommendations are filtered by application and substrate first, then strengthened by challenge and condition
+                overlap so the ranking remains interpretable rather than opaque.
+              </p>
+
+              <div id="recommendationList" class="recommendation-list recommendation-list-empty"></div>
+            </section>
+
+            <section id="prove" class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Prove</p>
+                  <h2>Evidence center, standards, and boundaries</h2>
+                </div>
+              </div>
+
+              <div class="prove-grid">
+                <div>
+                  <p class="small-label">Evidence center</p>
+                  <div id="evidenceCards" class="stacked-action-list"></div>
+                </div>
+
+                <div>
+                  <p class="small-label">Boundary conditions</p>
+                  <div id="boundaryPanel" class="stacked-action-list"></div>
+                  <p class="small-label section-gap">Standards and proof summary</p>
+                  <div id="standardsPanel" class="standards-panel"></div>
+                </div>
+              </div>
+
+              <p class="small-label section-gap">Document routes</p>
+              <div id="documentList" class="stacked-action-list"></div>
+            </section>
+
+            <section id="act" class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Act</p>
+                  <h2>Context-aware next actions</h2>
+                </div>
+              </div>
+
+              <p class="section-copy">
+                The action layer only surfaces the next moves that match the active scenario. Technical consult, sample, RFQ,
+                or evidence sharing are all routed from the same preserved context.
+              </p>
+
+              <div id="actionList" class="stacked-action-list"></div>
+            </section>
           </div>
-          <p class="note-text">
-            Expand the rules engine into product-path scoring, exclusions, caution flags, and shortlist comparison.
-          </p>
-        </article>
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Prove</h2>
-            <span class="panel-tag">Next module</span>
-          </div>
-          <p class="note-text">
-            Bind standards, case evidence, test summaries, and limitations directly to the active scenario context.
-          </p>
-        </article>
-        <article class="panel-card">
-          <div class="panel-head">
-            <h2>Act</h2>
-            <span class="panel-tag">Next module</span>
-          </div>
-          <p class="note-text">
-            Route users into technical discussion, sample request, documentation pack, or RFQ with prefilled context.
-          </p>
-        </article>
+
+          <aside class="column side-column">
+            <section class="dashboard-panel sticky-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Persistent workspace shell</p>
+                  <h2>Current context</h2>
+                </div>
+              </div>
+
+              <div id="contextSummary" class="context-summary"></div>
+
+              <div class="next-step-card">
+                <p class="small-label">Next best step</p>
+                <h3 id="nextStepTitle">Complete the scenario</h3>
+                <p id="nextStepBody" class="card-copy"></p>
+              </div>
+
+              <div class="rail-actions">
+                <a id="primaryActionLink" class="primary-button" href="#orient">Complete scenario</a>
+                <button id="copySummaryButton" class="ghost-button" type="button">Copy summary</button>
+              </div>
+            </section>
+
+            <section class="dashboard-panel sticky-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Decision confidence</p>
+                  <h2>Checklist</h2>
+                </div>
+              </div>
+
+              <ul id="confidenceChecklist" class="confidence-checklist"></ul>
+            </section>
+
+            <section class="dashboard-panel sticky-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Comparison shortlist</p>
+                  <h2>Compare tray</h2>
+                </div>
+              </div>
+
+              <div id="compareTray" class="compare-tray"></div>
+              <div id="compareTable" class="compare-table"></div>
+            </section>
+
+            <section class="dashboard-panel sticky-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Workspace metrics</p>
+                  <h2>Fit, proof, surface, value</h2>
+                </div>
+              </div>
+
+              <div class="metric-grid">
+                <button id="metricFit" class="metric-card" type="button">
+                  <span class="metric-label">Fit</span>
+                  <strong id="metricFitValue" class="metric-value">--</strong>
+                  <span id="metricFitNote" class="metric-note">Awaiting scenario</span>
+                </button>
+
+                <button id="metricProof" class="metric-card" type="button">
+                  <span class="metric-label">Proof</span>
+                  <strong id="metricProofValue" class="metric-value">--</strong>
+                  <span id="metricProofNote" class="metric-note">Awaiting scenario</span>
+                </button>
+
+                <button id="metricSurface" class="metric-card" type="button">
+                  <span class="metric-label">Surface</span>
+                  <strong id="metricSurfaceValue" class="metric-value">--</strong>
+                  <span id="metricSurfaceNote" class="metric-note">Awaiting scenario</span>
+                </button>
+
+                <button id="metricTrend" class="metric-card" type="button">
+                  <span class="metric-label">Value</span>
+                  <strong id="metricTrendValue" class="metric-value">--</strong>
+                  <span id="metricTrendNote" class="metric-note">Awaiting scenario</span>
+                </button>
+              </div>
+            </section>
+          </aside>
+        </div>
       </section>
     </main>
+
+    <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
+    <aside id="evidenceDrawer" class="evidence-drawer" aria-hidden="true">
+      <div class="drawer-header">
+        <div>
+          <p class="panel-kicker">Evidence drawer</p>
+          <h2 id="drawerTitle">Evidence</h2>
+        </div>
+        <button id="closeEvidenceDrawer" class="panel-icon" type="button" aria-label="Close evidence drawer">Close</button>
+      </div>
+
+      <p id="drawerSummary" class="detail-summary"></p>
+      <div id="drawerMetrics" class="detail-metrics"></div>
+      <div id="drawerBody" class="detail-analysis"></div>
+      <div id="drawerActions" class="detail-actions"></div>
+    </aside>
 
     <script src="./app.js"></script>
   </body>
