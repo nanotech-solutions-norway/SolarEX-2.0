@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.solarex.no/</loc></url>
+  <url><loc>https://www.solarex.no/index.html</loc></url>
   <url><loc>https://www.solarex.no/quartz.html</loc></url>
   <url><loc>https://www.solarex.no/titan.html</loc></url>
   <url><loc>https://www.solarex.no/applications.html</loc></url>
@@ -10,4 +11,15 @@
   <url><loc>https://www.solarex.no/technical-specifications.html</loc></url>
   <url><loc>https://www.solarex.no/application-process.html</loc></url>
   <url><loc>https://www.solarex.no/contact.html</loc></url>
+  <url><loc>https://www.solarex.no/no/</loc></url>
+  <url><loc>https://www.solarex.no/no/index.html</loc></url>
+  <url><loc>https://www.solarex.no/no/quartz.html</loc></url>
+  <url><loc>https://www.solarex.no/no/titan.html</loc></url>
+  <url><loc>https://www.solarex.no/no/applications.html</loc></url>
+  <url><loc>https://www.solarex.no/no/proof-results.html</loc></url>
+  <url><loc>https://www.solarex.no/no/roi-analysis.html</loc></url>
+  <url><loc>https://www.solarex.no/no/case-study-norway.html</loc></url>
+  <url><loc>https://www.solarex.no/no/technical-specifications.html</loc></url>
+  <url><loc>https://www.solarex.no/no/application-process.html</loc></url>
+  <url><loc>https://www.solarex.no/no/contact.html</loc></url>
 </urlset>
