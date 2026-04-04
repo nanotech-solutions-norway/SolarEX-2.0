@@ -9,6 +9,35 @@
       content="SIW v2.0 — Surface Intelligence Workspace. Persistent, explainable decision support for technical coatings selection."
     />
     <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .hero-search .search-suggestions {
+        top: calc(100% + 8px);
+      }
+
+      @media (max-width: 980px) {
+        .hero-panel .panel-header {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 16px;
+        }
+
+        .hero-panel .panel-header > :first-child {
+          order: 2;
+          width: 100%;
+        }
+
+        .hero-search {
+          order: 1;
+          width: 100%;
+          min-width: 100%;
+        }
+
+        .hero-title,
+        .hero-copy {
+          max-width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="scene" aria-hidden="true"></div>
