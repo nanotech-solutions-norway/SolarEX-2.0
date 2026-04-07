@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIW v2.0 — Handoff</title>
+    <meta
+      name="description"
+      content="SIW v2.0 handoff page for context-aware routing into consult, sample, or RFQ next steps."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="scene" aria-hidden="true"></div>
+
+    <main class="workspace-app">
+      <header class="command-bar shell-panel">
+        <div class="brand-cluster">
+          <div class="brand-glyph" aria-hidden="true"></div>
+          <div class="brand-copy">
+            <strong class="brand-title">SIW <span>v2.0</span></strong>
+            <span class="brand-subtitle">Action Handoff</span>
+          </div>
+        </div>
+
+        <nav class="top-nav" aria-label="Primary">
+          <a class="nav-chip" href="./index.html">Workspace</a>
+          <a class="nav-chip" href="./proof.html">Proof center</a>
+          <a class="nav-chip is-active" href="./handoff.html">Handoff</a>
+        </nav>
+
+        <div class="status-cluster">
+          <span class="status-chip status-accent">Context-aware routing</span>
+        </div>
+      </header>
+
+      <section class="workspace-stage shell-panel">
+        <div class="workspace-backdrop" aria-hidden="true"></div>
+
+        <div class="hero-panel dashboard-panel">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Act</p>
+              <h1 id="handoffTitle" class="hero-title">Preparing next-step route</h1>
+              <p id="handoffBody" class="hero-copy">
+                SIW uses the active scenario to route into the most suitable next step: technical consult, sample request, or RFQ.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="workspace-grid">
+          <div class="column main-column">
+            <section class="dashboard-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Routing summary</p>
+                  <h2>Recommended commercial or technical move</h2>
+                </div>
+              </div>
+
+              <div id="summaryCard" class="statement-box">
+                Loading route summary...
+              </div>
+
+              <div class="stacked-action-list section-gap">
+                <a class="action-card" href="mailto:post@nanotechas.no?subject=SIW%20Technical%20Consult">
+                  <span class="card-icon">→</span>
+                  <span class="card-copy">
+                    <strong>Email project team</strong>
+                    <span>Use this path for technical review, proof discussion, pilot framing, or RFQ preparation.</span>
+                  </span>
+                  <span class="card-arrow">Route</span>
+                </a>
+
+                <a class="action-card" href="./index.html#act">
+                  <span class="card-icon">▣</span>
+                  <span class="card-copy">
+                    <strong>Return to SIW act stage</strong>
+                    <span>Go back to the workspace and review other context-aware action routes.</span>
+                  </span>
+                  <span class="card-arrow">Open</span>
+                </a>
+              </div>
+            </section>
+          </div>
+
+          <aside class="column side-column">
+            <section class="dashboard-panel sticky-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Parameters</p>
+                  <h2>Detected query context</h2>
+                </div>
+              </div>
+
+              <div id="contextBox" class="context-summary"></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const intent = params.get('intent') || 'technical-consult';
+      const solution = params.get('solution') || 'selected route';
+
+      const intentLabelMap = {
+        'technical-consult': 'Technical consult',
+        'sample-request': 'Sample request',
+        'rfq-request': 'RFQ request'
+      };
+
+      const intentBodyMap = {
+        'technical-consult': 'Use this route when scenario fit, evidence, deployment conditions, or proof boundaries need engineering review before commercial progression.',
+        'sample-request': 'Use this route when the scenario is sufficiently defined and the next step is material evaluation, surface verification, or pilot preparation.',
+        'rfq-request': 'Use this route when the fit logic is already accepted and the next step is pricing, commercial scoping, or implementation planning.'
+      };
+
+      document.getElementById('handoffTitle').textContent = `${intentLabelMap[intent] || 'Technical consult'} for ${solution}`;
+      document.getElementById('handoffBody').textContent = intentBodyMap[intent] || intentBodyMap['technical-consult'];
+      document.getElementById('summaryCard').textContent = `${solution} has been routed to the ${intentLabelMap[intent] || 'technical consult'} path. Use the contact action to continue with a structured next-step discussion.`;
+      document.getElementById('contextBox').innerHTML = `
+        <span class="context-chip"><strong>Intent</strong> ${intentLabelMap[intent] || intent}</span>
+        <span class="context-chip"><strong>Solution</strong> ${solution}</span>
+      `;
+    </script>
+  </body>
+</html>
