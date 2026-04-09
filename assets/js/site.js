@@ -32,11 +32,41 @@ const getTargetPath = (lang) => {
   return pageKey === '/' ? '/' : pageKey;
 };
 
-const upsertLink = (rel, href) => {
-  let link = document.head.querySelector(`link[rel="${rel}"]`);
+const localizedPages = isNorwegianPage
+  ? [
+      ['index.html', 'Hjem'],
+      ['quartz.html', 'Quartz'],
+      ['titan.html', 'Titan'],
+      ['applications.html', 'Bruksområder'],
+      ['proof-results.html', 'Dokumentasjon'],
+      ['roi-analysis.html', 'ROI-analyse'],
+      ['case-study-norway.html', 'Casestudie'],
+      ['technical-specifications.html', 'Tekniske spesifikasjoner'],
+      ['application-process.html', 'Applikasjonsprosess'],
+      ['contact.html', 'Kontakt']
+    ]
+  : [
+      ['index.html', 'Home'],
+      ['quartz.html', 'Quartz'],
+      ['titan.html', 'Titan'],
+      ['applications.html', 'Applications'],
+      ['proof-results.html', 'Proof'],
+      ['roi-analysis.html', 'ROI'],
+      ['case-study-norway.html', 'Case Study'],
+      ['technical-specifications.html', 'Technical Specifications'],
+      ['application-process.html', 'Application Process'],
+      ['contact.html', 'Contact']
+    ];
+
+const currentLocalFile = pageKey === '/' ? 'index.html' : pageKey.replace(/^\//, '');
+
+const upsertLink = (rel, href, extras = {}) => {
+  const selectorExtras = Object.entries(extras).map(([key, value]) => `[${key}="${value}"]`).join('');
+  let link = document.head.querySelector(`link[rel="${rel}"]${selectorExtras}`);
   if (!link) {
     link = document.createElement('link');
     link.rel = rel;
+    Object.entries(extras).forEach(([key, value]) => link.setAttribute(key, value));
     document.head.appendChild(link);
   }
   link.href = href;
@@ -47,12 +77,53 @@ const injectEnhancementStyle = () => {
   const style = document.createElement('style');
   style.id = 'solarex-global-enhancements';
   style.textContent = `
+  @import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap");
   @font-face{
     font-family:"FaunaSolarEX";
     src:url("${fontAssetUrl}") format("truetype");
     font-weight:500;
     font-style:normal;
     font-display:swap
+  }
+  body,
+  p,
+  li,
+  td,
+  th,
+  .lead,
+  .section-copy,
+  .footer-note,
+  .site-footer p,
+  .site-footer a,
+  .card p,
+  .table-card td,
+  .table-card th,
+  .contact-list span,
+  .contact-list strong,
+  .contact-list a,
+  .footer-card p,
+  .stack-list,
+  .mini-list,
+  .feature-list,
+  .media-caption,
+  .flow-step p{
+    font-family:"Libre Baskerville", Georgia, "Times New Roman", serif !important;
+  }
+  h1,h2,h3,h4,h5,h6,
+  .brand,
+  .eyebrow,
+  .tag,
+  .button,
+  .button-secondary,
+  .section-title,
+  .micro-metric,
+  .site-nav a,
+  .footer-mini-meta,
+  .stat strong,
+  .band-item strong,
+  .metric-inline .metric-value,
+  .counter{
+    font-family:"FaunaSolarEX", "Times New Roman", serif !important;
   }
   .hero .container{width:min(1180px,calc(100% - 2rem));max-width:1180px;padding:0;margin:0 auto}
   body{
@@ -87,18 +158,11 @@ const injectEnhancementStyle = () => {
     animation:floatOrbAlt 18s ease-in-out infinite
   }
   main,.site-header,.site-footer{position:relative;z-index:1}
-  .brand{gap:.8rem}
+  .brand{display:inline-flex;align-items:center;gap:.3rem}
   .brand-logo{
-    width:54px;height:54px;object-fit:contain;border-radius:14px;
+    width:64px;height:64px;object-fit:contain;border-radius:14px;
     box-shadow:0 8px 26px rgba(0,0,0,.28);background:rgba(255,255,255,.02)
   }
-  .brand-wordmark,.footer-wordmark{
-    display:inline-flex;align-items:center;
-    font-family:"FaunaSolarEX",Inter,ui-sans-serif,system-ui,sans-serif;
-    letter-spacing:.02em
-  }
-  .brand-wordmark{font-size:1.42rem;font-weight:500;color:#fff}
-  .brand-wordmark span,.footer-wordmark span{color:#14d447}
   .hero-logo{width:min(100%,320px);height:auto;display:block;margin:0 auto;filter:drop-shadow(0 18px 34px rgba(0,0,0,.36))}
   .hero-visual-card{padding:1.5rem}
   .insight-grid,.download-grid,.matrix-grid,.formula-grid,.pilot-grid,.cta-grid{display:grid;gap:1rem}
@@ -129,6 +193,8 @@ const injectEnhancementStyle = () => {
     border:1px solid rgba(20,212,71,.24);background:rgba(20,212,71,.08);
     color:#d0f8da;font-size:.82rem;font-weight:700
   }
+  .site-nav a.button.button-sm{min-height:unset;padding:.55rem .8rem;background:transparent;border:1px solid transparent;text-shadow:none}
+  .site-nav a.button.button-sm:hover,.site-nav a.button.button-sm.active{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.05)}
   .site-footer.shared-footer{
     padding:2.4rem 0 3rem;
     border-top:1px solid rgba(255,255,255,.08);
@@ -138,10 +204,9 @@ const injectEnhancementStyle = () => {
   .shared-footer .footer-card{padding:1.35rem}
   .footer-brand-lockup{display:flex;align-items:center;gap:.9rem;margin:0 0 1rem}
   .footer-logo{
-    width:74px;height:74px;object-fit:contain;border-radius:18px;
+    width:92px;height:92px;object-fit:contain;border-radius:18px;
     background:rgba(255,255,255,.03);box-shadow:0 18px 42px rgba(0,0,0,.28)
   }
-  .footer-wordmark{font-size:1.8rem;color:#fff}
   .footer-note{margin:0;color:#b8c3b7}
   .footer-sitemap{
     display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem
@@ -164,7 +229,8 @@ const injectEnhancementStyle = () => {
   @media (max-width:980px){
     .hero .container{width:min(1180px,calc(100% - 1.1rem))}
     .insight-grid,.download-grid,.matrix-grid,.formula-grid,.pilot-grid,.cta-grid,.shared-footer .footer-shell,.footer-sitemap{grid-template-columns:1fr}
-    .brand-logo{width:46px;height:46px}
+    .brand-logo{width:52px;height:52px}
+    .footer-logo{width:82px;height:82px}
   }
   @media (prefers-reduced-motion:reduce){
     .ambient-grid,body::before,body::after{animation:none}
@@ -184,43 +250,20 @@ const ensureAmbientGrid = () => {
 const ensureBrandLogo = () => {
   document.querySelectorAll('.brand').forEach((brand) => {
     const href = brand.getAttribute('href') || `${assetPrefix}index.html`;
-    brand.innerHTML = `<img src="${logoAssetUrl}" alt="SolarEX logo" class="brand-logo" /><span class="brand-wordmark" aria-hidden="true">Solar<span>EX</span></span>`;
+    brand.innerHTML = `<img src="${logoAssetUrl}" alt="SolarEX logo" class="brand-logo" />`;
     brand.setAttribute('href', href);
+    brand.setAttribute('aria-label', 'SolarEX home');
+    brand.setAttribute('title', 'SolarEX home');
   });
 };
 
 const ensureIcons = () => {
   upsertLink('icon', faviconAssetUrl);
   upsertLink('apple-touch-icon', faviconAssetUrl);
+  upsertLink('alternate', getTargetPath('en'), { hreflang: 'en' });
+  upsertLink('alternate', getTargetPath('no'), { hreflang: 'no' });
+  upsertLink('alternate', getTargetPath('en'), { hreflang: 'x-default' });
 };
-
-const localizedPages = isNorwegianPage
-  ? [
-      ['index.html', 'Hjem'],
-      ['quartz.html', 'Quartz'],
-      ['titan.html', 'Titan'],
-      ['applications.html', 'Bruksområder'],
-      ['proof-results.html', 'Dokumentasjon'],
-      ['roi-analysis.html', 'ROI-analyse'],
-      ['case-study-norway.html', 'Casestudie'],
-      ['technical-specifications.html', 'Tekniske spesifikasjoner'],
-      ['application-process.html', 'Applikasjonsprosess'],
-      ['contact.html', 'Kontakt']
-    ]
-  : [
-      ['index.html', 'Home'],
-      ['quartz.html', 'Quartz'],
-      ['titan.html', 'Titan'],
-      ['applications.html', 'Applications'],
-      ['proof-results.html', 'Proof'],
-      ['roi-analysis.html', 'ROI'],
-      ['case-study-norway.html', 'Case Study'],
-      ['technical-specifications.html', 'Technical Specifications'],
-      ['application-process.html', 'Application Process'],
-      ['contact.html', 'Contact']
-    ];
-
-const currentLocalFile = pageKey === '/' ? 'index.html' : pageKey.replace(/^\//, '');
 
 const switchLanguage = (lang) => {
   localStorage.setItem('solarex_lang', lang);
@@ -261,8 +304,7 @@ const createFooter = () => {
       <div class="footer-card footer-brand-panel">
         <p class="tag">${brandTag}</p>
         <div class="footer-brand-lockup">
-          <img src="${logoAssetUrl}" alt="SolarEX logo" class="footer-logo" />
-          <span class="footer-wordmark" aria-hidden="true">Solar<span>EX</span></span>
+          <a href="${isNorwegianPage ? 'index.html' : 'index.html'}" aria-label="SolarEX home" title="SolarEX home"><img src="${logoAssetUrl}" alt="SolarEX logo" class="footer-logo" /></a>
         </div>
         <p class="footer-note">${description}</p>
       </div>
@@ -293,10 +335,22 @@ const createFooter = () => {
   });
 };
 
+const ensureNavigation = () => {
+  if (!siteNav) return;
+  const navItems = localizedPages.map(([href, label]) => {
+    const activeClass = href === currentLocalFile ? 'active' : '';
+    const buttonClass = href === 'contact.html' ? 'button button-sm' : '';
+    const classes = [activeClass, buttonClass].filter(Boolean).join(' ');
+    return `<a href="${href}"${classes ? ` class="${classes}"` : ''}>${label}</a>`;
+  }).join('');
+  siteNav.innerHTML = navItems;
+};
+
 injectEnhancementStyle();
 ensureAmbientGrid();
 ensureBrandLogo();
 ensureIcons();
+ensureNavigation();
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
