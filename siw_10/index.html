@@ -90,6 +90,10 @@
                   type="search"
                   autocomplete="off"
                   placeholder="Search industries, applications, products, or evidence"
+                  role="combobox"
+                  aria-expanded="false"
+                  aria-controls="searchSuggestions"
+                  aria-autocomplete="list"
                 />
               </label>
               <div id="searchSuggestions" class="search-suggestions" role="listbox" aria-label="Search suggestions"></div>
@@ -164,7 +168,7 @@
                   <p class="panel-kicker">Explain</p>
                   <h2>Context-aware explanation layer</h2>
                 </div>
-                <button id="openTopEvidenceButton" class="panel-icon" type="button">Open evidence</button>
+                <button id="openTopEvidenceButton" class="panel-icon" type="button" aria-haspopup="dialog" aria-controls="evidenceDrawer">Open evidence</button>
               </div>
 
               <div class="explain-grid">
@@ -333,7 +337,7 @@
     </main>
 
     <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
-    <aside id="evidenceDrawer" class="evidence-drawer" aria-hidden="true">
+    <aside id="evidenceDrawer" class="evidence-drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" aria-describedby="drawerSummary" tabindex="-1">
       <div class="drawer-header">
         <div>
           <p class="panel-kicker">Evidence drawer</p>
