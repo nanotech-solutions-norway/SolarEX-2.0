@@ -124,6 +124,54 @@
                 </label>
               </div>
 
+              <div id="environmentPanel" class="analytics-grid section-gap">
+                <label class="field-shell">
+                  <span>Site type</span>
+                  <select id="environmentSelect">
+                    <option value="">Select site type</option>
+                  </select>
+                </label>
+
+                <label class="field-shell">
+                  <span>Temperature range</span>
+                  <select id="temperatureRangeSelect">
+                    <option value="">Select temperature range</option>
+                  </select>
+                </label>
+
+                <label class="field-shell">
+                  <span>Severity</span>
+                  <select id="severitySelect">
+                    <option value="">Select severity</option>
+                  </select>
+                </label>
+
+                <label class="field-shell">
+                  <span>Contaminant type</span>
+                  <select id="contaminantTypeSelect">
+                    <option value="">Select contaminant type</option>
+                  </select>
+                </label>
+
+                <label class="field-shell">
+                  <span>Surface geometry</span>
+                  <select id="surfaceGeometrySelect">
+                    <option value="">Select surface geometry</option>
+                  </select>
+                </label>
+
+                <label class="field-shell">
+                  <span>Deployment priority</span>
+                  <select id="deploymentPrioritySelect">
+                    <option value="">Select deployment priority</option>
+                  </select>
+                </label>
+              </div>
+
+              <div id="scenarioConfidenceBadge" class="statement-box statement-empty section-gap">
+                Scenario confidence will update as environment context is completed.
+              </div>
+
               <div class="chip-zone">
                 <p class="small-label">Operating conditions</p>
                 <div id="conditionChips" class="chip-grid"></div>
@@ -161,6 +209,54 @@
               <div>
                 <p class="small-label">Proof stack</p>
                 <div id="proofStrip" class="proof-strip"></div>
+              </div>
+            </section>
+
+            <section id="fitMatrixPanel" class="dashboard-panel analytics-shell-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Fit Matrix</p>
+                  <h2>Best-fit comparison and route ranking</h2>
+                </div>
+              </div>
+              <div id="fitComparisonHeader" class="context-summary"></div>
+              <div id="fitComparisonLegend" class="chip-grid section-gap"></div>
+              <div id="fitComparisonMatrix" class="compare-table section-gap">
+                <div class="empty-panel-copy">Comparison output will populate after a scenario is complete.</div>
+              </div>
+              <div id="fitDecisionSummary" class="statement-box statement-empty section-gap">
+                Complete the scenario to generate a comparison summary.
+              </div>
+            </section>
+
+            <section id="explainVisualPanel" class="dashboard-panel analytics-shell-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Visual Explanation</p>
+                  <h2>Mechanism and trade-off analysis</h2>
+                </div>
+              </div>
+              <div class="prove-grid">
+                <div id="mechanismDiagramPanel">
+                  <p class="small-label">Mechanism diagram</p>
+                  <div id="mechanismDiagramCanvas" class="standards-panel analytics-visual-surface">
+                    <div class="empty-panel-copy">Mechanism visual will populate after route selection.</div>
+                  </div>
+                </div>
+                <div id="tradeoffChartPanel">
+                  <p class="small-label">Trade-off chart</p>
+                  <div id="tradeoffChartCanvas" class="standards-panel analytics-visual-surface">
+                    <div class="empty-panel-copy">Trade-off chart will populate after route selection.</div>
+                  </div>
+                </div>
+              </div>
+              <p class="small-label section-gap">Why this route</p>
+              <div id="fitRationaleList" class="stacked-action-list">
+                <div class="empty-panel-copy">Rationale statements will appear with the leading route.</div>
+              </div>
+              <p class="small-label section-gap">Boundary visualizer</p>
+              <div id="routeBoundaryVisualizer" class="standards-panel analytics-visual-surface">
+                <div class="empty-panel-copy">Boundary visualization will populate after route selection.</div>
               </div>
             </section>
 
@@ -257,6 +353,36 @@
               <ul id="confidenceChecklist" class="confidence-checklist"></ul>
             </section>
 
+            <section id="validationSummaryPanel" class="dashboard-panel sticky-panel analytics-shell-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">Validation summary</p>
+                  <h2>Readiness and proof coverage</h2>
+                </div>
+              </div>
+              <div id="reviewedEvidenceCounter" class="next-step-card">
+                <p class="small-label">Evidence reviewed</p>
+                <h3>0 / 0</h3>
+                <p class="card-copy">Standards-linked items: 0</p>
+              </div>
+              <div id="boundaryAcknowledgementBadge" class="statement-box statement-empty section-gap">
+                Boundary conditions not yet acknowledged.
+              </div>
+              <label class="field-shell section-gap">
+                <span>Handoff intent</span>
+                <select id="handoffIntentSelector">
+                  <option value="">Select handoff intent</option>
+                  <option value="technical-review">Technical review</option>
+                  <option value="sample-request">Sample request</option>
+                  <option value="rfq-request">RFQ / quotation</option>
+                  <option value="evidence-pack">Evidence pack</option>
+                </select>
+              </label>
+              <div class="rail-actions">
+                <button id="exportReviewPacketButton" class="ghost-button" type="button">Export review packet</button>
+              </div>
+            </section>
+
             <section class="dashboard-panel sticky-panel">
               <div class="panel-header">
                 <div>
@@ -319,9 +445,19 @@
       </div>
 
       <p id="drawerSummary" class="detail-summary"></p>
-      <div id="drawerMetrics" class="detail-metrics"></div>
-      <div id="drawerBody" class="detail-analysis"></div>
-      <div id="drawerActions" class="detail-actions"></div>
+      <div id="drawerEvidenceType" class="chip-grid section-gap"></div>
+      <div id="drawerSourceRef" class="statement-box statement-empty section-gap"></div>
+      <div id="drawerMetrics" class="detail-metrics section-gap"></div>
+      <div id="drawerBody" class="detail-analysis section-gap"></div>
+      <label class="field-shell section-gap">
+        <span>Reviewed</span>
+        <input id="drawerReviewedToggle" type="checkbox" />
+      </label>
+      <div id="drawerActions" class="detail-actions section-gap"></div>
+      <div class="rail-actions section-gap">
+        <button id="drawerPrevButton" class="ghost-button" type="button">Previous</button>
+        <button id="drawerNextButton" class="ghost-button" type="button">Next</button>
+      </div>
     </aside>
 
     <script src="./app.js"></script>
