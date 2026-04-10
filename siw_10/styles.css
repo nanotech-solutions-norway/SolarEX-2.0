@@ -554,13 +554,15 @@ select:disabled {
 }
 
 .explain-grid,
-.prove-grid {
+.prove-grid,
+.analytics-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
-.prove-grid {
+.prove-grid,
+.analytics-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -915,6 +917,24 @@ select:disabled {
   cursor: pointer;
 }
 
+.analytics-shell-panel {
+  overflow: hidden;
+}
+
+.analytics-visual-surface {
+  min-height: 180px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--stroke);
+  background: rgba(10, 22, 39, 0.72);
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.analytics-visual-surface .empty-panel-copy {
+  width: 100%;
+}
+
 @keyframes grow {
   0% {
     transform: scaleX(0);
@@ -1062,7 +1082,8 @@ select:disabled {
 @media (max-width: 1280px) {
   .workspace-grid,
   .explain-grid,
-  .prove-grid {
+  .prove-grid,
+  .analytics-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1094,7 +1115,8 @@ select:disabled {
 
   .scenario-form,
   .capability-map,
-  .metric-grid {
+  .metric-grid,
+  .analytics-grid {
     grid-template-columns: 1fr;
   }
 
