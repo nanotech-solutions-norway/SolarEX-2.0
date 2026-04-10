@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIW v3.0 — Surface Intelligence Workspace</title>
+    <meta
+      name="description"
+      content="SIW v3.0 — dashboard-style surface intelligence workspace for fit comparison, proof review, validation tracking, and action routing."
+    />
+    <meta name="siw-build" content="siw_v3_0_candidate__2026-04-10__siw_30" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="scene" aria-hidden="true"></div>
+
+    <main class="app-shell">
+      <header class="top-bar shell-panel">
+        <div class="brand-block">
+          <div class="brand-glyph" aria-hidden="true"></div>
+          <div class="brand-copy">
+            <strong>SIW <span>v3.0</span></strong>
+            <span>Surface Intelligence Workspace</span>
+          </div>
+        </div>
+
+        <nav class="top-nav" aria-label="Primary">
+          <a href="#filtersPanel" class="nav-chip is-active">Context</a>
+          <a href="#comparisonPanel" class="nav-chip">Comparison</a>
+          <a href="#mechanismPanel" class="nav-chip">Mechanism</a>
+          <a href="#validationPanel" class="nav-chip">Validation</a>
+          <a href="#actionsPanel" class="nav-chip">Actions</a>
+        </nav>
+
+        <div class="utility-strip">
+          <button id="saveWorkspaceButton" class="utility-chip" type="button">Save workspace</button>
+          <button id="resetWorkspaceButton" class="utility-chip" type="button">Reset</button>
+          <button id="exportPacketButton" class="utility-chip" type="button">Export packet</button>
+        </div>
+      </header>
+
+      <section class="workspace-shell shell-panel">
+        <div class="workspace-grid">
+          <aside class="left-rail">
+            <section id="filtersPanel" class="panel filters-panel">
+              <div class="panel-header">
+                <h2>Filters</h2>
+                <span class="panel-kicker">Context setup</span>
+              </div>
+
+              <label class="field-group">
+                <span>Coating type</span>
+                <select id="coatingTypeSelect"></select>
+              </label>
+
+              <label class="field-group">
+                <span>Environment</span>
+                <select id="environmentSelect"></select>
+              </label>
+
+              <label class="field-group">
+                <span>Temperature range</span>
+                <select id="temperatureRangeSelect"></select>
+              </label>
+
+              <label class="field-group">
+                <span>Asset</span>
+                <select id="assetSelect"></select>
+              </label>
+
+              <label class="field-group">
+                <span>Challenge</span>
+                <select id="challengeSelect"></select>
+              </label>
+
+              <p class="rail-label">Quick conditions</p>
+              <div id="conditionChips" class="chip-grid"></div>
+
+              <div id="scenarioSummary" class="summary-card muted-card">
+                Complete the scenario to activate route comparison.
+              </div>
+            </section>
+          </aside>
+
+          <section class="center-canvas">
+            <section id="comparisonPanel" class="panel comparison-panel">
+              <div class="panel-header align-top">
+                <div>
+                  <h2>Performance comparison</h2>
+                  <span class="panel-kicker">Best-fit route ranking</span>
+                </div>
+                <div id="comparisonHeaderChips" class="chip-grid compact"></div>
+              </div>
+
+              <div class="comparison-toolbar">
+                <span class="toolbar-label">Routes in view</span>
+                <div id="routeTags" class="chip-grid compact"></div>
+              </div>
+
+              <div class="matrix-shell">
+                <div class="matrix-header row-grid row-grid-header">
+                  <span>Criterion</span>
+                  <span id="matrixRouteAName">Route A</span>
+                  <span id="matrixRouteBName">Route B</span>
+                  <span id="matrixRouteCName">Route C</span>
+                </div>
+                <div id="performanceMatrix"></div>
+              </div>
+            </section>
+
+            <div class="visual-row">
+              <section id="mechanismPanel" class="panel mechanism-panel">
+                <div class="panel-header">
+                  <h2 id="mechanismTitle">Ice shedding mechanism</h2>
+                  <span class="panel-kicker">Mechanism view</span>
+                </div>
+
+                <div class="ice-stage">
+                  <div class="ice-surface"></div>
+                  <div class="ice-mass"></div>
+                  <div class="ice-fragments" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+
+                <div class="mechanism-footer">
+                  <span id="mechanismLabelA" class="mechanism-pill">Surface route</span>
+                  <span id="mechanismLabelB" class="mechanism-pill">Detachment profile</span>
+                </div>
+              </section>
+
+              <section id="tradeoffPanel" class="panel tradeoff-panel">
+                <div class="panel-header">
+                  <h2>Trade-off chart</h2>
+                  <span class="panel-kicker">Proof vs lifecycle efficiency</span>
+                </div>
+                <div id="tradeoffChart" class="chart-shell"></div>
+              </section>
+            </div>
+          </section>
+
+          <aside class="right-rail">
+            <section id="validationPanel" class="panel status-panel">
+              <div class="panel-header">
+                <h2>Validation summary</h2>
+                <span class="panel-kicker">Decision readiness</span>
+              </div>
+              <div id="validationSummaryList" class="status-list"></div>
+            </section>
+
+            <section id="notesPanel" class="panel status-panel">
+              <div class="panel-header">
+                <h2>Evaluation notes</h2>
+                <span class="panel-kicker">Reasoning snapshot</span>
+              </div>
+              <div id="evaluationNotesList" class="status-list"></div>
+            </section>
+
+            <section id="actionsPanel" class="panel status-panel">
+              <div class="panel-header">
+                <h2>Action recommendations</h2>
+                <span class="panel-kicker">Next best move</span>
+              </div>
+              <div id="actionButtons" class="action-list"></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <aside id="routeDrawer" class="route-drawer" aria-hidden="true" aria-labelledby="drawerTitle" tabindex="-1">
+      <div class="drawer-header">
+        <div>
+          <span class="panel-kicker">Route detail</span>
+          <h2 id="drawerTitle">Route detail</h2>
+        </div>
+        <button id="closeDrawerButton" class="utility-chip" type="button">Close</button>
+      </div>
+      <p id="drawerSummary" class="drawer-summary"></p>
+      <div id="drawerMetrics" class="chip-grid"></div>
+      <div id="drawerSections" class="drawer-sections"></div>
+      <div id="drawerActions" class="action-list compact-list"></div>
+    </aside>
+
+    <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
