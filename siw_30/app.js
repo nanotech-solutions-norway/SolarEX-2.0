@@ -1,4 +1,4 @@
-const STORAGE_KEY = "siw_workspace_v30";
+const STORAGE_KEY = "siw_workspace_v31";
 
 const OPTIONS = {
   coatingTypes: [
@@ -429,7 +429,7 @@ function renderNotes(routes) {
 function renderActions(routes) {
   const lead = routes[0];
   const actions = lead ? lead.actions : [["Request review", "./handoff.html?intent=technical-consult&solution=SIW-v3"], ["Continue review", "./proof.html"], ["Contact expert", "./handoff.html?intent=technical-consult&solution=SIW-v3"]];
-  els.actionButtons.innerHTML = actions.map((action, index) => `<a class="action-button" href="${action[1]}"><span class="action-icon">${index + 1}</span><span class="action-copy"><strong>${action[0]}</strong><span>${lead ? lead.label : 'SIW v3.0 route'}</span></span></a>`).join("");
+  els.actionButtons.innerHTML = actions.map((action, index) => `<a class="action-button" href="${action[1]}"><span class="action-icon">${index + 1}</span><span class="action-copy"><strong>${action[0]}</strong><span>${lead ? lead.label : 'SIW v3.1 route'}</span></span></a>`).join("");
 }
 
 function openDrawer(route) {
@@ -462,13 +462,13 @@ function closeDrawer() {
 
 function exportPacket(routes) {
   const payload = {
-    version: "3.0",
+    version: "3.1",
     path: "/siw_30/",
     scenario: state,
     rankedRoutes: routes.map((route) => ({ id: route.id, label: route.label, score: route.score, proof: route.proof, lifecycle: route.lifecycle, efficiency: route.efficiency })),
   };
   if (navigator.clipboard?.writeText) navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
-  window.alert("SIW v3.0 review packet copied to clipboard.");
+  window.alert("SIW v3.1 review packet copied to clipboard.");
 }
 
 function render() {
@@ -508,7 +508,7 @@ function bindEvents() {
     }
   });
 
-  els.saveWorkspaceButton.addEventListener("click", () => { persistState(); window.alert("SIW v3.0 workspace saved."); });
+  els.saveWorkspaceButton.addEventListener("click", () => { persistState(); window.alert("SIW v3.1 workspace saved."); });
   els.resetWorkspaceButton.addEventListener("click", () => { state = { ...DEFAULT_STATE }; render(); });
   els.exportPacketButton.addEventListener("click", () => exportPacket(rankedRoutes()));
   els.closeDrawerButton.addEventListener("click", closeDrawer);
