@@ -101,6 +101,7 @@ const injectEnhancementStyle = () => {
     .topbar{align-items:center!important;justify-content:space-between!important;gap:.75rem}
     .topbar-actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
     .topbar-actions .button{width:auto!important;min-height:38px;padding:.45rem .9rem}
+    .topbar-version{display:block;font-size:.92rem;opacity:.92;letter-spacing:.08em;text-transform:uppercase;color:#dbe4da}
     .mobile-lang-row{display:none}
     .hero-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
     .hero-comparison-card{padding:1.15rem;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 60px rgba(0,0,0,.22)}
@@ -127,7 +128,8 @@ const injectEnhancementStyle = () => {
     .footer-utility{display:grid;gap:.7rem}
     .footer-mini-meta{margin-top:1rem;color:#8ea08d;font-size:.9rem}
     @media (max-width:980px){
-      .nav-toggle{display:inline-flex!important;align-items:center;justify-content:center;min-height:44px;padding:.6rem 1rem;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:#fff;font-weight:800}
+      .nav-toggle{display:inline-flex!important;align-items:center;justify-content:center;min-height:44px;width:48px;height:48px;min-width:48px;padding:0!important;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:transparent;font-size:0;font-weight:800;position:relative}
+      .nav-toggle::before{content:"";display:block;width:18px;height:2px;border-radius:999px;background:#fff;box-shadow:0 -6px 0 #fff,0 6px 0 #fff}
       .site-nav{display:none!important;overflow:visible!important;white-space:normal!important;padding-top:.85rem;gap:.7rem!important}
       .site-nav.open{display:grid!important;grid-template-columns:1fr;align-items:stretch}
       .site-nav a{width:100%;text-align:center;justify-content:center;padding:.85rem 1rem!important}
@@ -136,17 +138,22 @@ const injectEnhancementStyle = () => {
       .mobile-lang-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
       .mobile-lang-row a{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:#fff;font-weight:700;padding:.8rem 1rem}
       .mobile-lang-row a.active{background:linear-gradient(135deg,#0a6a22,#0f8f2f);border-color:rgba(20,212,71,.38)}
-      .hero h1{font-size:clamp(2.15rem,11vw,3.35rem)!important;line-height:1.02!important}
+      .topbar{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand toggle" "version version"!important;align-items:center!important;gap:.45rem .75rem!important}
+      .topbar>.brand{grid-area:brand;justify-self:start!important;align-self:center}
+      .topbar>.nav-toggle{grid-area:toggle;justify-self:end!important;align-self:start}
+      .topbar>.topbar-version{grid-area:version;justify-self:start!important}
+      .hero h1{font-size:clamp(1.95rem,9vw,3.25rem)!important;line-height:1.04!important}
       .lead{font-size:1rem!important}
       .hero-grid,.hero-stats,.footer-grid,.band,.proof-grid,.flow,.process-diagram,.shared-footer .footer-shell,.footer-sitemap,.matrix-grid,.formula-grid,.pilot-grid,.insight-grid,.download-grid,.cta-grid,.hero-comparison{grid-template-columns:1fr!important}
-      .hero,.hero-product{padding-top:4.6rem!important}
+      .hero,.hero-product{padding-top:4.2rem!important}
       .stat,.band-item,.hero-comparison-card,.matrix-card,.footer-card,.pilot-card,.viz-card,.media-frame{padding:1.05rem!important}
       .site-nav a.contact-chip{margin-top:.15rem}
     }
     @media (max-width:640px){
-      .container{width:min(1180px,calc(100% - .9rem))!important}
+      .container{width:min(1180px,calc(100% - 20px))!important}
       .button,.button-secondary{width:auto}
       .section{padding:2rem 0 3rem}
+      .brand-wordmark{font-size:clamp(1.55rem,7.8vw,2.05rem)!important}
     }
   `;
   document.head.appendChild(style);
@@ -160,6 +167,26 @@ const ensureBrandWordmark = () => {
     brand.setAttribute('aria-label', 'SolarEX home');
     brand.setAttribute('title', 'SolarEX home');
   });
+};
+
+const normalizeHeaderStructure = () => {
+  const topbar = document.querySelector('.topbar');
+  if (!topbar) return;
+  if (navToggle && navToggle.parentElement !== topbar) topbar.appendChild(navToggle);
+  let version = topbar.querySelector('.topbar-version');
+  if (!version) {
+    const fallback = topbar.querySelector('span:not(.brand-wordmark span)');
+    if (fallback && /v\d/i.test(fallback.textContent || '')) {
+      fallback.classList.add('topbar-version');
+      version = fallback;
+    }
+  }
+  if (!version) {
+    version = document.createElement('span');
+    version.className = 'topbar-version';
+    version.textContent = 'v2.1';
+    topbar.appendChild(version);
+  }
 };
 
 const ensureIcons = () => {
@@ -236,7 +263,6 @@ const createFooter = () => {
   footer.className = 'site-footer shared-footer';
 
   const brandTag = currentLang === 'no' ? 'SolarEX-plattform' : 'SolarEX platform';
-  const sitemapTag = 'Sitemap';
   const utilityTag = currentLang === 'no' ? 'Kontakt' : 'Contact';
   const description = currentLang === 'no'
     ? 'SolarEX er en mekanismebasert fotovoltaisk nanobeleggsplattform for renere solglass, redusert vaskebelastning og mer presis pilotkvalifisering.'
@@ -261,7 +287,7 @@ const createFooter = () => {
         <p class="footer-note">${description}</p>
       </div>
       <div class="footer-card footer-sitemap-panel">
-        <p class="tag">${sitemapTag}</p>
+        <p class="tag">Sitemap</p>
         <div class="footer-sitemap">${sitemapHtml}</div>
       </div>
       <div class="footer-card footer-utility-panel">
@@ -302,6 +328,7 @@ const setupNavToggle = () => {
 
 injectEnhancementStyle();
 ensureBrandWordmark();
+normalizeHeaderStructure();
 ensureIcons();
 ensureNavigation();
 ensureTopbarActions();
