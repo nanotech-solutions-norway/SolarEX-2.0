@@ -92,7 +92,7 @@ const injectEnhancementStyle = () => {
   style.id = 'solarex-global-enhancements';
   style.textContent = `
     @import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap");
-    body,p,li,td,th,.lead,.section-copy,.footer-note,.site-footer p,.site-footer a,.card p,.table-card td,.table-card th,.contact-list span,.contact-list strong,.contact-list a,.footer-card p,.stack-list,.mini-list,.feature-list,.media-caption,.flow-step p{font-family:"Libre Baskerville",Georgia,"Times New Roman",serif!important}
+    body,p,li,td,th,.lead,.section-copy,.footer-note,.site-footer p,.site-footer a,.card p,.table-card td,.table-card th,.contact-list span,.contact-list strong,.contact-list a,.footer-card p,.stack-list,.mini-list,.feature-list,.media-caption,.flow-step p,.spec-table td,.spec-table th,.roi-table td,.roi-table th,.case-table td,.case-table th{font-family:"Libre Baskerville",Georgia,"Times New Roman",serif!important}
     h1,h2,h3,h4,h5,h6,.brand-wordmark,.eyebrow,.tag,.button,.button-secondary,.section-title,.micro-metric,.site-nav a,.footer-mini-meta,.stat strong,.band-item strong,.metric-inline .metric-value,.counter{font-family:"Libre Baskerville",Georgia,"Times New Roman",serif!important}
     body{overflow-x:hidden}
     .brand{display:inline-flex;align-items:center;gap:.35rem}
@@ -127,6 +127,11 @@ const injectEnhancementStyle = () => {
     .footer-sitemap a.is-active{border-color:rgba(20,212,71,.34);background:rgba(20,212,71,.10);color:#fff}
     .footer-utility{display:grid;gap:.7rem}
     .footer-mini-meta{margin-top:1rem;color:#8ea08d;font-size:.9rem}
+    .viz-track{height:14px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
+    .viz-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#0ea532,#26c654);box-shadow:0 0 18px rgba(20,212,71,.24)}
+    .roi-bars,.spec-bars,.case-bars{display:grid;gap:1rem}
+    .bar-row{display:grid;gap:.4rem}
+    .bar-head{display:flex;justify-content:space-between;gap:1rem;align-items:center;color:#dbe4da;font-size:.96rem}
     @media (max-width:980px){
       .nav-toggle{display:inline-flex!important;align-items:center;justify-content:center;min-height:44px;width:48px;height:48px;min-width:48px;padding:0!important;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:transparent;font-size:0;font-weight:800;position:relative}
       .nav-toggle::before{content:"";display:block;width:18px;height:2px;border-radius:999px;background:#fff;box-shadow:0 -6px 0 #fff,0 6px 0 #fff}
@@ -170,23 +175,32 @@ const ensureBrandWordmark = () => {
 };
 
 const normalizeHeaderStructure = () => {
+  const header = document.querySelector('.site-header');
   const topbar = document.querySelector('.topbar');
-  if (!topbar) return;
+  if (!header || !topbar) return;
+
   if (navToggle && navToggle.parentElement !== topbar) topbar.appendChild(navToggle);
-  let version = topbar.querySelector('.topbar-version');
-  if (!version) {
-    const fallback = topbar.querySelector('span:not(.brand-wordmark span)');
-    if (fallback && /v\d/i.test(fallback.textContent || '')) {
-      fallback.classList.add('topbar-version');
-      version = fallback;
-    }
+  if (navToggle) {
+    navToggle.textContent = '';
+    navToggle.setAttribute('aria-label', 'Open navigation');
   }
+
+  const versionCandidates = [...header.querySelectorAll('span')].filter((el) => {
+    const text = (el.textContent || '').trim();
+    return /^v\d/i.test(text) && !el.closest('.brand-wordmark');
+  });
+
+  let version = topbar.querySelector('.topbar-version') || versionCandidates[0] || null;
   if (!version) {
     version = document.createElement('span');
-    version.className = 'topbar-version';
     version.textContent = 'v2.1';
-    topbar.appendChild(version);
   }
+  version.className = 'topbar-version';
+  if (version.parentElement !== topbar) topbar.appendChild(version);
+
+  versionCandidates.forEach((el) => {
+    if (el !== version) el.remove();
+  });
 };
 
 const ensureIcons = () => {
@@ -374,6 +388,19 @@ const counterObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.35 });
 
 document.querySelectorAll('[data-count]').forEach((el) => counterObserver.observe(el));
+
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const fill = entry.target;
+      fill.style.transition = 'width 1.2s ease';
+      fill.style.width = `${fill.dataset.fill || 0}%`;
+      barObserver.unobserve(fill);
+    }
+  });
+}, { threshold: 0.35 });
+
+document.querySelectorAll('[data-fill]').forEach((fill) => barObserver.observe(fill));
 
 document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
   const href = link.getAttribute('href') || '';
