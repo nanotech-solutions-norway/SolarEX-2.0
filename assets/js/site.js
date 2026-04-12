@@ -601,3 +601,20 @@ document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
   link.setAttribute('href', `mailto:${emailAddress}${query}`);
   if (link.textContent && link.textContent.includes('@')) link.textContent = emailAddress;
 });
+
+const loadPresentationVisuals = () => {
+  if (currentLang !== 'en') return;
+  if (!['technical-specifications.html', 'titan.html', 'proof-results.html', 'applications.html'].includes(currentLocalFile)) return;
+  if (document.querySelector('script[data-solarex-presentation-visuals]')) return;
+  const script = document.createElement('script');
+  script.src = '../assets/js/presentation-visuals.js';
+  script.defer = true;
+  script.dataset.solarexPresentationVisuals = '1';
+  document.body.appendChild(script);
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadPresentationVisuals, { once: true });
+} else {
+  loadPresentationVisuals();
+}
