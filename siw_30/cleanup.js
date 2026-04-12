@@ -33,6 +33,20 @@
     }
   };
 
+  const isSolarEXRoute = (route) => route.id === "solarex-sio2-route" || route.id === "solarex-tio2-route";
+
+  const includeRouteForScenario = (route) => {
+    if (!isSolarEXRoute(route)) return true;
+    return state.asset === "solar";
+  };
+
+  rankedRoutes = function () {
+    return ROUTES.filter(includeRouteForScenario)
+      .map((route) => ({ ...route, score: routeScore(route) }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3);
+  };
+
   const getActionType = (label = "") => {
     const normalized = String(label).toLowerCase();
     if (normalized.includes("sample")) return "sample";
@@ -112,12 +126,14 @@
   const getBubbleConfig = () => {
     if (window.matchMedia("(min-width: 1180px)").matches) {
       return {
-        baseRadius: 11,
-        proofDivisor: 36,
-        radiusScale: 0.5,
-        shellOffset: 2.5,
-        spreadPadding: 10,
-        labelDy: 3,
+        baseRadius: 9,
+        proofDivisor: 52,
+        radiusScale: 0.24,
+        shellOffset: 1.35,
+        spreadPadding: 7,
+        labelDy: 1.8,
+        rankFontSize: 6.5,
+        rankFontWeight: 700,
         xSlots: [124, 220, 316],
       };
     }
@@ -130,6 +146,8 @@
         shellOffset: 6,
         spreadPadding: 18,
         labelDy: 3.8,
+        rankFontSize: 11,
+        rankFontWeight: 800,
         xSlots: [116, 220, 324],
       };
     }
@@ -141,6 +159,8 @@
       shellOffset: 8,
       spreadPadding: 22,
       labelDy: 4,
+      rankFontSize: 12,
+      rankFontWeight: 800,
       xSlots: [110, 220, 330],
     };
   };
@@ -282,6 +302,7 @@
     const yMax = Math.max(...yValues);
     const bubbleConfig = getBubbleConfig();
     const activeRoute = getActiveRoute(routes);
+    const xSlots = routes.length === 1 ? [220] : routes.length === 2 ? [142, 298] : bubbleConfig.xSlots;
 
     const initialNodes = routes.map((route, index) => {
       const baseRadius = bubbleConfig.baseRadius + Math.round(route.plot.proofMaturity / bubbleConfig.proofDivisor);
@@ -291,12 +312,14 @@
         xValue: route.plot.applicationFit,
         yValue: route.plot.documentedPerformance,
         proofValue: route.plot.proofMaturity,
-        x: bubbleConfig.xSlots[index] || bubbleConfig.xSlots[bubbleConfig.xSlots.length - 1],
+        x: xSlots[index] || xSlots[xSlots.length - 1],
         y: scaleRelative(route.plot.documentedPerformance, yMin, yMax, 206, 74),
-        r: baseRadius * bubbleConfig.radiusScale,
+        r: Math.max(3.2, baseRadius * bubbleConfig.radiusScale),
         shellOffset: bubbleConfig.shellOffset,
         spreadPadding: bubbleConfig.spreadPadding,
         labelDy: bubbleConfig.labelDy,
+        rankFontSize: bubbleConfig.rankFontSize,
+        rankFontWeight: bubbleConfig.rankFontWeight,
         isSelected: activeRoute?.id === route.id,
       };
     });
@@ -331,10 +354,10 @@
             .map(
               (node) => `
                 <g class="chart-bubble-group${node.isSelected ? " is-selected" : ""}" data-chart-route-id="${node.route.id}" tabindex="0" role="button" aria-label="Show ${node.route.label} specifications in the mechanism panel">
-                  <circle class="chart-bubble-hit" cx="${node.x}" cy="${node.y}" r="${node.r + node.shellOffset + 8}"></circle>
+                  <circle class="chart-bubble-hit" cx="${node.x}" cy="${node.y}" r="${node.r + node.shellOffset + 10}" fill="transparent" stroke="transparent"></circle>
                   <circle class="chart-bubble-shell" cx="${node.x}" cy="${node.y}" r="${node.r + node.shellOffset}"></circle>
                   <circle class="chart-bubble-core" cx="${node.x}" cy="${node.y}" r="${node.r}"></circle>
-                  <text x="${node.x}" y="${node.y + node.labelDy}" text-anchor="middle" class="chart-rank-label">${node.rank}</text>
+                  <text x="${node.x}" y="${node.y + node.labelDy}" text-anchor="middle" class="chart-rank-label" style="fill:#ffffff;font-size:${node.rankFontSize}px;font-weight:${node.rankFontWeight};">${node.rank}</text>
                 </g>
               `
             )
