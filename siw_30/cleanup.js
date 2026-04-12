@@ -100,6 +100,36 @@
     return start + ((value - min) / (max - min)) * (end - start);
   };
 
+  const getBubbleConfig = () => {
+    if (window.matchMedia("(min-width: 1180px)").matches) {
+      return {
+        baseRadius: 11,
+        proofDivisor: 36,
+        shellOffset: 5,
+        spreadPadding: 16,
+        labelDy: 3.5,
+      };
+    }
+
+    if (window.matchMedia("(min-width: 760px)").matches) {
+      return {
+        baseRadius: 13,
+        proofDivisor: 30,
+        shellOffset: 6,
+        spreadPadding: 18,
+        labelDy: 3.8,
+      };
+    }
+
+    return {
+      baseRadius: 15,
+      proofDivisor: 24,
+      shellOffset: 8,
+      spreadPadding: 22,
+      labelDy: 4,
+    };
+  };
+
   const spreadNodes = (nodes) => {
     const adjusted = nodes.map((node) => ({ ...node }));
     for (let i = 0; i < adjusted.length; i += 1) {
@@ -109,7 +139,7 @@
         const dx = b.x - a.x;
         const dy = b.y - a.y;
         const distance = Math.sqrt(dx * dx + dy * dy) || 1;
-        const minDistance = a.r + b.r + 24;
+        const minDistance = a.r + b.r + Math.max(a.spreadPadding, b.spreadPadding);
         if (distance < minDistance) {
           const shift = (minDistance - distance) / 2;
           const directionX = dx / distance;
@@ -182,6 +212,7 @@
     const xMax = Math.max(...xValues);
     const yMin = Math.min(...yValues);
     const yMax = Math.max(...yValues);
+    const bubbleConfig = getBubbleConfig();
 
     const initialNodes = routes.map((route, index) => ({
       route,
@@ -191,7 +222,10 @@
       proofValue: route.plot.proofMaturity,
       x: scaleRelative(route.plot.applicationFit, xMin, xMax, 108, 334),
       y: scaleRelative(route.plot.documentedPerformance, yMin, yMax, 206, 74),
-      r: 17 + Math.round(route.plot.proofMaturity / 20),
+      r: bubbleConfig.baseRadius + Math.round(route.plot.proofMaturity / bubbleConfig.proofDivisor),
+      shellOffset: bubbleConfig.shellOffset,
+      spreadPadding: bubbleConfig.spreadPadding,
+      labelDy: bubbleConfig.labelDy,
     }));
 
     const nodes = spreadNodes(initialNodes);
@@ -221,9 +255,9 @@
           ${nodes
             .map(
               (node) => `
-                <circle class="chart-bubble-shell" cx="${node.x}" cy="${node.y}" r="${node.r + 8}"></circle>
+                <circle class="chart-bubble-shell" cx="${node.x}" cy="${node.y}" r="${node.r + node.shellOffset}"></circle>
                 <circle class="chart-bubble-core" cx="${node.x}" cy="${node.y}" r="${node.r}"></circle>
-                <text x="${node.x}" y="${node.y + 4}" text-anchor="middle" class="chart-rank-label">${node.rank}</text>
+                <text x="${node.x}" y="${node.y + node.labelDy}" text-anchor="middle" class="chart-rank-label">${node.rank}</text>
               `
             )
             .join("")}
@@ -251,6 +285,15 @@
       </div>
     `;
   };
+
+  let viewportBucket = window.innerWidth >= 1180 ? "desktop" : window.innerWidth >= 760 ? "tablet" : "mobile";
+  window.addEventListener("resize", () => {
+    const nextBucket = window.innerWidth >= 1180 ? "desktop" : window.innerWidth >= 760 ? "tablet" : "mobile";
+    if (nextBucket !== viewportBucket) {
+      viewportBucket = nextBucket;
+      render();
+    }
+  });
 
   document.addEventListener("click", (event) => {
     const actionButton = event.target.closest("[data-route-action]");
