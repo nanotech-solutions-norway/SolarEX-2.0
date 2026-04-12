@@ -4,15 +4,15 @@ const OPTIONS = {
   coatingTypes: [
     ["anti-icing", "Anti-icing route"],
     ["barrier", "Barrier / anti-corrosion"],
-    ["self-cleaning", "Self-cleaning route"],
-    ["antimicrobial", "Antimicrobial route"],
+    ["pv_easy_clean", "PV easy-clean route"],
+    ["photocatalytic", "Photocatalytic / hydrophilic route"],
   ],
   environments: [
     ["coastal", "Coastal / marine-adjacent"],
     ["outdoor", "Outdoor exposed"],
     ["industrial", "Industrial / utility"],
-    ["clinical", "Clinical / controlled indoor"],
     ["desert", "Dry / abrasive dust"],
+    ["controlled", "Controlled / glazing-heavy"],
   ],
   temperatureRanges: [
     ["subzero", "Sub-zero / freeze risk"],
@@ -24,181 +24,233 @@ const OPTIONS = {
     ["radome", "Radome / antenna"],
     ["blade", "Wind blade"],
     ["steel", "Steel structure"],
-    ["glass", "Glass / solar module"],
-    ["touchpoint", "High-touch interior surface"],
+    ["solar", "Solar module / PV glass"],
+    ["glazing", "Exterior glazing / plastic glazing"],
   ],
   challenges: [
     ["icing", "Ice buildup"],
     ["corrosion", "Corrosion"],
     ["soiling", "Dust / organic soiling"],
-    ["microbial", "Microbial load"],
+    ["condensation", "Condensation / optical clarity"],
   ],
   conditions: [
     "High uptime requirement",
     "Inspection visibility",
     "Low cleaning budget",
-    "High-touch use",
     "Severe weather",
-    "Organic contamination",
+    "UV exposure",
+    "Condensation control",
   ],
 };
 
 const ROUTES = [
   {
     id: "hirec-route",
-    label: "HIREC® Ice-Shedding Route",
+    family: "HIREC",
+    label: "HIREC® Anti-Icing Route",
     coatingType: "anti-icing",
-    environments: ["coastal", "outdoor"],
-    temperatures: ["subzero", "cold"],
+    environments: ["coastal", "outdoor", "industrial"],
+    temperatures: ["subzero", "cold", "temperate"],
     assets: ["radome", "blade"],
     challenges: ["icing"],
-    summary: "Passive anti-icing route for exposed telecom and wind assets where rapid shedding and uptime continuity dominate.",
+    summary:
+      "Superhydrophobic anti-icing route for telecom radomes, antennas, and exposed wind assets where uptime continuity and snow/ice shedding are the primary decision drivers.",
     rationale: [
-      "Strongest fit when ice adhesion and wet-weather operational loss are the core business problem.",
-      "Most aligned to exposed polymer/composite surfaces in cold-weather uptime-sensitive deployments.",
+      "Best fit when the operational problem is icing-driven attenuation, shedding delay, or access-intensive maintenance.",
+      "Drive research confirms strong anti-icing positioning, contact angle above 150°, and RF suitability for high-frequency telecom applications.",
     ],
     validation: [
-      "Operational fit verified for ice-shedding-led scenarios.",
-      "Boundary review required for non-corrosion-first positioning.",
-      "Commercial route suitable for sample or technical review.",
+      "Indicative contact angle above 150°.",
+      "Near-complete attenuation mitigation demonstrated in 9.8 GHz rain tests.",
+      "RF attenuation remains below 0.1 dB at 30–70 GHz for the coating stack described in the tech sheets.",
     ],
     notes: [
-      "Use when the buyer wants a water-shedding / anti-icing logic rather than a heavy barrier system.",
-      "Best where severe weather and operational continuity matter more than deep corrosion mitigation.",
-      "Validate substrate preparation and local winter severity before rollout.",
+      "Use for ice and snow mitigation, not as the lead route for corrosion-first decision logic.",
+      "The NTT / MIC field framing strengthens the telecom narrative and supports minimum contact-angle threshold discussion.",
+      "Confirm substrate preparation and deployment temperature window before field rollout.",
+    ],
+    boundary:
+      "Not the preferred route when the primary commercial objective is long-life corrosion barrier performance rather than anti-icing or snow-shedding reliability.",
+    evidence: [
+      "Contact angle >150° from HIREC telecom tech sheets.",
+      "RF attenuation <0.1 dB at 30–70 GHz in coating-performance slides.",
+      "Field framing references ~1,110 NTT relay towers and a 135° preferred minimum identified in the MIC deployment material.",
     ],
     actions: [
       ["Request sample", "./handoff.html?intent=sample-request&solution=HIREC-v3"],
       ["Continue review", "./proof.html"],
       ["Contact expert", "./handoff.html?intent=technical-consult&solution=HIREC-v3"],
     ],
-    scores: { primary: 92, durability: 78, cleanability: 71 },
-    proof: 81,
-    lifecycle: 76,
-    efficiency: 88,
-    curve: [62, 74, 88],
-    boundary: "Not the preferred route when the buyer's primary need is long-life structural corrosion barrier performance.",
-    mechanismTitle: "Ice shedding mechanism",
-    mechanismTags: ["Low adhesion", "Rapid detachment"],
-    contactAngle: 112,
-    wettingProfile: "Hydrophobic / low ice adhesion",
+    plot: {
+      applicationFit: 93,
+      documentedPerformance: 92,
+      proofMaturity: 90,
+      lifecycle: 84,
+      deployment: 72,
+    },
+    keyStats: [
+      { label: "Indicative contact angle", value: ">150°", sub: "Superhydrophobic anti-icing profile" },
+      { label: "RF attenuation", value: "<0.1 dB", sub: "30–70 GHz performance framing" },
+      { label: "Field deployment anchor", value: "~1,110 towers", sub: "NTT / MIC deployment context" },
+    ],
+    mechanismTitle: "Anti-icing performance profile",
+    mechanismTags: ["Contact angle >150°", "9.8 GHz rain-mitigation evidence"],
   },
   {
     id: "gentoo-route",
+    family: "Gentoo",
     label: "Gentoo™ Barrier Route",
     coatingType: "barrier",
     environments: ["coastal", "industrial", "outdoor"],
     temperatures: ["cold", "temperate", "hot"],
     assets: ["steel", "radome"],
     challenges: ["corrosion"],
-    summary: "Transparent/low-build corrosion barrier route for inspection-friendly metal protection in coastal and industrial exposure.",
+    summary:
+      "Clear hydrophobic sol-gel barrier route for corrosion reduction, water shedding, and inspection-friendly protection on metallic infrastructure and corrosion-sensitive assemblies.",
     rationale: [
-      "Best when inspection visibility and corrosion reduction must coexist in the same route.",
-      "More defensible than an anti-icing pathway when the true buying driver is long-term surface durability.",
+      "Best fit when corrosion protection, water shedding, and thin transparent barrier performance need to coexist.",
+      "Drive research provides explicit contact-angle, watershed-angle, coating-thickness, and corrosion-resistance data rather than only narrative marketing claims.",
     ],
     validation: [
-      "Barrier suitability identified.",
-      "Lifecycle value favorable for infrastructure exposure.",
-      "Inspection-first logic preserved.",
+      "Contact angle 110°–115° with 5°–10° watershed angle in the current TDS.",
+      "Dry film thickness 4–8 microns.",
+      "Corrosion data reports substantial galvanic protection benefit and 65–75% lower weight loss in fastener assemblies.",
     ],
     notes: [
-      "Use for corrosion-led selection logic, not as a generic anti-icing substitute.",
-      "Works best when transparency, easier inspection, and durability all matter.",
-      "Validate environmental chemistry and lifecycle expectations before RFQ stage.",
+      "Use for corrosion-led selection logic, not as a substitute for anti-icing-first performance.",
+      "The ultra-thin transparent barrier is useful where visual inspection and low added thickness matter.",
+      "Continuous-use service temperature is documented to 160°C, with higher short-term exposure tolerance in source material.",
+    ],
+    boundary:
+      "Not the preferred route when the primary problem is snow shedding, organic-soiling reduction, or condensation management on glazing surfaces.",
+    evidence: [
+      "Contact angle 110°–115° and watershed angle 5°–10° from Gentoo TDS.",
+      "4–8 micron dry thickness and -50°C to 160°C service range from Gentoo TDS.",
+      "Corrosion report states approximately 65–75% reduction in galvanic fastener weight loss versus controls.",
     ],
     actions: [
       ["Request corrosion review", "./handoff.html?intent=technical-consult&solution=Gentoo-v3"],
       ["Continue review", "./proof.html"],
       ["Contact expert", "./handoff.html?intent=rfq-request&solution=Gentoo-v3"],
     ],
-    scores: { primary: 86, durability: 92, cleanability: 66 },
-    proof: 78,
-    lifecycle: 90,
-    efficiency: 72,
-    curve: [78, 90, 72],
-    boundary: "Not the preferred route when ice-shedding or self-cleaning mechanism is the actual business need.",
-    mechanismTitle: "Barrier integrity mechanism",
-    mechanismTags: ["Surface barrier", "Inspection visibility"],
-    contactAngle: 94,
-    wettingProfile: "Moderate water-shedding, barrier-led route",
+    plot: {
+      applicationFit: 87,
+      documentedPerformance: 88,
+      proofMaturity: 84,
+      lifecycle: 92,
+      deployment: 76,
+    },
+    keyStats: [
+      { label: "Contact angle", value: "110–115°", sub: "Hydrophobic barrier route" },
+      { label: "Watershedding angle", value: "5–10°", sub: "Low roll-off / water-shedding" },
+      { label: "Dry thickness", value: "4–8 μm", sub: "Ultra-thin transparent barrier" },
+    ],
+    mechanismTitle: "Barrier and watershedding profile",
+    mechanismTags: ["Contact angle 110–115°", "Corrosion reduction evidence"],
   },
   {
-    id: "solarex-route",
-    label: "SolarEX™ Self-Cleaning Route",
-    coatingType: "self-cleaning",
+    id: "solarex-sio2-route",
+    family: "SolarEX SiO₂",
+    label: "SolarEX™ SiO₂ PV Easy-Clean Route",
+    coatingType: "pv_easy_clean",
     environments: ["desert", "outdoor", "industrial"],
     temperatures: ["temperate", "hot"],
-    assets: ["glass"],
+    assets: ["solar"],
     challenges: ["soiling"],
-    summary: "Self-cleaning / anti-soiling route for glass and PV surfaces where contamination retention and maintenance burden drive losses.",
+    summary:
+      "Passive PV easy-clean route focused on hydrophobic and oleophobic anti-stick behavior for solar modules where wash burden, dust retention, and maintenance-cycle reduction drive value.",
     rationale: [
-      "Best fit where organic contamination or soiling reduction is tied to performance or appearance retention.",
-      "More defensible than barrier routes when the core business problem is cleaning frequency and retained contamination.",
+      "Best fit when the business case is centered on easy-clean behavior and reduced maintenance frequency on PV glass.",
+      "Drive research supports the route with explicit application guidance, coating-thickness data, and commercial ROI scenario framing for European conditions.",
     ],
     validation: [
-      "Cleaning-reduction logic identified.",
-      "Surface compatibility favorable for glass-led assets.",
-      "Proof route requires contamination-profile confirmation.",
+      "Layer thickness documented at 100–150 nm.",
+      "Typical application rate documented at 5–10 ml/m² manually and 5–15 ml/m² industrially.",
+      "Commercial scenario deck frames 147-day ROI and 21 kWh/m² annual gain as modeled screening assumptions.",
     ],
     notes: [
-      "Use when the buyer wants fewer cleaning cycles and cleaner optical surfaces rather than structural barrier protection.",
-      "Differentiate hydrophobic and photocatalytic logic during review.",
-      "Validate contamination chemistry and regional dust/organic load before selection finalization.",
+      "Use when passive anti-stick and easy-clean logic is the primary mechanism discussion.",
+      "Treat ROI deck values as scenario-model inputs rather than monitored field proof.",
+      "Keep the distinction between modeled uplift and documented monitored uplift explicit in customer-facing discussion.",
+    ],
+    boundary:
+      "Not the strongest route when the lead requirement is anti-icing reliability or when the sales case requires monitored multi-month proof rather than modeled scenario output.",
+    evidence: [
+      "Layer thickness 100–150 nm from SolarEX Europe deck.",
+      "Application consumption 5–10 ml/m² manual and 5–15 ml/m² industrial from SolarEX application material.",
+      "ROI scenario deck states 147-day payback and 21 kWh/m² annual gain under modeled European assumptions.",
     ],
     actions: [
-      ["Request sample", "./handoff.html?intent=sample-request&solution=SolarEX-v3"],
+      ["Request sample", "./handoff.html?intent=sample-request&solution=SolarEX-SiO2-v3"],
       ["Continue review", "./proof.html"],
-      ["Contact expert", "./handoff.html?intent=technical-consult&solution=SolarEX-v3"],
+      ["Contact expert", "./handoff.html?intent=technical-consult&solution=SolarEX-SiO2-v3"],
     ],
-    scores: { primary: 83, durability: 74, cleanability: 93 },
-    proof: 80,
-    lifecycle: 79,
-    efficiency: 91,
-    curve: [80, 79, 91],
-    boundary: "Not the preferred route when the true selection logic is corrosion-barrier lifetime or anti-icing uptime protection.",
-    mechanismTitle: "Self-cleaning mechanism",
-    mechanismTags: ["Contaminant release", "Reduced wash cycles"],
-    contactAngle: 118,
-    wettingProfile: "Strong bead-and-release wetting profile",
+    plot: {
+      applicationFit: 84,
+      documentedPerformance: 74,
+      proofMaturity: 68,
+      lifecycle: 86,
+      deployment: 82,
+    },
+    keyStats: [
+      { label: "Layer thickness", value: "100–150 nm", sub: "Invisible easy-clean layer" },
+      { label: "Application rate", value: "5–15 ml/m²", sub: "Manual / industrial process window" },
+      { label: "ROI scenario", value: "147 days", sub: "Modeled European screening case" },
+    ],
+    mechanismTitle: "PV easy-clean performance profile",
+    mechanismTags: ["Anti-stick easy-clean", "Modeled ROI deck"],
   },
   {
-    id: "pcs-route",
-    label: "PCS Antimicrobial Route",
-    coatingType: "antimicrobial",
-    environments: ["clinical", "industrial"],
+    id: "solarex-tio2-route",
+    family: "SolarEX TiO₂ / PC-SR",
+    label: "SolarEX™ TiO₂ / PC-SR Photocatalytic Route",
+    coatingType: "photocatalytic",
+    environments: ["outdoor", "industrial", "controlled"],
     temperatures: ["temperate", "hot"],
-    assets: ["touchpoint"],
-    challenges: ["microbial"],
-    summary: "Requirement-driven antimicrobial route for high-touch indoor surfaces where efficacy proof and governance-ready explanation matter.",
+    assets: ["solar", "glazing"],
+    challenges: ["soiling", "condensation"],
+    summary:
+      "Active photocatalytic and hydrophilic route for solar modules and exterior glazing where monitored yield uplift, anti-misting behavior, and UV-driven self-cleaning logic strengthen the decision case.",
     rationale: [
-      "Best fit when the buyer needs a standards-conscious antimicrobial route for indoor touch surfaces.",
-      "More defensible than generic easy-clean coatings when microbial burden is the explicit review driver.",
+      "Best fit when the discussion needs monitored performance proof plus a credible photocatalytic or hydrophilic mechanism story.",
+      "Drive research combines a 360-day monitored SolarEX TiO₂ module study with TiO₂ PC-SR field instructions for hydrophilic anti-misting deployment.",
     ],
     validation: [
-      "Evidence-led route identified.",
-      "Boundary transparency required for non-enveloped-virus limitations.",
-      "Technical review should precede broad commercial scaling.",
+      "Average monitored energy-yield uplift of +5.15% over 360 days in the rooftop module study.",
+      "Hydrophilic film described as only a few nanometers thick in the TiO₂ PC-SR application instructions.",
+      "Typical application amount documented at approximately 10–25 ml/m² for TiO₂ PC-SR.",
     ],
     notes: [
-      "Use where efficacy proof and boundary clarity are both required.",
-      "Keep non-floor and virus-boundary positioning explicit.",
-      "Validate cleaning regime and surface class before recommendation close-out.",
+      "Use when the route must explain both self-cleaning mechanism and monitored proof, not only passive anti-stick behavior.",
+      "For glazing-led conversations, anti-misting and optical-clarity language is often stronger than PV-output language.",
+      "Keep the distinction clear between the SolarEX TiO₂ monitored module study and the broader TiO₂ PC-SR glazing instruction set.",
+    ],
+    boundary:
+      "Not the preferred route when the buyer only needs a simple passive easy-clean layer or when a corrosion barrier system is the primary specification requirement.",
+    evidence: [
+      "360-day monitored module study reports +5.15% average energy-yield uplift.",
+      "TiO₂ PC-SR instructions describe a few-nanometer hydrophilic film and 24–48 hour outdoor effect development.",
+      "Application amount approximately 10–25 ml/m² from TiO₂ PC-SR field reference.",
     ],
     actions: [
-      ["Request technical review", "./handoff.html?intent=technical-consult&solution=PCS-v3"],
+      ["Request technical review", "./handoff.html?intent=technical-consult&solution=SolarEX-TiO2-v3"],
       ["Continue review", "./proof.html"],
-      ["Contact expert", "./handoff.html?intent=rfq-request&solution=PCS-v3"],
+      ["Contact expert", "./handoff.html?intent=rfq-request&solution=SolarEX-TiO2-v3"],
     ],
-    scores: { primary: 89, durability: 71, cleanability: 82 },
-    proof: 94,
-    lifecycle: 70,
-    efficiency: 80,
-    curve: [94, 70, 80],
-    boundary: "Do not generalize this route into floor-grade durability or universal virucidal claims without direct evidence support.",
-    mechanismTitle: "Antimicrobial persistence mechanism",
-    mechanismTags: ["High-touch control", "Evidence-linked"],
-    contactAngle: 82,
-    wettingProfile: "Wetting control is secondary to efficacy proof",
+    plot: {
+      applicationFit: 89,
+      documentedPerformance: 91,
+      proofMaturity: 87,
+      lifecycle: 80,
+      deployment: 80,
+    },
+    keyStats: [
+      { label: "Monitored uplift", value: "+5.15%", sub: "360-day rooftop module study" },
+      { label: "Film type", value: "Hydrophilic", sub: "Few-nanometer active surface state" },
+      { label: "Application rate", value: "10–25 ml/m²", sub: "Exterior glazing / optical-control field use" },
+    ],
+    mechanismTitle: "Photocatalytic and hydrophilic profile",
+    mechanismTags: ["Monitored uplift +5.15%", "Hydrophilic anti-misting route"],
   },
 ];
 
@@ -246,15 +298,45 @@ const els = {
   closeDrawerButton: document.getElementById("closeDrawerButton"),
 };
 
-let state = loadState();
+let state = sanitizeState(loadState());
 
 function clamp(value, min = 0, max = 99) {
   return Math.min(max, Math.max(min, value));
 }
 
+function validIds(options) {
+  return new Set(options.map(([id]) => id));
+}
+
+function sanitizeState(candidate) {
+  const clean = { ...DEFAULT_STATE, ...(candidate || {}) };
+  const validCoatingTypes = validIds(OPTIONS.coatingTypes);
+  const validEnvironments = validIds(OPTIONS.environments);
+  const validTemperatures = validIds(OPTIONS.temperatureRanges);
+  const validAssets = validIds(OPTIONS.assets);
+  const validChallenges = validIds(OPTIONS.challenges);
+  const validConditions = new Set(OPTIONS.conditions);
+
+  if (!validCoatingTypes.has(clean.coatingType)) clean.coatingType = "";
+  if (!validEnvironments.has(clean.environment)) clean.environment = "";
+  if (!validTemperatures.has(clean.temperatureRange)) clean.temperatureRange = "";
+  if (!validAssets.has(clean.asset)) clean.asset = "";
+  if (!validChallenges.has(clean.challenge)) clean.challenge = "";
+  clean.conditions = Array.isArray(clean.conditions)
+    ? clean.conditions.filter((item) => validConditions.has(item))
+    : [];
+  clean.acknowledgedBoundary = Boolean(clean.acknowledgedBoundary);
+  return clean;
+}
+
 function optionMarkup(options, selected, placeholder) {
   return [`<option value="">${placeholder}</option>`]
-    .concat(options.map(([value, label]) => `<option value="${value}" ${selected === value ? "selected" : ""}>${label}</option>`))
+    .concat(
+      options.map(
+        ([value, label]) =>
+          `<option value="${value}" ${selected === value ? "selected" : ""}>${label}</option>`
+      )
+    )
     .join("");
 }
 
@@ -266,7 +348,7 @@ function labelFor(options, value) {
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return { ...DEFAULT_STATE, ...JSON.parse(raw) };
+    if (raw) return JSON.parse(raw);
   } catch (error) {}
   return { ...DEFAULT_STATE };
 }
@@ -278,102 +360,79 @@ function persistState() {
 }
 
 function completeScenario() {
-  return Boolean(state.coatingType && state.environment && state.temperatureRange && state.asset && state.challenge);
+  return Boolean(
+    state.coatingType &&
+      state.environment &&
+      state.temperatureRange &&
+      state.asset &&
+      state.challenge
+  );
 }
 
 function renderControls() {
-  els.coatingTypeSelect.innerHTML = optionMarkup(OPTIONS.coatingTypes, state.coatingType, "Select coating type");
-  els.environmentSelect.innerHTML = optionMarkup(OPTIONS.environments, state.environment, "Select environment");
-  els.temperatureRangeSelect.innerHTML = optionMarkup(OPTIONS.temperatureRanges, state.temperatureRange, "Select temperature range");
+  els.coatingTypeSelect.innerHTML = optionMarkup(
+    OPTIONS.coatingTypes,
+    state.coatingType,
+    "Select coating type"
+  );
+  els.environmentSelect.innerHTML = optionMarkup(
+    OPTIONS.environments,
+    state.environment,
+    "Select environment"
+  );
+  els.temperatureRangeSelect.innerHTML = optionMarkup(
+    OPTIONS.temperatureRanges,
+    state.temperatureRange,
+    "Select temperature range"
+  );
   els.assetSelect.innerHTML = optionMarkup(OPTIONS.assets, state.asset, "Select asset");
-  els.challengeSelect.innerHTML = optionMarkup(OPTIONS.challenges, state.challenge, "Select challenge");
+  els.challengeSelect.innerHTML = optionMarkup(
+    OPTIONS.challenges,
+    state.challenge,
+    "Select challenge"
+  );
 
   els.conditionChips.innerHTML = OPTIONS.conditions
     .map(
-      (condition) => `<button class="chip-button ${state.conditions.includes(condition) ? "is-active" : ""}" type="button" data-condition="${condition}">${condition}</button>`
+      (condition) =>
+        `<button class="chip-button ${state.conditions.includes(condition) ? "is-active" : ""}" type="button" data-condition="${condition}">${condition}</button>`
     )
     .join("");
 }
 
 function routeScore(route) {
-  let score = 40;
+  let score = 34;
   if (route.coatingType === state.coatingType) score += 24;
-  if (route.environments.includes(state.environment)) score += 16;
-  if (route.temperatures.includes(state.temperatureRange)) score += 12;
-  if (route.assets.includes(state.asset)) score += 14;
+  if (route.environments.includes(state.environment)) score += 14;
+  if (route.temperatures.includes(state.temperatureRange)) score += 10;
+  if (route.assets.includes(state.asset)) score += 16;
   if (route.challenges.includes(state.challenge)) score += 18;
-  if (state.conditions.includes("High uptime requirement") && route.id === "hirec-route") score += 8;
-  if (state.conditions.includes("Inspection visibility") && route.id === "gentoo-route") score += 7;
-  if (state.conditions.includes("Low cleaning budget") && route.id === "solarex-route") score += 7;
-  if (state.conditions.includes("High-touch use") && route.id === "pcs-route") score += 7;
-  if (state.conditions.includes("Organic contamination") && route.id === "solarex-route") score += 6;
-  if (state.conditions.includes("Severe weather") && (route.id === "hirec-route" || route.id === "gentoo-route")) score += 5;
-  return Math.min(score, 99);
+
+  if (state.conditions.includes("High uptime requirement") && route.id === "hirec-route") score += 9;
+  if (state.conditions.includes("Inspection visibility") && route.id === "gentoo-route") score += 8;
+  if (state.conditions.includes("Low cleaning budget") && route.id === "solarex-sio2-route") score += 8;
+  if (state.conditions.includes("Low cleaning budget") && route.id === "solarex-tio2-route") score += 5;
+  if (state.conditions.includes("Severe weather") && route.id === "hirec-route") score += 7;
+  if (state.conditions.includes("Severe weather") && route.id === "gentoo-route") score += 4;
+  if (state.conditions.includes("UV exposure") && route.id === "solarex-tio2-route") score += 8;
+  if (state.conditions.includes("UV exposure") && route.id === "solarex-sio2-route") score += 4;
+  if (state.conditions.includes("Condensation control") && route.id === "solarex-tio2-route") score += 10;
+
+  return clamp(score, 0, 99);
 }
 
 function rankedRoutes() {
-  return ROUTES.map((route) => ({ ...route, score: routeScore(route) })).sort((a, b) => b.score - a.score).slice(0, 3);
-}
-
-function primaryAttributeLabel() {
-  const mode = state.challenge;
-  if (mode === "corrosion") return "Barrier integrity";
-  if (mode === "soiling") return "Cleanability";
-  if (mode === "microbial") return "Evidence strength";
-  return "Ice shedding";
-}
-
-function primaryAttributeValue(route) {
-  const mode = state.challenge;
-  if (mode === "corrosion") return route.scores.durability;
-  if (mode === "soiling") return route.scores.cleanability;
-  if (mode === "microbial") return route.proof;
-  return route.scores.primary;
-}
-
-function attributeFitScore(route) {
-  const mode = state.challenge;
-  if (mode === "corrosion") {
-    return clamp(Math.round(route.scores.durability * 0.5 + route.lifecycle * 0.3 + route.proof * 0.2));
-  }
-  if (mode === "soiling") {
-    return clamp(Math.round(route.scores.cleanability * 0.55 + route.efficiency * 0.25 + route.proof * 0.2));
-  }
-  if (mode === "microbial") {
-    return clamp(Math.round(route.proof * 0.45 + route.scores.primary * 0.35 + route.lifecycle * 0.2));
-  }
-  return clamp(Math.round(route.scores.primary * 0.6 + route.proof * 0.2 + route.efficiency * 0.2));
-}
-
-function contactAngleNormalized(route) {
-  return clamp(Math.round((route.contactAngle - 70) * 2.2));
-}
-
-function contactAngleEffect(route) {
-  const normalized = contactAngleNormalized(route);
-  const mode = state.challenge;
-  if (mode === "corrosion") {
-    return clamp(Math.round(route.scores.durability * 0.7 + normalized * 0.3));
-  }
-  if (mode === "soiling") {
-    return clamp(Math.round(normalized * 0.55 + route.scores.cleanability * 0.45));
-  }
-  if (mode === "microbial") {
-    return clamp(Math.round(route.proof * 0.75 + normalized * 0.25));
-  }
-  return clamp(Math.round(normalized * 0.65 + route.scores.primary * 0.35));
-}
-
-function routeShortLabel(route) {
-  return route.label.replace(/®|™/g, "").replace(" Route", "").split(" ")[0];
+  return ROUTES.map((route) => ({ ...route, score: routeScore(route) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
 }
 
 function criterionRows() {
   return [
-    ["Indicative contact angle", (route) => `${route.contactAngle}°`],
-    [primaryAttributeLabel(), (route) => `${primaryAttributeValue(route)}%`],
-    ["Attribute fit", (route) => `${attributeFitScore(route)}%`],
-    ["Contact-angle effect", (route) => `${contactAngleEffect(route)}%`],
+    ["Application fit", (route) => route.plot.applicationFit],
+    ["Documented performance", (route) => route.plot.documentedPerformance],
+    ["Proof maturity", (route) => route.plot.proofMaturity],
+    ["Lifecycle / durability", (route) => route.plot.lifecycle],
   ];
 }
 
@@ -386,19 +445,18 @@ function renderMatrix(routes) {
 
   els.performanceMatrix.innerHTML = rows
     .map(([label, getter]) => {
-      const values = routes.map((route) => (route ? parseInt(getter(route), 10) : 0));
+      const values = routes.map((route) => (route ? getter(route) : 0));
       const max = Math.max(...values);
       const cells = routes
         .map((route, index) => {
           if (!route) {
             return `<div class="metric-cell"><div class="metric-bar"><span style="width:0%"></span></div><div class="metric-value">-</div></div>`;
           }
-          const displayValue = getter(route);
           const value = values[index];
           return `
             <div class="metric-cell">
               <div class="metric-bar"><span style="width:${value}%"></span></div>
-              <div class="metric-value">${displayValue} ${value === max ? '<span class="best-badge">Best</span>' : ''}</div>
+              <div class="metric-value">${value}% ${value === max ? '<span class="best-badge">Best</span>' : ""}</div>
             </div>
           `;
         })
@@ -410,14 +468,31 @@ function renderMatrix(routes) {
 
 function renderHeader(routes) {
   const chips = [
-    state.coatingType ? `<span class="route-tag is-active">${labelFor(OPTIONS.coatingTypes, state.coatingType)}</span>` : "",
-    state.environment ? `<span class="route-tag">${labelFor(OPTIONS.environments, state.environment)}</span>` : "",
-    state.temperatureRange ? `<span class="route-tag">${labelFor(OPTIONS.temperatureRanges, state.temperatureRange)}</span>` : "",
+    state.coatingType
+      ? `<span class="route-tag is-active">${labelFor(OPTIONS.coatingTypes, state.coatingType)}</span>`
+      : "",
+    state.environment
+      ? `<span class="route-tag">${labelFor(OPTIONS.environments, state.environment)}</span>`
+      : "",
+    state.temperatureRange
+      ? `<span class="route-tag">${labelFor(
+          OPTIONS.temperatureRanges,
+          state.temperatureRange
+        )}</span>`
+      : "",
     state.asset ? `<span class="route-tag">${labelFor(OPTIONS.assets, state.asset)}</span>` : "",
-    state.challenge ? `<span class="route-tag">${labelFor(OPTIONS.challenges, state.challenge)}</span>` : "",
+    state.challenge
+      ? `<span class="route-tag">${labelFor(OPTIONS.challenges, state.challenge)}</span>`
+      : "",
   ].filter(Boolean);
+
   els.comparisonHeaderChips.innerHTML = chips.join("");
-  els.routeTags.innerHTML = routes.map((route, index) => `<button class="route-tag ${index === 0 ? 'is-active' : ''}" type="button" data-open-route="${route.id}">${route.label}</button>`).join("");
+  els.routeTags.innerHTML = routes
+    .map(
+      (route, index) =>
+        `<button class="route-tag ${index === 0 ? "is-active" : ""}" type="button" data-open-route="${route.id}">${route.label}</button>`
+    )
+    .join("");
 }
 
 function renderScenarioSummary(routes) {
@@ -426,94 +501,41 @@ function renderScenarioSummary(routes) {
     return;
   }
   const lead = routes[0];
-  els.scenarioSummary.textContent = `${labelFor(OPTIONS.coatingTypes, state.coatingType)} selected for ${labelFor(OPTIONS.assets, state.asset)} in ${labelFor(OPTIONS.environments, state.environment)} conditions. Current lead: ${lead.label} with ${lead.contactAngle}° indicative contact angle and ${attributeFitScore(lead)}% attribute fit.`;
+  const anchor = lead.evidence[0] || lead.summary;
+  els.scenarioSummary.textContent = `${labelFor(
+    OPTIONS.coatingTypes,
+    state.coatingType
+  )} selected for ${labelFor(OPTIONS.assets, state.asset)} in ${labelFor(
+    OPTIONS.environments,
+    state.environment
+  )} conditions. Current lead: ${lead.label}. Evidence anchor: ${anchor}`;
 }
 
-function mechanismArtwork(route, angle) {
-  const dropletScale = clamp((angle - 80) / 45, 0, 1);
-  const dropletWidth = 132 - dropletScale * 46;
-  const dropletHeight = 58 + dropletScale * 40;
-  const centerX = 464;
-  const baseY = 198;
-  const half = dropletWidth / 2;
-  const leftX = centerX - half;
-  const rightX = centerX + half;
-  const topY = baseY - dropletHeight;
-  const tangentAngle = ((180 - angle) * Math.PI) / 180;
-  const tangentLength = 44;
-  const tangentX = rightX - Math.cos(tangentAngle) * tangentLength;
-  const tangentY = baseY - Math.sin(tangentAngle) * tangentLength;
-  const angleArcEndX = rightX - 26;
-  const angleArcEndY = baseY - 18;
-
-  let sceneAccent = '<path d="M90 190 C130 118, 196 104, 246 186 L268 212 L118 212 Z" fill="url(#iceMass)" opacity="0.96"/>';
-  if (route.id === "gentoo-route") {
-    sceneAccent = '<rect x="110" y="154" width="174" height="44" rx="12" fill="url(#barrierGlow)" opacity="0.94"/><path d="M118 176 H278" stroke="rgba(255,255,255,0.68)" stroke-width="3" stroke-linecap="round"/>';
-  } else if (route.id === "solarex-route") {
-    sceneAccent = '<circle cx="136" cy="154" r="18" fill="url(#dropletBlue)"/><circle cx="182" cy="138" r="14" fill="url(#dropletBlue)"/><circle cx="222" cy="162" r="12" fill="url(#dropletBlue)"/><path d="M104 206 C154 182, 212 176, 286 190" stroke="rgba(185,226,255,0.55)" stroke-width="3" stroke-linecap="round"/>';
-  } else if (route.id === "pcs-route") {
-    sceneAccent = '<circle cx="156" cy="154" r="42" fill="rgba(89,199,255,0.08)" stroke="rgba(127,231,182,0.44)" stroke-width="2"/><path d="M156 120 L156 188 M122 154 L190 154" stroke="rgba(127,231,182,0.82)" stroke-width="3" stroke-linecap="round"/>';
-  }
+function mechanismVisualMarkup(route) {
+  const bars = [
+    ["Application fit", route.plot.applicationFit],
+    ["Documented performance", route.plot.documentedPerformance],
+    ["Proof maturity", route.plot.proofMaturity],
+  ];
 
   return `
-    <svg class="mechanism-svg" viewBox="0 0 640 260" role="img" aria-label="${route.mechanismTitle} with indicative contact angle ${angle} degrees">
-      <defs>
-        <linearGradient id="panelGlow" x1="0" x2="1">
-          <stop offset="0%" stop-color="rgba(89,199,255,0.18)"/>
-          <stop offset="100%" stop-color="rgba(106,143,255,0.02)"/>
-        </linearGradient>
-        <linearGradient id="surfaceTop" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stop-color="rgba(214,236,255,0.92)"/>
-          <stop offset="100%" stop-color="rgba(83,154,255,0.68)"/>
-        </linearGradient>
-        <linearGradient id="surfaceFace" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stop-color="rgba(24,82,180,0.78)"/>
-          <stop offset="100%" stop-color="rgba(4,16,36,0.94)"/>
-        </linearGradient>
-        <radialGradient id="dropletBlue" cx="32%" cy="24%">
-          <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
-          <stop offset="40%" stop-color="rgba(188,230,255,0.96)"/>
-          <stop offset="100%" stop-color="rgba(75,154,255,0.74)"/>
-        </radialGradient>
-        <linearGradient id="iceMass" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stop-color="rgba(255,255,255,0.94)"/>
-          <stop offset="100%" stop-color="rgba(146,205,255,0.82)"/>
-        </linearGradient>
-        <linearGradient id="barrierGlow" x1="0" x2="1">
-          <stop offset="0%" stop-color="rgba(89,199,255,0.16)"/>
-          <stop offset="100%" stop-color="rgba(106,143,255,0.32)"/>
-        </linearGradient>
-        <filter id="softGlow">
-          <feGaussianBlur stdDeviation="6" result="blur"/>
-          <feMerge>
-            <feMergeNode in="blur"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-      </defs>
-
-      <rect x="0" y="0" width="640" height="260" fill="url(#panelGlow)" opacity="0.9"/>
-      <ellipse cx="320" cy="228" rx="214" ry="18" fill="rgba(0,0,0,0.34)"/>
-      <polygon points="108,178 348,178 502,214 262,214" fill="url(#surfaceTop)"/>
-      <polygon points="262,214 502,214 502,234 262,234" fill="url(#surfaceFace)"/>
-      <polygon points="108,178 262,214 262,234 108,198" fill="rgba(9,31,78,0.72)"/>
-
-      ${sceneAccent}
-
-      <path d="M ${centerX} ${topY}
-               C ${centerX + half * 0.76} ${topY + dropletHeight * 0.08}, ${rightX} ${baseY - dropletHeight * 0.26}, ${rightX} ${baseY}
-               C ${rightX - half * 0.26} ${baseY - dropletHeight * 0.14}, ${centerX + half * 0.28} ${baseY - 4}, ${centerX} ${baseY - 3}
-               C ${centerX - half * 0.28} ${baseY - 4}, ${leftX + half * 0.26} ${baseY - dropletHeight * 0.14}, ${leftX} ${baseY}
-               C ${leftX} ${baseY - dropletHeight * 0.26}, ${centerX - half * 0.76} ${topY + dropletHeight * 0.08}, ${centerX} ${topY} Z"
-            fill="url(#dropletBlue)" filter="url(#softGlow)"/>
-      <circle cx="${centerX - half * 0.18}" cy="${topY + dropletHeight * 0.28}" r="9" fill="rgba(255,255,255,0.7)"/>
-
-      <line x1="${rightX}" y1="${baseY}" x2="${rightX + 34}" y2="${baseY}" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
-      <line x1="${rightX}" y1="${baseY}" x2="${tangentX}" y2="${tangentY}" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
-      <path d="M ${rightX - 24} ${baseY} A 24 24 0 0 0 ${angleArcEndX} ${angleArcEndY}" fill="none" stroke="rgba(89,199,255,0.9)" stroke-width="3"/>
-      <text x="${rightX - 6}" y="${baseY - 30}" class="chart-label">${angle}°</text>
-      <text x="122" y="236" class="chart-note">Contact-angle visual scales footprint and detachment profile for the selected route.</text>
-    </svg>
+    <div class="mechanism-visual route-${route.id}">
+      <div class="mechanism-route-badge">${route.family}</div>
+      <h3>${route.mechanismTitle}</h3>
+      <p class="mechanism-copy">${route.summary}</p>
+      <div class="mechanism-mini-bars">
+        ${bars
+          .map(
+            ([label, value]) => `
+              <div class="mini-bar-row">
+                <div class="mini-bar-head"><span>${label}</span><span>${value}%</span></div>
+                <div class="mini-bar-track"><span style="width:${value}%"></span></div>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+    </div>
   `;
 }
 
@@ -522,108 +544,212 @@ function renderMechanism(routes) {
   const stage = document.querySelector(".ice-stage");
   if (!lead || !stage) return;
 
-  const fit = attributeFitScore(lead);
-  const effect = contactAngleEffect(lead);
-
   els.mechanismTitle.textContent = lead.mechanismTitle;
-  els.mechanismLabelA.textContent = `Contact angle ${lead.contactAngle}°`;
+  els.mechanismLabelA.textContent = lead.mechanismTags[0];
   els.mechanismLabelA.classList.add("is-accent");
-  els.mechanismLabelB.textContent = `Attribute fit ${fit}%`;
+  els.mechanismLabelB.textContent = lead.mechanismTags[1];
 
   stage.innerHTML = `
     <div class="mechanism-scene">
-      ${mechanismArtwork(lead, lead.contactAngle)}
+      ${mechanismVisualMarkup(lead)}
     </div>
     <div class="mechanism-meta">
-      <div class="mechanism-stat">
-        <span class="stat-label">Indicative contact angle</span>
-        <span class="stat-value">${lead.contactAngle}°</span>
-        <span class="stat-sub">${lead.wettingProfile}</span>
-      </div>
-      <div class="mechanism-stat">
-        <span class="stat-label">Contact-angle effect</span>
-        <span class="stat-value">${effect}%</span>
-        <span class="stat-sub">Challenge-adjusted contribution for ${labelFor(OPTIONS.challenges, state.challenge) || 'selected route'}.</span>
-      </div>
-      <div class="mechanism-stat">
-        <span class="stat-label">Attribute fit</span>
-        <span class="stat-value">${fit}%</span>
-        <span class="stat-sub">Aligned to ${primaryAttributeLabel().toLowerCase()} and product attribute ratings.</span>
-      </div>
+      ${lead.keyStats
+        .map(
+          (item) => `
+            <div class="mechanism-stat">
+              <span class="stat-label">${item.label}</span>
+              <span class="stat-value">${item.value}</span>
+              <span class="stat-sub">${item.sub}</span>
+            </div>
+          `
+        )
+        .join("")}
     </div>
   `;
 }
 
+function routeShortLabel(route) {
+  return route.family.replace("SolarEX ", "").replace(" / PC-SR", "");
+}
+
+function resolveNodeCollisions(nodes) {
+  const adjusted = nodes.map((node) => ({ ...node }));
+  for (let i = 0; i < adjusted.length; i += 1) {
+    for (let j = i + 1; j < adjusted.length; j += 1) {
+      const a = adjusted[i];
+      const b = adjusted[j];
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+      const minDistance = a.r + b.r + 14;
+      if (distance < minDistance) {
+        const shift = (minDistance - distance) / 2;
+        const directionX = dx / distance;
+        const directionY = dy / distance;
+        b.x += directionX * shift + 6;
+        b.y += directionY * shift - 6;
+      }
+    }
+  }
+  return adjusted.map((node) => ({
+    ...node,
+    x: clamp(node.x, 72, 372),
+    y: clamp(node.y, 44, 240),
+  }));
+}
+
 function renderTradeoffChart(routes) {
   const kicker = document.querySelector("#tradeoffPanel .panel-kicker");
-  if (kicker) kicker.textContent = "Contact angle vs attribute fit";
+  if (kicker) kicker.textContent = "Application fit vs documented performance";
 
-  const nodes = routes.map((route) => {
-    const xValue = attributeFitScore(route);
-    const yValue = contactAngleEffect(route);
-    return {
-      route,
-      xValue,
-      yValue,
-      x: 70 + xValue * 2.9,
-      y: 244 - yValue * 1.72,
-      r: 8 + Math.round(route.proof / 18),
-    };
-  });
+  const initialNodes = routes.map((route, index) => ({
+    route,
+    xValue: route.plot.applicationFit,
+    yValue: route.plot.documentedPerformance,
+    proofValue: route.plot.proofMaturity,
+    lifecycle: route.plot.lifecycle,
+    rank: index + 1,
+    x: 64 + route.plot.applicationFit * 3.02,
+    y: 246 - route.plot.documentedPerformance * 1.84,
+    r: 11 + Math.round(route.plot.proofMaturity / 12),
+  }));
 
+  const nodes = resolveNodeCollisions(initialNodes);
   const trail = nodes.map((node) => `${node.x},${node.y}`).join(" ");
+
   els.tradeoffChart.innerHTML = `
     <div class="tradeoff-legend">
-      <span class="metric-pill">X = Attribute fit</span>
-      <span class="metric-pill">Y = Contact-angle effect</span>
-      <span class="metric-pill">Bubble = Proof</span>
+      <span class="metric-pill">X = Application fit</span>
+      <span class="metric-pill">Y = Documented performance</span>
+      <span class="metric-pill">Bubble = Proof maturity</span>
     </div>
-    <svg class="chart-svg" viewBox="0 0 420 300" role="img" aria-label="Contact-angle effect versus attribute-fit trade-off chart">
-      <line x1="54" y1="26" x2="54" y2="258" class="chart-grid-line"></line>
-      <line x1="54" y1="258" x2="388" y2="258" class="chart-grid-line"></line>
-      <line x1="54" y1="178" x2="388" y2="178" class="chart-grid-line"></line>
-      <line x1="54" y1="98" x2="388" y2="98" class="chart-grid-line"></line>
-      <line x1="166" y1="26" x2="166" y2="258" class="chart-grid-line"></line>
-      <line x1="278" y1="26" x2="278" y2="258" class="chart-grid-line"></line>
-      <text x="12" y="32" class="chart-axis-title">High</text>
-      <text x="16" y="258" class="chart-note">Low</text>
-      <text x="272" y="288" class="chart-axis-title">Attribute fit</text>
-      <text x="12" y="146" class="chart-axis-title" transform="rotate(-90 12 146)">Contact-angle effect</text>
-      <polyline class="chart-trail" points="${trail}"></polyline>
-      ${nodes.map((node) => `
-        <circle class="chart-bubble" cx="${node.x}" cy="${node.y}" r="${node.r + 8}"></circle>
-        <circle class="chart-point" cx="${node.x}" cy="${node.y}" r="${node.r}"></circle>
-        <text x="${node.x - 22}" y="${node.y - node.r - 10}" class="chart-bubble-label">${routeShortLabel(node.route)}</text>
-        <text x="${node.x - 16}" y="${node.y + node.r + 18}" class="chart-note">${node.route.contactAngle}° / ${node.xValue}%</text>
-      `).join("")}
-      <text x="238" y="40" class="chart-note">Upper-right = stronger angle-linked fit for the active challenge.</text>
-    </svg>
+    <div class="chart-frame">
+      <svg class="chart-svg" viewBox="0 0 420 280" role="img" aria-label="Trade-off chart showing application fit versus documented performance">
+        <line x1="54" y1="24" x2="54" y2="248" class="chart-grid-line"></line>
+        <line x1="54" y1="248" x2="388" y2="248" class="chart-grid-line"></line>
+        <line x1="54" y1="173" x2="388" y2="173" class="chart-grid-line"></line>
+        <line x1="54" y1="98" x2="388" y2="98" class="chart-grid-line"></line>
+        <line x1="166" y1="24" x2="166" y2="248" class="chart-grid-line"></line>
+        <line x1="278" y1="24" x2="278" y2="248" class="chart-grid-line"></line>
+        <text x="14" y="30" class="chart-axis-title">High</text>
+        <text x="16" y="248" class="chart-note">Low</text>
+        <text x="256" y="272" class="chart-axis-title">Application fit</text>
+        <text x="16" y="154" class="chart-axis-title" transform="rotate(-90 16 154)">Documented performance</text>
+        <polyline class="chart-trail" points="${trail}"></polyline>
+        ${nodes
+          .map(
+            (node) => `
+              <circle class="chart-bubble" cx="${node.x}" cy="${node.y}" r="${node.r + 7}"></circle>
+              <circle class="chart-point" cx="${node.x}" cy="${node.y}" r="${node.r}"></circle>
+              <text x="${node.x}" y="${node.y + 4}" text-anchor="middle" class="chart-rank-label">${node.rank}</text>
+            `
+          )
+          .join("")}
+        <text x="192" y="40" class="chart-note">Upper-right = stronger proof-backed fit for the active decision case.</text>
+      </svg>
+    </div>
+    <div class="tradeoff-summary">
+      ${nodes
+        .map(
+          (node) => `
+            <div class="tradeoff-summary-row">
+              <span class="summary-rank">${node.rank}</span>
+              <div class="tradeoff-summary-copy">
+                <strong>${node.route.label}</strong>
+                <span>${node.route.evidence[0]}</span>
+              </div>
+              <div class="tradeoff-summary-metrics">
+                <span>Fit ${node.xValue}%</span>
+                <span>Performance ${node.yValue}%</span>
+                <span>Proof ${node.proofValue}%</span>
+              </div>
+            </div>
+          `
+        )
+        .join("")}
+    </div>
   `;
 }
 
 function renderValidation(routes) {
   const lead = routes[0];
   const items = [
-    { label: "Scenario captured", body: completeScenario() ? "Minimum scenario completed." : "Pending scenario fields.", type: completeScenario() ? "success" : "warning" },
-    { label: "Best-fit route identified", body: lead ? `${lead.label} is leading.` : "No active route.", type: lead ? "success" : "warning" },
-    { label: "Contact-angle logic aligned", body: lead ? `${lead.contactAngle}° profile mapped to ${contactAngleEffect(lead)}% effect.` : "Awaiting route.", type: lead ? "success" : "warning" },
-    { label: "Boundary acknowledged", body: state.acknowledgedBoundary ? "Boundary conditions acknowledged." : "Boundary review still recommended.", type: state.acknowledgedBoundary ? "success" : "warning" },
+    {
+      label: "Scenario captured",
+      body: completeScenario() ? "Minimum scenario completed." : "Pending scenario fields.",
+      type: completeScenario() ? "success" : "warning",
+    },
+    {
+      label: "Best-fit route identified",
+      body: lead ? `${lead.label} is leading.` : "No active route.",
+      type: lead ? "success" : "warning",
+    },
+    {
+      label: "Evidence-backed route data loaded",
+      body: lead ? lead.evidence[0] : "Awaiting route selection.",
+      type: lead ? "success" : "warning",
+    },
+    {
+      label: "Boundary acknowledged",
+      body: state.acknowledgedBoundary
+        ? "Boundary conditions acknowledged."
+        : "Boundary review still recommended.",
+      type: state.acknowledgedBoundary ? "success" : "warning",
+    },
   ];
-  els.validationSummaryList.innerHTML = items.map((item) => `<div class="status-item"><span class="status-icon ${item.type}">${item.type === 'success' ? '✓' : '!'}</span><span class="status-copy"><strong>${item.label}</strong><span>${item.body}</span></span></div>`).join("");
+
+  els.validationSummaryList.innerHTML = items
+    .map(
+      (item) =>
+        `<div class="status-item"><span class="status-icon ${item.type}">${
+          item.type === "success" ? "✓" : "!"
+        }</span><span class="status-copy"><strong>${item.label}</strong><span>${item.body}</span></span></div>`
+    )
+    .join("");
 }
 
 function renderNotes(routes) {
   const lead = routes[0];
   const notes = lead
-    ? [`Indicative contact angle ${lead.contactAngle}° contributes ${contactAngleEffect(lead)}% to the active challenge fit.`].concat(lead.notes)
+    ? [
+        `Decision indices are grounded in Drive-sourced product documentation for ${lead.label}.`,
+        ...lead.notes,
+      ]
     : ["Complete the scenario to generate route notes."];
-  els.evaluationNotesList.innerHTML = notes.map((note, index) => `<div class="status-item"><span class="status-icon ${index === 0 ? 'success' : 'warning'}">${index === 0 ? '✓' : '•'}</span><span class="status-copy"><strong>${index === 0 ? 'Lead note' : 'Review note'}</strong><span>${note}</span></span></div>`).join("");
+
+  els.evaluationNotesList.innerHTML = notes
+    .map(
+      (note, index) =>
+        `<div class="status-item"><span class="status-icon ${
+          index === 0 ? "success" : "warning"
+        }">${index === 0 ? "✓" : "•"}</span><span class="status-copy"><strong>${
+          index === 0 ? "Lead note" : "Review note"
+        }</strong><span>${note}</span></span></div>`
+    )
+    .join("");
 }
 
 function renderActions(routes) {
   const lead = routes[0];
-  const actions = lead ? lead.actions : [["Request review", "./handoff.html?intent=technical-consult&solution=SIW-v3"], ["Continue review", "./proof.html"], ["Contact expert", "./handoff.html?intent=technical-consult&solution=SIW-v3"]];
-  els.actionButtons.innerHTML = actions.map((action, index) => `<a class="action-button" href="${action[1]}"><span class="action-icon">${index + 1}</span><span class="action-copy"><strong>${action[0]}</strong><span>${lead ? lead.label : 'SIW v3.1 route'}</span></span></a>`).join("");
+  const actions = lead
+    ? lead.actions
+    : [
+        ["Request review", "./handoff.html?intent=technical-consult&solution=SIW-v3"],
+        ["Continue review", "./proof.html"],
+        ["Contact expert", "./handoff.html?intent=technical-consult&solution=SIW-v3"],
+      ];
+
+  els.actionButtons.innerHTML = actions
+    .map(
+      (action, index) =>
+        `<a class="action-button" href="${action[1]}"><span class="action-icon">${
+          index + 1
+        }</span><span class="action-copy"><strong>${action[0]}</strong><span>${
+          lead ? lead.label : "SIW v3.1 route"
+        }</span></span></a>`
+    )
+    .join("");
 }
 
 function openDrawer(route) {
@@ -631,21 +757,34 @@ function openDrawer(route) {
   els.drawerSummary.textContent = route.summary;
   els.drawerMetrics.innerHTML = [
     `<span class="metric-pill">Fit ${route.score}%</span>`,
-    `<span class="metric-pill">Proof ${route.proof}%</span>`,
-    `<span class="metric-pill">Contact angle ${route.contactAngle}°</span>`,
-    `<span class="metric-pill">Attribute fit ${attributeFitScore(route)}%</span>`,
+    `<span class="metric-pill">Performance ${route.plot.documentedPerformance}%</span>`,
+    `<span class="metric-pill">Proof ${route.plot.proofMaturity}%</span>`,
+    `<span class="metric-pill">Lifecycle ${route.plot.lifecycle}%</span>`,
   ].join("");
+
   els.drawerSections.innerHTML = [
     `<div class="drawer-block"><div><h3>Why it leads</h3><p>${route.rationale[0]}</p></div></div>`,
-    `<div class="drawer-block"><div><h3>Contact-angle interpretation</h3><p>${route.wettingProfile}. Challenge-adjusted effect score: ${contactAngleEffect(route)}%.</p></div></div>`,
+    `<div class="drawer-block"><div><h3>Documented evidence</h3><p>${route.evidence.join(" ")}</p></div></div>`,
     `<div class="drawer-block"><div><h3>Boundary</h3><p>${route.boundary}</p></div></div>`,
   ].join("");
-  els.drawerActions.innerHTML = route.actions.map((action, index) => `<a class="action-button" href="${action[1]}"><span class="action-icon">${index + 1}</span><span class="action-copy"><strong>${action[0]}</strong><span>${route.label}</span></span></a>`).join("");
+
+  els.drawerActions.innerHTML = route.actions
+    .map(
+      (action, index) =>
+        `<a class="action-button" href="${action[1]}"><span class="action-icon">${
+          index + 1
+        }</span><span class="action-copy"><strong>${action[0]}</strong><span>${
+          route.label
+        }</span></span></a>`
+    )
+    .join("");
+
   els.routeDrawer.classList.add("is-open");
   els.routeDrawer.setAttribute("aria-hidden", "false");
   els.drawerBackdrop.hidden = false;
   state.acknowledgedBoundary = true;
   persistState();
+  renderValidation(rankedRoutes());
 }
 
 function closeDrawer() {
@@ -663,15 +802,19 @@ function exportPacket(routes) {
       id: route.id,
       label: route.label,
       score: route.score,
-      proof: route.proof,
-      lifecycle: route.lifecycle,
-      efficiency: route.efficiency,
-      contactAngle: route.contactAngle,
-      attributeFit: attributeFitScore(route),
-      contactAngleEffect: contactAngleEffect(route),
+      applicationFit: route.plot.applicationFit,
+      documentedPerformance: route.plot.documentedPerformance,
+      proofMaturity: route.plot.proofMaturity,
+      lifecycle: route.plot.lifecycle,
+      deployment: route.plot.deployment,
+      evidence: route.evidence,
+      keyStats: route.keyStats,
     })),
   };
-  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+  }
   window.alert("SIW v3.1 review packet copied to clipboard.");
 }
 
@@ -690,20 +833,38 @@ function render() {
 }
 
 function bindEvents() {
-  els.coatingTypeSelect.addEventListener("change", (event) => { state.coatingType = event.target.value; render(); });
-  els.environmentSelect.addEventListener("change", (event) => { state.environment = event.target.value; render(); });
-  els.temperatureRangeSelect.addEventListener("change", (event) => { state.temperatureRange = event.target.value; render(); });
-  els.assetSelect.addEventListener("change", (event) => { state.asset = event.target.value; render(); });
-  els.challengeSelect.addEventListener("change", (event) => { state.challenge = event.target.value; render(); });
+  els.coatingTypeSelect.addEventListener("change", (event) => {
+    state.coatingType = event.target.value;
+    render();
+  });
+  els.environmentSelect.addEventListener("change", (event) => {
+    state.environment = event.target.value;
+    render();
+  });
+  els.temperatureRangeSelect.addEventListener("change", (event) => {
+    state.temperatureRange = event.target.value;
+    render();
+  });
+  els.assetSelect.addEventListener("change", (event) => {
+    state.asset = event.target.value;
+    render();
+  });
+  els.challengeSelect.addEventListener("change", (event) => {
+    state.challenge = event.target.value;
+    render();
+  });
 
   document.addEventListener("click", (event) => {
     const conditionBtn = event.target.closest("[data-condition]");
     if (conditionBtn) {
       const value = conditionBtn.dataset.condition;
-      state.conditions = state.conditions.includes(value) ? state.conditions.filter((item) => item !== value) : state.conditions.concat(value);
+      state.conditions = state.conditions.includes(value)
+        ? state.conditions.filter((item) => item !== value)
+        : state.conditions.concat(value);
       render();
       return;
     }
+
     const routeBtn = event.target.closest("[data-open-route]");
     if (routeBtn) {
       const route = rankedRoutes().find((item) => item.id === routeBtn.dataset.openRoute);
@@ -712,12 +873,22 @@ function bindEvents() {
     }
   });
 
-  els.saveWorkspaceButton.addEventListener("click", () => { persistState(); window.alert("SIW v3.1 workspace saved."); });
-  els.resetWorkspaceButton.addEventListener("click", () => { state = { ...DEFAULT_STATE }; render(); });
+  els.saveWorkspaceButton.addEventListener("click", () => {
+    persistState();
+    window.alert("SIW v3.1 workspace saved.");
+  });
+
+  els.resetWorkspaceButton.addEventListener("click", () => {
+    state = { ...DEFAULT_STATE };
+    render();
+  });
+
   els.exportPacketButton.addEventListener("click", () => exportPacket(rankedRoutes()));
   els.closeDrawerButton.addEventListener("click", closeDrawer);
   els.drawerBackdrop.addEventListener("click", closeDrawer);
-  document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDrawer(); });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeDrawer();
+  });
 }
 
 bindEvents();
