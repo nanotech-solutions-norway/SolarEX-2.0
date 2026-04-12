@@ -137,22 +137,44 @@
   font-size: 10px;
 }
 
+.chart-bubble-group,
+.chart-bubble-hit {
+  cursor: pointer;
+}
+
 .chart-bubble-shell {
   fill: rgba(89, 199, 255, 0.14);
   stroke: rgba(118, 171, 255, 0.46);
   stroke-width: 1.2;
+  transition: stroke 0.18s ease, fill 0.18s ease, transform 0.18s ease;
 }
 
 .chart-bubble-core {
   fill: rgba(43, 192, 255, 0.96);
   stroke: rgba(255,255,255,0.86);
   stroke-width: 1.6;
+  transition: stroke 0.18s ease, transform 0.18s ease;
+}
+
+.chart-bubble-group:hover .chart-bubble-core,
+.chart-bubble-group:focus-visible .chart-bubble-core,
+.chart-bubble-group.is-selected .chart-bubble-core {
+  stroke: rgba(255,255,255,1);
+  stroke-width: 2;
+}
+
+.chart-bubble-group:hover .chart-bubble-shell,
+.chart-bubble-group:focus-visible .chart-bubble-shell,
+.chart-bubble-group.is-selected .chart-bubble-shell {
+  stroke: rgba(159, 220, 255, 0.86);
+  fill: rgba(89, 199, 255, 0.22);
 }
 
 .chart-rank-label {
-  fill: #08111f;
-  font-size: 13px;
+  fill: #ffffff;
+  font-size: 11px;
   font-weight: 800;
+  pointer-events: none;
 }
 
 .tradeoff-summary.compact-summary {
@@ -176,6 +198,12 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+@media (min-width: 1180px) {
+  .chart-rank-label {
+    font-size: 9px;
+  }
 }
 
 @media (max-width: 1180px) {
@@ -207,6 +235,10 @@
     padding: 10px 8px;
     min-height: 0;
   }
+
+  .chart-rank-label {
+    font-size: 11px;
+  }
 }
 
 @media (max-width: 560px) {
@@ -232,5 +264,9 @@
 
   .tradeoff-topline {
     gap: 8px;
+  }
+
+  .chart-rank-label {
+    font-size: 12px;
   }
 }
