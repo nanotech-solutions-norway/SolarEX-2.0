@@ -15,6 +15,8 @@
     default: "Open route detail",
   };
 
+  let activeTradeoffRouteId = null;
+
   const shortRouteNote = (route) => {
     if (!route) return "";
     switch (route.id) {
@@ -95,6 +97,13 @@
 
   const getRouteById = (routeId) => ROUTES.find((route) => route.id === routeId);
 
+  const getActiveRoute = (routes) => {
+    const active = routes.find((route) => route.id === activeTradeoffRouteId);
+    if (active) return active;
+    activeTradeoffRouteId = routes[0]?.id || null;
+    return routes[0] || null;
+  };
+
   const scaleRelative = (value, min, max, start, end) => {
     if (max === min) return (start + end) / 2;
     return start + ((value - min) / (max - min)) * (end - start);
@@ -105,9 +114,11 @@
       return {
         baseRadius: 11,
         proofDivisor: 36,
-        shellOffset: 5,
-        spreadPadding: 16,
-        labelDy: 3.5,
+        radiusScale: 0.5,
+        shellOffset: 2.5,
+        spreadPadding: 10,
+        labelDy: 3,
+        xSlots: [124, 220, 316],
       };
     }
 
@@ -115,18 +126,22 @@
       return {
         baseRadius: 13,
         proofDivisor: 30,
+        radiusScale: 1,
         shellOffset: 6,
         spreadPadding: 18,
         labelDy: 3.8,
+        xSlots: [116, 220, 324],
       };
     }
 
     return {
       baseRadius: 15,
       proofDivisor: 24,
+      radiusScale: 1,
       shellOffset: 8,
       spreadPadding: 22,
       labelDy: 4,
+      xSlots: [110, 220, 330],
     };
   };
 
@@ -157,6 +172,61 @@
       x: Math.min(352, Math.max(88, node.x)),
       y: Math.min(214, Math.max(66, node.y)),
     }));
+  };
+
+  const mechanismVisualMarkup = (route) => {
+    const bars = [
+      ["Application fit", route.plot.applicationFit],
+      ["Documented performance", route.plot.documentedPerformance],
+      ["Proof maturity", route.plot.proofMaturity],
+    ];
+
+    return `
+      <div class="mechanism-scene">
+        <div class="mechanism-visual route-${route.id}">
+          <div class="mechanism-route-badge">${route.family}</div>
+          <h3>${route.mechanismTitle}</h3>
+          <p class="mechanism-copy">${route.summary}</p>
+          <div class="mechanism-mini-bars">
+            ${bars
+              .map(
+                ([label, value]) => `
+                  <div class="mini-bar-row">
+                    <div class="mini-bar-head"><span>${label}</span><span>${value}%</span></div>
+                    <div class="mini-bar-track"><span style="width:${value}%"></span></div>
+                  </div>
+                `
+              )
+              .join("")}
+          </div>
+        </div>
+      </div>
+      <div class="mechanism-meta">
+        ${route.keyStats
+          .map(
+            (item) => `
+              <div class="mechanism-stat">
+                <span class="stat-label">${item.label}</span>
+                <span class="stat-value">${item.value}</span>
+                <span class="stat-sub">${item.sub}</span>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+  };
+
+  renderMechanism = function (routes) {
+    const activeRoute = getActiveRoute(routes);
+    const stage = document.querySelector(".ice-stage");
+    if (!activeRoute || !stage) return;
+
+    els.mechanismTitle.textContent = activeRoute.mechanismTitle;
+    els.mechanismLabelA.textContent = activeRoute.mechanismTags?.[0] || activeRoute.family;
+    els.mechanismLabelA.classList.add("is-accent");
+    els.mechanismLabelB.textContent = activeRoute.mechanismTags?.[1] || "Evidence-backed route";
+    stage.innerHTML = mechanismVisualMarkup(activeRoute);
   };
 
   renderActions = function (routes) {
@@ -198,6 +268,7 @@
     els.routeDrawer.setAttribute("aria-hidden", "false");
     els.drawerBackdrop.hidden = false;
     state.acknowledgedBoundary = true;
+    activeTradeoffRouteId = route.id;
     persistState();
     if (typeof renderValidation === "function") renderValidation(rankedRoutes());
   };
@@ -206,41 +277,43 @@
     const kicker = document.querySelector("#tradeoffPanel .panel-kicker");
     if (kicker) kicker.textContent = "Relative fit view";
 
-    const xValues = routes.map((route) => route.plot.applicationFit);
     const yValues = routes.map((route) => route.plot.documentedPerformance);
-    const xMin = Math.min(...xValues);
-    const xMax = Math.max(...xValues);
     const yMin = Math.min(...yValues);
     const yMax = Math.max(...yValues);
     const bubbleConfig = getBubbleConfig();
+    const activeRoute = getActiveRoute(routes);
 
-    const initialNodes = routes.map((route, index) => ({
-      route,
-      rank: index + 1,
-      xValue: route.plot.applicationFit,
-      yValue: route.plot.documentedPerformance,
-      proofValue: route.plot.proofMaturity,
-      x: scaleRelative(route.plot.applicationFit, xMin, xMax, 108, 334),
-      y: scaleRelative(route.plot.documentedPerformance, yMin, yMax, 206, 74),
-      r: bubbleConfig.baseRadius + Math.round(route.plot.proofMaturity / bubbleConfig.proofDivisor),
-      shellOffset: bubbleConfig.shellOffset,
-      spreadPadding: bubbleConfig.spreadPadding,
-      labelDy: bubbleConfig.labelDy,
-    }));
+    const initialNodes = routes.map((route, index) => {
+      const baseRadius = bubbleConfig.baseRadius + Math.round(route.plot.proofMaturity / bubbleConfig.proofDivisor);
+      return {
+        route,
+        rank: index + 1,
+        xValue: route.plot.applicationFit,
+        yValue: route.plot.documentedPerformance,
+        proofValue: route.plot.proofMaturity,
+        x: bubbleConfig.xSlots[index] || bubbleConfig.xSlots[bubbleConfig.xSlots.length - 1],
+        y: scaleRelative(route.plot.documentedPerformance, yMin, yMax, 206, 74),
+        r: baseRadius * bubbleConfig.radiusScale,
+        shellOffset: bubbleConfig.shellOffset,
+        spreadPadding: bubbleConfig.spreadPadding,
+        labelDy: bubbleConfig.labelDy,
+        isSelected: activeRoute?.id === route.id,
+      };
+    });
 
     const nodes = spreadNodes(initialNodes);
 
     els.tradeoffChart.innerHTML = `
       <div class="tradeoff-topline">
         <div class="tradeoff-legend">
-          <span class="metric-pill">X = Application fit</span>
+          <span class="metric-pill">X = Rank order</span>
           <span class="metric-pill">Y = Documented performance</span>
           <span class="metric-pill">Bubble = Proof maturity</span>
         </div>
-        <span class="tradeoff-mode">Relative positioning of active routes</span>
+        <span class="tradeoff-mode">1 on left · 3 on right · tap bubble for specifications</span>
       </div>
       <div class="chart-frame chart-frame-clean">
-        <svg class="chart-svg" viewBox="0 0 420 280" role="img" aria-label="Trade-off chart showing application fit versus documented performance for the active route set">
+        <svg class="chart-svg" viewBox="0 0 420 280" role="img" aria-label="Trade-off chart showing ranked route order and documented performance for the active route set">
           <line x1="74" y1="44" x2="74" y2="226" class="chart-grid-line"></line>
           <line x1="74" y1="226" x2="368" y2="226" class="chart-grid-line"></line>
           <line x1="74" y1="165" x2="368" y2="165" class="chart-grid-line"></line>
@@ -249,15 +322,20 @@
           <line x1="270" y1="44" x2="270" y2="226" class="chart-grid-line"></line>
           <text x="74" y="34" class="chart-corner-label">Higher</text>
           <text x="42" y="230" class="chart-corner-label">Lower</text>
-          <text x="240" y="258" class="chart-axis-caption">Application fit</text>
+          <text x="245" y="258" class="chart-axis-caption">Rank order</text>
           <text x="24" y="182" class="chart-axis-caption" transform="rotate(-90 24 182)">Documented performance</text>
-          <text x="222" y="28" class="chart-note-short">1 = strongest current fit</text>
+          <text x="108" y="245" class="chart-corner-label">1</text>
+          <text x="216" y="245" class="chart-corner-label">2</text>
+          <text x="324" y="245" class="chart-corner-label">3</text>
           ${nodes
             .map(
               (node) => `
-                <circle class="chart-bubble-shell" cx="${node.x}" cy="${node.y}" r="${node.r + node.shellOffset}"></circle>
-                <circle class="chart-bubble-core" cx="${node.x}" cy="${node.y}" r="${node.r}"></circle>
-                <text x="${node.x}" y="${node.y + node.labelDy}" text-anchor="middle" class="chart-rank-label">${node.rank}</text>
+                <g class="chart-bubble-group${node.isSelected ? " is-selected" : ""}" data-chart-route-id="${node.route.id}" tabindex="0" role="button" aria-label="Show ${node.route.label} specifications in the mechanism panel">
+                  <circle class="chart-bubble-hit" cx="${node.x}" cy="${node.y}" r="${node.r + node.shellOffset + 8}"></circle>
+                  <circle class="chart-bubble-shell" cx="${node.x}" cy="${node.y}" r="${node.r + node.shellOffset}"></circle>
+                  <circle class="chart-bubble-core" cx="${node.x}" cy="${node.y}" r="${node.r}"></circle>
+                  <text x="${node.x}" y="${node.y + node.labelDy}" text-anchor="middle" class="chart-rank-label">${node.rank}</text>
+                </g>
               `
             )
             .join("")}
@@ -267,7 +345,7 @@
         ${nodes
           .map(
             (node) => `
-              <div class="tradeoff-summary-row">
+              <div class="tradeoff-summary-row${node.isSelected ? " is-selected" : ""}">
                 <span class="summary-rank">${node.rank}</span>
                 <div class="tradeoff-summary-copy">
                   <strong>${node.route.label}</strong>
@@ -297,33 +375,48 @@
 
   document.addEventListener("click", (event) => {
     const actionButton = event.target.closest("[data-route-action]");
-    if (!actionButton) return;
-
-    event.preventDefault();
-
-    const route = getRouteById(actionButton.dataset.routeId) || rankedRoutes()[0];
-    const actionType = actionButton.dataset.routeAction;
-
-    if (!route) return;
-
-    if (actionType === "sample") {
-      copyReviewPacket(route);
+    if (actionButton) {
+      event.preventDefault();
+      const route = getRouteById(actionButton.dataset.routeId) || rankedRoutes()[0];
+      const actionType = actionButton.dataset.routeAction;
+      if (!route) return;
+      if (actionType === "sample") {
+        copyReviewPacket(route);
+        openDrawer(route);
+        return;
+      }
+      if (actionType === "review") {
+        scrollToPanel("comparisonPanel");
+        return;
+      }
+      if (actionType === "expert") {
+        openDrawer(route);
+        scrollToPanel("validationPanel");
+        return;
+      }
       openDrawer(route);
       return;
     }
 
-    if (actionType === "review") {
-      scrollToPanel("comparisonPanel");
-      return;
+    const bubble = event.target.closest("[data-chart-route-id]");
+    if (bubble) {
+      const route = getRouteById(bubble.dataset.chartRouteId);
+      if (!route) return;
+      activeTradeoffRouteId = route.id;
+      render();
     }
+  });
 
-    if (actionType === "expert") {
-      openDrawer(route);
-      scrollToPanel("validationPanel");
-      return;
+  document.addEventListener("keydown", (event) => {
+    const bubble = event.target.closest?.("[data-chart-route-id]");
+    if (!bubble) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      const route = getRouteById(bubble.dataset.chartRouteId);
+      if (!route) return;
+      activeTradeoffRouteId = route.id;
+      render();
     }
-
-    openDrawer(route);
   });
 
   render();
