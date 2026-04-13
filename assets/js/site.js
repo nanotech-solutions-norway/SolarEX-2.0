@@ -34,6 +34,14 @@ const pageKey = (() => {
 
 const currentLocalFile = pageKey === '/' ? 'index.html' : pageKey.replace(/^\//, '');
 
+window.SolarEXRuntime = window.SolarEXRuntime || {};
+window.SolarEXRuntime.normalizedPath = normalizedPath;
+window.SolarEXRuntime.deploymentPrefix = deploymentPrefix;
+window.SolarEXRuntime.localPath = localPath;
+window.SolarEXRuntime.currentLang = currentLang;
+window.SolarEXRuntime.pageKey = pageKey;
+window.SolarEXRuntime.currentLocalFile = currentLocalFile;
+
 const localizedPages = currentLang === 'no'
   ? [
       ['index.html', 'Hjem'],
@@ -139,6 +147,13 @@ const injectEnhancementStyle = () => {
     .solarex-extension-grid-compact{grid-template-columns:repeat(3,minmax(0,1fr))}
     .solarex-extension-card{padding:1.15rem;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 60px rgba(0,0,0,.22);min-width:0}
     .solarex-extension-pill{padding:1rem;border-radius:18px;background:rgba(20,212,71,.08);border:1px solid rgba(20,212,71,.22)}
+    @media (min-width:981px){
+      .nav-toggle{display:none!important}
+      .topbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:1rem!important}
+      .nav-wrap{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:1rem!important}
+      .site-nav{display:flex!important;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:.7rem!important;padding-top:0!important}
+      .site-nav a{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}
+    }
     @media (max-width:980px){
       .nav-toggle{display:inline-flex!important;align-items:center;justify-content:center;min-height:44px;width:48px;height:48px;min-width:48px;padding:0!important;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:transparent;font-size:0;font-weight:800;position:relative}
       .nav-toggle::before{content:"";display:block;width:18px;height:2px;border-radius:999px;background:#fff;box-shadow:0 -6px 0 #fff,0 6px 0 #fff}

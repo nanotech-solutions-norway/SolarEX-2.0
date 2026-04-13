@@ -1,6 +1,9 @@
 (() => {
-  if (typeof currentLocalFile === 'undefined') return;
-  if (typeof currentLang !== 'undefined' && currentLang !== 'en') return;
+  const runtime = window.SolarEXRuntime || {};
+  const currentLocalFile = runtime.currentLocalFile;
+  const currentLang = runtime.currentLang;
+  if (!currentLocalFile) return;
+  if (currentLang && currentLang !== 'en') return;
 
   const targetPages = new Set(['technical-specifications.html', 'titan.html', 'proof-results.html', 'applications.html']);
   if (!targetPages.has(currentLocalFile)) return;
@@ -50,8 +53,7 @@
       <text x="82" y="226" fill="#dbe4da" font-size="13">Scattering</text>
       <text x="182" y="228" fill="#dbe4da" font-size="13">Absorption</text>
       <circle cx="430" cy="140" r="28" fill="#ffd23f"/><text x="402" y="146" fill="#222" font-size="14">UV</text>
-      <line x1="430" y1="170" x2="430" y2="240" stroke="#ffd23f" stroke-width="6"/>
-      <line x1="430" y1="170" x2="465" y2="225" stroke="#62c3ff" stroke-width="5"/>
+      <line x1="430" y1="170" x2="430" y2="240" stroke="#ffd23f" stroke-width="6"/><line x1="430" y1="170" x2="465" y2="225" stroke="#62c3ff" stroke-width="5"/>
       <rect x="370" y="240" width="130" height="30" rx="10" fill="rgba(20,212,71,.18)" stroke="rgba(20,212,71,.32)"/>
       <text x="382" y="260" fill="#fff" font-size="15">Protected substrate</text>
       <text x="476" y="228" fill="#dbe4da" font-size="13">Reflection / scatter</text>
