@@ -33,6 +33,15 @@ const pageKey = (() => {
 })();
 
 const currentLocalFile = pageKey === '/' ? 'index.html' : pageKey.replace(/^\//, '');
+const localizedUi = currentLang === 'no'
+  ? {
+      homeAria: 'SolarEX hjem',
+      openNavigation: 'Åpne navigasjon'
+    }
+  : {
+      homeAria: 'SolarEX home',
+      openNavigation: 'Open navigation'
+    };
 
 window.SolarEXRuntime = window.SolarEXRuntime || {};
 window.SolarEXRuntime.normalizedPath = normalizedPath;
@@ -92,6 +101,12 @@ const upsertLink = (rel, href, extras = {}) => {
     document.head.appendChild(link);
   }
   link.href = href;
+};
+
+const toAbsoluteUrl = (path) => {
+  if (!path) return window.location.origin;
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  return new URL(path, window.location.origin).toString();
 };
 
 const injectEnhancementStyle = () => {
@@ -195,8 +210,8 @@ const ensureBrandWordmark = () => {
     const href = brand.getAttribute('href') || 'index.html';
     brand.innerHTML = '<span class="brand-wordmark">Solar<span>EX</span></span>';
     brand.setAttribute('href', href);
-    brand.setAttribute('aria-label', 'SolarEX home');
-    brand.setAttribute('title', 'SolarEX home');
+    brand.setAttribute('aria-label', localizedUi.homeAria);
+    brand.setAttribute('title', localizedUi.homeAria);
   });
 };
 
@@ -208,7 +223,7 @@ const normalizeHeaderStructure = () => {
   if (navToggle && navToggle.parentElement !== topbar) topbar.appendChild(navToggle);
   if (navToggle) {
     navToggle.textContent = '';
-    navToggle.setAttribute('aria-label', 'Open navigation');
+    navToggle.setAttribute('aria-label', localizedUi.openNavigation);
   }
 
   const versionPattern = /^v\d/i;
@@ -245,9 +260,9 @@ const ensureIcons = () => {
   const dataUrl = `data:image/svg+xml,${encodeURIComponent(svg)}`;
   upsertLink('icon', dataUrl);
   upsertLink('apple-touch-icon', dataUrl);
-  upsertLink('alternate', getTargetPath('en'), { hreflang: 'en' });
-  upsertLink('alternate', getTargetPath('no'), { hreflang: 'no' });
-  upsertLink('alternate', getTargetPath('en'), { hreflang: 'x-default' });
+  upsertLink('alternate', toAbsoluteUrl(getTargetPath('en')), { hreflang: 'en' });
+  upsertLink('alternate', toAbsoluteUrl(getTargetPath('no')), { hreflang: 'no' });
+  upsertLink('alternate', toAbsoluteUrl(getTargetPath('en')), { hreflang: 'x-default' });
 };
 
 const switchLanguage = (lang) => {
@@ -503,7 +518,7 @@ const createFooter = () => {
       <div class="footer-card footer-brand-panel">
         <p class="tag">${brandTag}</p>
         <div class="footer-brand-lockup">
-          <a href="${pageHref('index.html')}" aria-label="SolarEX home" title="SolarEX home" class="footer-wordmark">Solar<span>EX</span></a>
+          <a href="${pageHref('index.html')}" aria-label="${localizedUi.homeAria}" title="${localizedUi.homeAria}" class="footer-wordmark">Solar<span>EX</span></a>
         </div>
         <p class="footer-note">${description}</p>
       </div>
